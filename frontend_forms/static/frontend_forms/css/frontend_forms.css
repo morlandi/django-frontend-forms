@@ -1,0 +1,362 @@
+/*
+    "How To Create a Modal Box":;
+    https://www.w3schools.com/howto/howto_css_modals.asp
+*/
+
+/* The Modal (background) */
+.dialog {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    /* background-color: rgba(0,0,0,0.4); */
+    background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
+
+}
+
+/* Modal Content/Box */
+.dialog .dialog-content {
+    background-color: #fefefe;
+    padding: 0;
+    border: 2px solid #333;
+    /*width: 600px;*/
+    box-shadow: 5px 5px 10px #666;
+
+    /* 15% from the top and centered */
+     /*margin: 15% auto;*/
+     margin: 80px auto;
+
+    /* Center in screen */
+    /*
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    */
+
+    border-radius: 8px;
+}
+
+.dialog .dialog-content .dialog-header {
+    /*height: 40px;*/
+    background-color: #999;
+    color: white;
+    padding: 12px;
+    border-radius: 6px 6px 0 0;
+}
+
+.dialog .dialog-content .dialog-header .title {
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+}
+
+.dialog .dialog-header .spinner {
+    float: left;
+    padding: 0;
+    margin: -8px 8px 0 0;
+    font-size: 26px;
+    color: white;
+    /*visibility: hidden;*/
+    display: none;
+}
+
+.dialog .dialog-header.loading .spinner {
+    /*visibility: visible;*/
+    display: block;
+}
+
+.dialog .dialog-content .dialog-footer {
+    /*height: 40px;*/
+    background-color: #999;
+    color: white;
+    padding: 12px;
+    border-radius: 0 0 6px 6px;
+    margin-bottom: -1px;
+}
+
+.dialog .dialog-content .dialog-footer input[type="submit"] {
+    float: right;
+    margin-top: -5px;
+    margin-left: 8px;
+    border-radius: 4px;
+    height: 30px;
+    line-height: 10px;
+}
+
+.dialog .dialog-content .dialog-footer .btn {
+    min-width: 100px;
+    border-radius: 8px !important;
+    border: none;
+    background-color: #333 !important;
+    color: #fff;
+}
+
+.dialog .dialog-content .dialog-footer .btn-close {
+    background-color: #ccc !important;
+    color: #333;
+}
+
+.dialog .dialog-content .dialog-body {
+    /*height: 400px;*/
+    padding: 12px;
+}
+
+/* The Close Button */
+.dialog .dialog-header .close {
+    color: #fff;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: -4px !important;
+}
+
+.dialog .dialog-header .close:hover,
+.dialog .dialog-header .close:focus {
+    color: #ccc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*
+ *  Sweetalert2 fix for bs3
+ */
+
+/* https://github.com/sweetalert2/sweetalert2/issues/855 */
+/*
+.swal2-popup {
+  font-size: 1.6rem !important;
+}
+
+.swal2-actions button {
+    min-width: 8em;
+    margin: 0 6px;
+}
+*/
+
+.swal2-actions button {
+    min-width: 6em;
+    margin: 0 6px;
+}
+
+/*
+ *  Fixes for Bootstrap 4
+ */
+
+
+form.compact-fields .form-control {
+    width: auto;
+}
+
+form.compact-fields .form-control.is-valid {
+    /*background-image: none;*/
+}
+
+form .field-with-errors {
+    /* Required for correct positioning of .invalid-tooltip */
+    /* If not desired, use .invalid-feedback instead */
+    position: relative;
+    margin-bottom: 40px;
+}
+
+/*
+ * "simpletable" styles
+ */
+
+.simpletable {
+    border: 1px solid #cccccc;
+    border-collapse: collapse;
+
+}
+
+.simpletable th,
+.simpletable td {
+    padding: 2px;
+    border: 1px solid #cccccc;
+}
+
+
+/*
+ *  jquery-ui datepicker styling
+ *
+ *  Adapted from: https://www.hongkiat.com/blog/jquery-ui-datepicker/
+ */
+
+/* DatePicker Container */
+.ui-datepicker {
+    width: 216px;
+    height: auto;
+    margin: 5px auto 0;
+    font: 10pt Arial, sans-serif;
+    /*
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    */
+    background-color: #333;
+    border: 1px solid #333 !important;
+}
+.ui-datepicker a {
+    text-decoration: none;
+}
+/* DatePicker Table */
+.ui-datepicker table {
+    width: 100%;
+}
+.ui-datepicker-header {
+    color: #e0e0e0;
+    font-weight: bold;
+    /*
+    -webkit-box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, 2);
+    -moz-box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
+    box-shadow: inset 0px 1px 1px 0px rgba(250, 250, 250, .2);
+    text-shadow: 1px -1px 0px #000;
+    filter: dropshadow(color=#000, offx=1, offy=-1);
+    */
+    line-height: 30px;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: #111;
+}
+.ui-datepicker-title {
+    text-align: center;
+}
+.ui-datepicker-prev, .ui-datepicker-next {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+/*
+    background-image: url('../img/arrow.png');
+    background-repeat: no-repeat;
+    line-height: 600%;
+*/
+    overflow: hidden;
+    color: white;
+}
+.ui-datepicker-prev {
+    float: left;
+    background-position: center -30px;
+}
+.ui-datepicker-next {
+    float: right;
+    background-position: center 0px;
+}
+.ui-datepicker thead {
+    background-color: #f7f7f7;
+    /*
+    background-image: -moz-linear-gradient(top,  #f7f7f7 0%, #f1f1f1 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#f1f1f1));
+    background-image: -webkit-linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+    background-image: -o-linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+    background-image: -ms-linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+    background-image: linear-gradient(top,  #f7f7f7 0%,#f1f1f1 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#f1f1f1',GradientType=0 );
+    */
+    border-bottom: 1px solid #bbb;
+}
+.ui-datepicker th {
+    text-transform: uppercase;
+    font-size: 8pt;
+    padding: 5px 0;
+    color: #666666;
+    text-align: center;
+    /*
+    text-shadow: 1px 0px 0px #fff;
+    filter: dropshadow(color=#fff, offx=1, offy=0);
+    */
+}
+.ui-datepicker tbody td {
+    padding: 0;
+    border-right: 1px solid #bbb;
+}
+.ui-datepicker tbody td:last-child {
+    /*border-right: 0px;*/
+    border-right: 1px solid #333;
+}
+.ui-datepicker tbody tr {
+    border-bottom: 1px solid #bbb;
+}
+.ui-datepicker tbody tr:last-child {
+    border-bottom: 0px;
+}
+.ui-datepicker td span, .ui-datepicker td a {
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #666666;
+    /*
+    text-shadow: 1px 1px 0px #fff;
+    filter: dropshadow(color=#fff, offx=1, offy=1);
+    */
+}
+.ui-datepicker-calendar .ui-state-default {
+    background: #ededed;
+    /*
+    background: -moz-linear-gradient(top,  #ededed 0%, #dedede 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ededed), color-stop(100%,#dedede));
+    background: -webkit-linear-gradient(top,  #ededed 0%,#dedede 100%);
+    background: -o-linear-gradient(top,  #ededed 0%,#dedede 100%);
+    background: -ms-linear-gradient(top,  #ededed 0%,#dedede 100%);
+    background: linear-gradient(top,  #ededed 0%,#dedede 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#dedede',GradientType=0 );
+    -webkit-box-shadow: inset 1px 1px 0px 0px rgba(250, 250, 250, .5);
+    -moz-box-shadow: inset 1px 1px 0px 0px rgba(250, 250, 250, .5);
+    box-shadow: inset 1px 1px 0px 0px rgba(250, 250, 250, .5);
+    */
+}
+.ui-datepicker-calendar .ui-state-hover {
+    background: #f7f7f7;
+}
+.ui-datepicker-calendar .ui-state-active {
+    background: #6eafbf;
+    /*
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    -moz-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    text-shadow: 0px 1px 0px #4d7a85;
+    filter: dropshadow(color=#4d7a85, offx=0, offy=1);
+    */
+    color: #e0e0e0;
+    border: 1px solid #55838f;
+    position: relative;
+    margin: -1px;
+}
+.ui-datepicker-unselectable .ui-state-default {
+    background: #f4f4f4;
+    color: #b4b3b3;
+}
+.ui-datepicker-calendar td:first-child .ui-state-active {
+    width: 29px;
+    margin-left: 0;
+}
+.ui-datepicker-calendar td:last-child .ui-state-active {
+    width: 29px;
+    margin-right: 0;
+}
+.ui-datepicker-calendar tr:last-child .ui-state-active {
+    height: 29px;
+    margin-bottom: 0;
+}
+
+
+
+input.datepicker.hasDatepicker {
+    width: 140px;
+    display: inline;
+}
+
+.ui-datepicker-trigger {
+    padding: 6px 8px;
+    background: none;
+    background-color: white;
+}

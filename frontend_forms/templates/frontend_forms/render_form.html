@@ -1,0 +1,63 @@
+{% load i18n frontend_forms_tags %}
+
+{% if form.errors or form.non_field_errors %}
+    <p class="errornote">{% trans 'Please correct the error below.' %}</p>
+{% endif %}
+
+{% if FORM_LAYOUT_FLAVOR == "generic" %}
+
+    {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% for hidden_field in form.hidden_fields %}
+        {% if hidden_field.errors %}
+            <ul class="errorlist">
+                {% for error in hidden_field.errors %}
+                    <li>(Hidden field {{ hidden_field.name }}) {{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {{ hidden_field }}
+    {% endfor %}
+
+    <fieldset class="module grp-module" style="width: 100%">
+        {% for field in form.visible_fields %}
+            {% render_form_field field=field flavor=FORM_LAYOUT_FLAVOR %}
+        {% endfor %}
+    </fieldset>
+
+{% elif FORM_LAYOUT_FLAVOR == "bs4" %}
+
+    {% comment %}
+    Adapted from:
+    https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html#rendering-bootstrap-4-forms
+    {% endcomment %}
+
+    {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field }}
+    {% endfor %}
+
+    <fieldset>
+        {% for field in form.visible_fields %}
+            {% render_form_field field flavor=FORM_LAYOUT_FLAVOR layout=layout %}
+        {% endfor %}
+    </fieldset>
+
+{% else %}
+
+    <h1>Unknow FORM_LAYOUT_FLAVOR: "{{ FORM_LAYOUT_FLAVOR }}"</h1>
+
+{% endif %}

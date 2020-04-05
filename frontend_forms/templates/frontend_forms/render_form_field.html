@@ -1,0 +1,87 @@
+{% load frontend_forms_tags %}
+
+{% if FORM_LAYOUT_FLAVOR == "generic" %}
+
+    <div class="form-row{% if field.errors %} errors{% endif %} field-{{ field.html_name }}">
+        <div>
+            <div>
+                <label {% if field.field.required %}class="required"{% endif %} for="{{ field.id_for_label }}">{{ field.label }}:</label>
+            </div>
+            <div>
+                {{ field|add_field_attrs:field_attrs }}
+                {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% elif FORM_LAYOUT_FLAVOR == "bs4" %}
+
+    <div class="form-group{% if field.errors %} field-with-errors has-error{% endif %} {% if field.form.is_bound %} has-success{% endif %} field-{{ field.html_name }}">
+
+        {% if field.field.widget.input_type == 'checkbox' %}
+            {# TODO: show field errors, if any #}
+
+            <div class="form-check{% if field.errors %} has-error{% endif %}{% if layout == 'horizontal' %} col-md-9 col-sm-offset-3{% endif %}">
+                <input class="form-check-input" type="checkbox" name="{{ field.html_name }}" id="{{ field.auto_id }}"
+                    {% if field.value %}checked{% endif %}
+                >
+                <label class="form-check-label" for="{{ field.html_name }}">
+                    &nbsp;
+                    {{ field.label }}
+                </label>
+            </div>
+        {% else %}
+
+            {% if field.field.widget.input_type == 'radio' %}
+
+                <label {% if field.field.required %}class="required"{% endif %} for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {# TODO: show field errors, if any #}
+                {% for choice in field %}
+                    <div class="form-check{% if field.errors %} has-error{% endif %}">
+                        {{ choice.tag }}
+                        <label class="form-check-label" for="{{ choice.id_for_label }}">
+                            {{ choice.choice_label }}
+                        </label>
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                {% with field|boostrap_field_class|add:","|add:field_attrs as css %}
+
+                    <label class="control-label{% if layout == 'horizontal' %} col-md-3{% endif %}{% if field.field.required %} required{% endif %}"
+                        for="{{ field.id_for_label }}">{{ field.label }}:
+                    </label>
+                    <div{% if layout == 'horizontal' %} class="col-md-9"{% endif %}>
+
+                        {{ field|add_field_attrs:css }}
+                        {% for error in field.errors %}
+                            <div class="invalid-tooltip">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                        {% endif %}
+
+                    </div>
+
+                {% endwith %}
+            {% endif %}
+
+        {% endif %}
+    </div>
+
+{% else %}
+
+    <h1>Unknow FORM_LAYOUT_FLAVOR: "{{ FORM_LAYOUT_FLAVOR }}"</h1>
+
+{% endif %}

@@ -1,0 +1,28 @@
+{% load static %}
+
+{# "How To Create a Modal Box":; #}
+{# https://www.w3schools.com/howto/howto_css_modals.asp #}
+
+<div id="dialog_generic" class="dialog draggable">
+    <div class="dialog-dialog">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                <span class="spinner">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </span>
+                <span class="close">&times;</span>
+                <div class="title">Title</div>
+            </div>
+            <div class="dialog-body ui-front">
+                {% comment %}
+                <p>Some text in the dialog ...</p>
+                {% endcomment %}
+            </div>
+            <div class="dialog-footer">
+                <input type="submit" value="Close" class="btn btn-close" />
+                <input type="submit" value="Save" class="btn btn-save" />
+                <div class="text">footer</div>
+            </div>
+        </div>
+    </div>
+</div>

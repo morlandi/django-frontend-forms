@@ -1,0 +1,33 @@
+{% load i18n %}
+
+{% comment %}
+TODO:
+
+"How to Use Bootstrap 4 Forms With Django"
+https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html
+{% endcomment %}
+
+
+<div class="row">
+    <div class="col-sm-10">
+        <form method="post" class="form" novalidate autocomplete="off">
+            {% csrf_token %}
+
+            {% comment %}
+            {% bootstrap_form form layout='horizontal' %}
+            <input type="hidden" name="object_id" value="{{ object.id|default:'' }}">
+            {% buttons %}
+                <div class="form-submit-row">
+                    <button type="submit" class="btn btn-primary">
+                        {% bootstrap_icon "star" %} {% trans 'Send' %}
+                    </button>
+                </div>
+            {% endbuttons %}
+            {% endcomment %}
+
+            {{ form }}
+            <button type="submit" class="btn btn-success">{% trans 'Send' %}</button>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+{% load i18n frontend_forms_tags %}
+
+{% comment %}
+<style>
+.modal .grp-module {
+    border: none;
+    background-color: transparent;
+}
+</style>
+{% endcomment %}
+
+<div class="row">
+    <div class="col-sm-12">
+        <form action="{{ action }}" method="post" class="form" novalidate autocomplete="off">
+            {% csrf_token %}
+            {% render_form form %}
+            <input type="hidden" name="object_id" value="{{ object.id|default:'' }}">
+            <div class="form-submit-row">
+                <input type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
