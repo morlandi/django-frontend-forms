@@ -3,6 +3,11 @@
 History
 =======
 
+v0.1.1
+------
+* ModalForms module renamed as FrontendForms
+* optional parameter `event` added to open()
+
 v0.1.0
 ------
 * Module renamed from "django-modal-forms" to "django-frontend-forms"

@@ -101,7 +101,7 @@ For demonstration purposes, we also subscribe the 'created' notification.
     </script>
 
 
-    <a href="#" class="btn btn-primary pull-right" onclick="dialog1.open(); return false;">
+    <a href="#" class="btn btn-primary pull-right" onclick="dialog1.open(event); return false;">
         <i class="fa fa-plus-circle"></i>
         Test Popup
     </a>
@@ -147,7 +147,7 @@ Sample usage in a template:
     </script>
 
 
-    <a href="#" onclick="dialog2.open(show=false); return false;">
+    <a href="#" onclick="dialog2.open(event, show=false); return false;">
         <i class="fa fa-plus-circle"></i>
         Test Popup (2)
     </a> /
@@ -252,7 +252,7 @@ Dialog class public methods
 ---------------------------
 
 - constructor(options={})
-- open(show=true)
+- open(event, show=true)
 - close()
 - show()
 

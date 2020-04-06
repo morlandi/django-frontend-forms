@@ -18,6 +18,7 @@ class Dialog {
         // Default options
         self.options = {
             dialog_selector: '#dialog_generic',
+            open_event: null,
             html: '',
             url: '',
             width: null,
@@ -43,7 +44,7 @@ class Dialog {
         if (self.element.length <= 0) {
             var message = 'ERROR: dialog "' + self.options.dialog_selector + '" not found';
             console.log(message);
-            ModalForms.display_server_error(message);
+            FrontendForms.display_server_error(message);
         }
 
         self._notify("created", {options: self.options});
@@ -106,8 +107,10 @@ class Dialog {
         self._notify('closed');
     }
 
-    _initialize() {
+    _initialize(open_event) {
         var self = this;
+
+        self.options.open_event = open_event;
 
         var content = self.element.find('.dialog-content');
         var header = content.find('.dialog-header');
@@ -173,7 +176,7 @@ class Dialog {
             self._notify('loaded', {url: self.options.url});
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
-            ModalForms.display_server_error(errorThrown);
+            FrontendForms.display_server_error(errorThrown);
         }).always(function() {
             header.removeClass('loading');
         });
@@ -190,10 +193,10 @@ class Dialog {
      * 4. if successfull, a 'loaded.dialog' event is fired; you can use it to perform any action required after loading
      */
 
-    open(show=true) {
+    open(event=null, show=true) {
 
         var self = this;
-        self._initialize();
+        self._initialize(event);
 
         // When the user clicks on any '.btn-close' element, close the modal
         self.element.find('.dialog-header .close').off().on('click', function() {
@@ -313,7 +316,7 @@ class Dialog {
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
-                ModalForms.display_server_error(errorThrown);
+                FrontendForms.display_server_error(errorThrown);
             }).always(function() {
                 header.removeClass('loading');
             });
@@ -325,7 +328,7 @@ class Dialog {
 ////////////////////////////////////////////////////////////////////////////////
 // Helpers
 
-window.ModalForms = (function() {
+window.FrontendForms = (function() {
 
     function display_server_error(errorDetails) {
 
