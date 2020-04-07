@@ -238,8 +238,8 @@ We can finally use the form in a Dialog:
                         console.log('Dialog created: dialog=%o, params=%o', dialog, params);
                         break;
                     case "submitted":
-                        ModalForms.hide_mouse_cursor();
-                        ModalForms.reload_page(true);
+                        FrontendForms.hide_mouse_cursor();
+                        FrontendForms.reload_page(true);
                         break;
                 }
             }
@@ -380,8 +380,8 @@ Add the .compact-fields class to the form to modify the layout as in the right p
 
 .. image:: screenshots/bs4-forms.png
 
-Utilities (module ModalForms)
------------------------------
+Utilities (module FrontendForms)
+--------------------------------
 
 - display_server_error(errorDetails)
 - redirect(url, show_layer=false)
@@ -390,12 +390,18 @@ Utilities (module ModalForms)
 - overlay_show(element)
 - overlay_hide(element)
 - hide_mouse_cursor()
+- logObject(element, obj)
+- dumpObject(obj, max_depth, depth)
 - isEmptyObject(obj)
+- cloneObject(obj)
 - lookup(array, prop, value)
 - adjust_canvas_size(id)
 - getCookie(name)
 - confirmRemoteAction(url, options, afterDoneCallback, data=null)
+- downloadFromAjaxPost(url, params, headers, callback)
 - querystring_parse(qs, sep, eq, options)
+- set_datepicker_defaults(language_code)
+- apply_multiselect(elements)
 
 Form rendering helpers
 ----------------------
@@ -484,7 +490,7 @@ A basic support is provided for jquery-ui datepicker.
 
 Follow these steps:
 
-(1) Initialize datepicker default by calling `ModalForms.set_datepicker_defaults(language_code)` once:
+(1) Initialize datepicker default by calling `FrontendForms.set_datepicker_defaults(language_code)` once:
 
 .. code:: javascript
 
@@ -492,7 +498,7 @@ Follow these steps:
         $(document).ready(function() {
             moment.locale('it');
 
-            ModalForms.set_datepicker_defaults('{{LANGUAGE_CODE}}');    <-------------
+            FrontendForms.set_datepicker_defaults('{{LANGUAGE_CODE}}');    <-------------
             ...
 
 (2) In your form, make sure that the `datepicker` class is assigned to the input element;
@@ -520,6 +526,99 @@ Follow these steps:
                 case "loaded":
                     bindSelectables();
                     dialog.element.find(".datepicker").datepicker({});    <-------------
+                    break;
+                ...
+            }
+        }
+    });
+
+
+jQuery MultiSelect support
+--------------------------
+
+Requirements::
+
+    <link rel="stylesheet" type="text/css" href="{% static 'multiselect/css/multi-select.css' %}" />
+
+    <script src="{% static 'multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'jquery.quicksearch/dist/jquery.quicksearch.min.js' %}"></script>
+
+
+Follow these steps:
+
+(1) In your form, add the `multiselect` class to the SelectMultiple() widget
+
+.. code:: python
+
+    class MyForm(forms.ModelForm):
+
+        ...
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['operators'].widget.attrs = {'class': 'multiselect'}
+
+(2) Later on, bind the widget using `apply_multiselect()` helper:
+
+.. code:: javascript
+
+    dialog1 = new Dialog({
+        ...
+        callback: function(event_name, dialog, params) {
+            switch (event_name) {
+                case "loaded":
+                    FrontendForms.apply_multiselect(dialog.element.find('.multiselect'));
+                    break;
+                ...
+            }
+        }
+    });
+
+django-select2 support
+----------------------
+
+Requirements::
+
+    <script src="{% static 'select2/dist/js/select2.min.js' %}"></script>
+    <script src="{% static 'select2/dist/js/i18n/it.js' %}"></script>
+    <script src="{% static 'django_select2/django_select2.js' %}"</script>
+
+    <script language="javascript">
+        $( document ).ready(function() {
+            $.fn.select2.defaults.set('language', 'it');
+        });
+    </script>
+
+Follow these steps:
+
+(1) In your form, add the `multiselect` class to the SelectMultiple() widget
+
+.. code:: python
+
+    from django_select2.forms import HeavySelect2Widget
+
+    class MyForm(forms.ModelForm):
+
+        ...
+
+        class Meta:
+            ...
+            widgets = {
+                'fieldname': HeavySelect2Widget(
+                    data_url='/url/to/json/response'
+                )
+            }
+
+(2) Later on, bind the widget using `apply_multiselect()` helper:
+
+.. code:: javascript
+
+    dialog1 = new Dialog({
+        ...
+        callback: function(event_name, dialog, params) {
+            switch (event_name) {
+                case "loaded":
+                    dialog.element.find('.django-select2').djangoSelect2();
                     break;
                 ...
             }

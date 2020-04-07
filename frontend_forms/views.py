@@ -64,8 +64,23 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
         filename, extension = os.path.splitext(template_name)
         template_name = filename + '_inner' + extension
 
+    # Since so many Forms will require the `request` for proper initialization,
+    # we wish to pass it to the Form's constructor;
+    # however, this raises an exception in the general case, so let's do it only
+    # when specifically required with `Form.Meta.want_request = True`
+    try:
+        forms_wants_request = model_form_class.Meta.wants_request
+    except:
+        forms_wants_request = False
+
     if request.method == 'POST':
-        form = model_form_class(instance=object, data=request.POST)
+
+        #form = model_form_class(instance=object, data=request.POST)
+        kwargs = {'instance': object, 'data': request.POST }
+        if forms_wants_request:
+            kwargs.update({'request': request, })
+        form = model_form_class(**kwargs)
+
         if form.is_valid():
             object = form.save()
             if not request.is_ajax():
@@ -82,12 +97,15 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
 
         # Provide initial values fro specific model
         initial = {}
-        # TODO: fix in gaia
-        # if (app_label, model_name) == ('cbrdb', 'rapportoimpianto') or \
-        #    (app_label, model_name) == ('cbrdb', 'rapportomacchina'):
-        #     initial = {'autore': request.user, }
+        #form = model_form_class(instance=object, initial=initial, request=request)
+        kwargs = {'instance': object, 'initial': initial, }
+        if forms_wants_request:
+            kwargs.update({'request': request, })
+        form = model_form_class(**kwargs)
 
-        form = model_form_class(instance=object, initial=initial)
+    # Add a specific form class attribute so we can characterize the form in the template;
+    # i.e.:   <form class="form {{form.form_class}}" ...
+    form.form_class = 'form-%s-%s' % (app_label, model_name)
 
     return render(request, template_name, {
         'object': object,
@@ -125,4 +143,3 @@ def clone_object(request, app_label, model_name, pk):
     object = get_object_by_uuid_or_404(model, pk)
     new_object = object.clone(request)
     return HttpResponse(new_object.id)
-

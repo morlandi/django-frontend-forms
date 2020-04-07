@@ -3,6 +3,13 @@
 History
 =======
 
+v0.1.2
+------
+* Optionally provide the `request` to the Form constructor
+* Add a class attribute 'form-app_label-model_name' to the rendered form
+* django-select2 support
+* jQuery MultiSelect support
+
 v0.1.1
 ------
 * ModalForms module renamed as FrontendForms
