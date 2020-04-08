@@ -162,7 +162,21 @@ form .field-with-errors {
     /* If not desired, use .invalid-feedback instead */
     position: relative;
     margin-bottom: 40px;
+
 }
+
+form .field-with-errors .invalid-tooltip {
+    z-index: 0;
+}
+
+form .field-with-errors .form-check.has-error .form-check-input {
+    box-shadow: 0px 0px 0px 1px #dc3545;
+}
+
+form .field-with-errors .form-check.has-error .invalid-tooltip {
+    display: block;
+}
+
 
 /*
  * "simpletable" styles

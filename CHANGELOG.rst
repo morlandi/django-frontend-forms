@@ -3,6 +3,11 @@
 History
 =======
 
+v0.1.3
+------
+* Display checkbox fields errors
+* Adjust errors styles
+
 v0.1.2
 ------
 * Optionally provide the `request` to the Form constructor
