@@ -18,6 +18,10 @@ Install the package by running:
 
 .. code:: bash
 
+    pip install django-frontend-forms
+
+    or:
+
     pip install git+https://github.com/morlandi/django-frontend-forms
 
 In your settings, add:
