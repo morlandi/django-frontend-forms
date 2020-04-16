@@ -3,6 +3,10 @@
 History
 =======
 
+v....
+-----
+* generic Form submission from a Dialog example added to Readme
+
 v0.1.3
 ------
 * Display checkbox fields errors

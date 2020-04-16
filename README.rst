@@ -157,8 +157,8 @@ Sample usage in a template:
     </a> /
 
 
-Example: form submission from a Dialog
---------------------------------------
+Example: editing a Django Model from a Dialog
+---------------------------------------------
 
 TODO: TO BE REFINED ... AND VERIFIED ;)
 
@@ -250,6 +250,263 @@ We can finally use the form in a Dialog:
         });
 
     });
+
+Example: generic Form submission from a Dialog
+----------------------------------------------
+
+.. image:: screenshots/contract-form.png
+
+We start by creating a view for form rendering and submission:
+
+file `ajax.py`:
+
+.. code:: python
+
+    import time
+    from django.contrib.auth.decorators import login_required
+    from django.views.decorators.cache import never_cache
+    from django.core.exceptions import PermissionDenied
+    from django.http import HttpResponseRedirect
+
+
+    @login_required
+    @never_cache
+    def select_contract(request):
+
+        # if settings.DEBUG:
+        #     time.sleep(0.5);
+
+        if not request.user.has_perm('backend.view_contract') or not request.is_ajax():
+            raise PermissionDenied
+
+        #template_name = 'frontend/dialogs/generic_form_inner_with_video.html'
+        template_name = 'dashboard/dialogs/select_contract.html'
+
+        object = None
+        if request.method == 'POST':
+            form = SelectContractForm(request=request, data=request.POST)
+            if form.is_valid():
+                object = form.save(request)
+                if not request.is_ajax():
+                    # reload the page
+                    next = request.META['PATH_INFO']
+                    return HttpResponseRedirect(next)
+                # if is_ajax(), we just return the validated form, so the modal will close
+        else:
+            form = SelectContractForm(request=request)
+
+        return render(request, template_name, {
+            'form': form,
+            'object': object,  # unused, but armless
+        })
+
+and provide an endpoint to it for ajax call:
+
+file `urls.py`
+
+.. code:: python
+
+
+    from django.urls import path
+    from . import ajax
+
+    app_name = 'dashboard'
+
+    urlpatterns = [
+        ...
+        path('j/select_contract/', ajax.select_contract, name='j_select_contract'),
+        ...
+    ]
+
+The Form in this example does a few interesting things:
+
+- includes some specific assets declaring an inner Media class
+- receives the request upon construction
+- uses it to provide specific initial values to the widgets
+- provides some specific validations with `clean()`
+- encapsulates in `save()` all actions required after successfull submission
+
+
+file `forms.py`:
+
+.. code:: python
+
+    import json
+    import datetime
+    from django import forms
+    from selectable.forms import AutoCompleteWidget, AutoCompleteSelectWidget, AutoComboboxSelectWidget
+    from backend.models import Contract
+    from django.utils.safestring import mark_safe
+    from .lookups import ContractLookup
+
+
+    class SelectContractForm(forms.Form):
+
+        contract = forms.CharField(
+            label='Contract',
+            widget=AutoComboboxSelectWidget(ContractLookup, limit=10),
+            required=True,
+            help_text=mark_safe("&nbsp;"),
+        )
+        today = forms.BooleanField(label="Oggi", required=False)
+        date = forms.DateField(widget=forms.DateInput(), label='', required=False)
+
+        class Media:
+            css = {
+                'screen': ('dashboard/css/select_contract_form.css', )
+            }
+            js = ('dashboard/js/select_contract_form.js', )
+
+
+        def __init__(self, request, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['date'].widget = forms.DateInput(attrs={'class': 'datepicker'})
+            assert request.user.is_authenticated and request.user.is_active
+            self.fields['contract'].initial = request.user.contract_attivo
+            self.fields['date'].initial = request.user.data_attiva
+            self.fields['today'].initial = request.user.data_attiva is None
+
+        def lookup_contract(self):
+            try:
+                contract = Contract.objects.get(
+                    id=self.cleaned_data['contract']
+                )
+            except Contract.DoesNotExist:
+                contract = None
+            return contract
+
+        def clean(self):
+            cleaned_data = self.cleaned_data
+            if not cleaned_data['today'] and not cleaned_data['date']:
+                raise forms.ValidationError({
+                    'date': 'Questo campo è obbligatorio'
+                })
+            return cleaned_data
+
+        def save(self, request):
+            user = request.user
+            assert request.user.is_authenticated and request.user.is_active
+            user.contract_attivo = self.lookup_contract()
+            if self.cleaned_data['today']:
+                user.data_attiva = None
+            else:
+                user.data_attiva = self.cleaned_data['date']
+            user.save(update_fields=['contract_attivo', 'data_attiva', ])
+
+The javascript and css assets are used for specific needs of this form:
+
+.. code:: javascript
+
+    function onChangeToday(event) {
+        var controller = $('#id_today');
+        var value = controller.is(":checked");
+        $('#id_date').prop('disabled', value);
+        $('.field-date .ui-datepicker-trigger').prop('disabled', value);
+        if (value) {
+            $('#id_date').datepicker('setDate', null);
+        }
+    }
+
+    $(document).ready(function() {
+        $('#id_today').on('change', onChangeToday);
+        onChangeToday();
+    });
+
+In the template, remember to include the Form's assets:
+
+.. code:: html
+
+    {% load i18n frontend_forms_tags %}
+
+    {{ form.media.css }}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="{{ action }}" method="post" class="form {{form.form_class}}" novalidate autocomplete="off">
+                {% csrf_token %}
+
+                {% if form.errors or form.non_field_errors %}
+                    <p class="errornote">{% trans 'Please correct the error below.' %}</p>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                    <ul class="errorlist">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                <fieldset>
+                    {% render_form_field form.contract %}
+                    <div>Data di riferimento:</div>
+                    <div class="data-selection-block">
+                        {% render_form_field form.today %}
+                        {% render_form_field form.date %}
+                    </div>
+                </fieldset>
+
+                <input type="hidden" name="object_id" value="{{ object.id|default:'' }}">
+                <div class="form-submit-row">
+                    <input type="submit" value="Save" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if request.is_ajax %}
+        {{ form.media.js }}
+    {% endif %}
+
+And finally, the Dialog itself;
+
+please note that we use the `loaded` event notification to rebind the widgets
+after form rendering.
+
+.. code:: html
+
+    {% block extrajs %}
+    <script language="javascript">
+        $(document).ready(function() {
+
+            dialog1 = new Dialog({
+                dialog_selector: '#dialog_generic',
+                html: '',
+                url: "{% url 'dashboard:j_select_contract' %}",
+                width: '80%',
+                max_width: '400px',
+                min_height: '200px',
+                button_save_label: 'Salva',
+                button_close_label: 'Annulla',
+                title: '<i class="fa fa-file-o"></i> Selezione Contract',
+                footer_text: '',
+                enable_trace: true,
+                callback: function(event_name, dialog, params) {
+                    switch (event_name) {
+                        case "loaded":
+                            bindSelectables();
+                            dialog.element.find(".datepicker").datepicker({});
+                            break;
+                        case "submitted":
+                            FrontendForms.reload_page(show_layer=true);
+                            break;
+                    }
+                }
+            });
+
+            $('.btn-cambia-contract').off().on('click', function(event) {
+                event.preventDefault();
+                dialog1.open();
+            })
+
+        });
+
+    </script>
+    {% endblock extrajs %}
 
 
 Dialog class public methods
