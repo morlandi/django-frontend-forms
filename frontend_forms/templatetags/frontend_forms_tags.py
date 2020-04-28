@@ -283,7 +283,7 @@ def add_field_attrs(field, css):
     return field.as_widget(attrs=attrs)
 
 @register.inclusion_tag('frontend_forms/render_form_field.html')
-def render_form_field(field, flavor=None, extra_attrs='', layout=FORM_LAYOUT_DEFAULT):
+def render_form_field(field, flavor=None, extra_attrs='', layout=FORM_LAYOUT_DEFAULT, index=0):
 
     # Example:
     #   {'class': 'user-position', 'style': 'border: 1px solid red;'} --> 'class=user-position,style=border: 1px solid red;'
@@ -301,6 +301,7 @@ def render_form_field(field, flavor=None, extra_attrs='', layout=FORM_LAYOUT_DEF
         'field_attrs': field_attrs,
         'FORM_LAYOUT_FLAVOR': flavor if flavor is not None else FORM_LAYOUT_FLAVOR,
         'layout': layout,
+        'index': index,
     }
 
 @register.inclusion_tag('frontend_forms/render_form.html')

@@ -27,7 +27,7 @@
 
     <fieldset class="module grp-module" style="width: 100%">
         {% for field in form.visible_fields %}
-            {% render_form_field field=field flavor=FORM_LAYOUT_FLAVOR %}
+            {% render_form_field field=field flavor=FORM_LAYOUT_FLAVOR layout=layout index=forloop.counter %}
         {% endfor %}
     </fieldset>
 
@@ -52,7 +52,7 @@
 
     <fieldset>
         {% for field in form.visible_fields %}
-            {% render_form_field field flavor=FORM_LAYOUT_FLAVOR layout=layout %}
+            {% render_form_field field flavor=FORM_LAYOUT_FLAVOR layout=layout index=forloop.counter %}
         {% endfor %}
     </fieldset>
 
