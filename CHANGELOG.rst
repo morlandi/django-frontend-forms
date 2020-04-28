@@ -3,9 +3,11 @@
 History
 =======
 
-v....
------
+v0.1.4
+------
 * generic Form submission from a Dialog example added to Readme
+* fix horizontal forms for BS4
+* add even/odd class to form groups
 
 v0.1.3
 ------
