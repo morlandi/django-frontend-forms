@@ -3,6 +3,10 @@
 History
 =======
 
+v0.1.5
+------
+* autofocus_first_visible_input option added
+
 v0.1.4
 ------
 * generic Form submission from a Dialog example added to Readme

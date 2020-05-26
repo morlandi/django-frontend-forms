@@ -32,7 +32,8 @@ class Dialog {
             title: '',
             footer_text: '',
             enable_trace: false,
-            callback: null
+            callback: null,
+            autofocus_first_visible_input: true
         };
 
         // Override with user-supplied custom options
@@ -267,7 +268,9 @@ class Dialog {
         }
 
         // Give focus to first visible form field
-        form.find('input:visible').first().focus().select();
+        if (self.options.autofocus_first_visible_input) {
+            form.find('input:visible').first().focus().select();
+        }
 
         // bind to the form’s submit event
         form.on('submit', function(event) {
