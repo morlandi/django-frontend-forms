@@ -8,7 +8,6 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.utils import timezone
-from constance import config
 from frontend_forms.app_settings import FORM_LAYOUT_FLAVOR
 from frontend_forms.app_settings import FORM_LAYOUT_DEFAULT
 
