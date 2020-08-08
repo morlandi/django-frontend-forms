@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load i18n utils_tags frontend_forms_tags %}
+
+{% block page-title %}django-frontend-forms example{% endblock page-title %}
+{% block body-class%}index{% endblock body-class %}
+
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row" style="margin-bottom: 20px;">
+        <input id="btn-use-dropzonejs" type="checkbox"{% if use_dropzonejs %} checked{% endif %}
+            class="nowrap"
+            data-width="200" data-height="30"
+            data-toggle="toggle"
+            data-on="{% trans 'Use Dropzonejs' %}" data-off="{% trans 'Use plain HTML' %}"
+            data-onstyle="success" data-offstyle="danger">
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div id="form-container">
+
+                {% comment %}
+                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload" action="{% url 'files_upload' %}" novalidate autocomplete="off">
+                    {% csrf_token %}
+                    <div class="fallback">
+                        {# <input id="file" name="file" type="file" multiple="multiple"/> #}
+                        {{form}}
+                        <input type="submit" value="Upload"/>
+                    </div>
+                </form>
+                {% endcomment %}
+
+
+                {% comment %}
+                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload" action="{% url 'files_upload' %}" novalidate autocomplete="off">
+                    {% csrf_token %}
+
+                    <div class="fallback">
+                    {% render_form form %}
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+                    </div>
+                </form>
+                {% endcomment %}
+
+
+
+                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload"
+                    action="{% url 'files_upload' %}?use_dropzonejs={% if use_dropzonejs %}1{% else %}0{% endif %}" novalidate autocomplete="off">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <ul class="errorlist">
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                    {% endfor %}
+
+                    <fieldset>
+                        {% render_form_field form.title %}
+                        <div class="fallback">
+                            {% render_form_field form.file %}
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </form>
+
+
+
+
+
+
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>{% trans 'Saved files' %} ({{files|length}})</h3>
+            {% if files.count > 0 %}
+                <table class="simpletable">
+                    <tr>
+                        <th>{% trans 'created' %}</th>
+                        <th>{% trans 'file' %}</th>
+                        <th>{% trans 'size' %}</th>
+                        <th>{% trans 'image info' %}</th>
+                        <th>{% trans 'description' %}</th>
+                    </tr>
+                    {% for file in files %}
+                    <tr>
+                        <td class="nowrap">{{file.created|format_datetime}}</td>
+                        <td>
+                            {% if file.file %}
+                            <a href="{{file.file.url}}">{{file}}</a>
+                            {% endif %}
+                        </td>
+                        <td class="numeric">
+                            {% if file.file %}
+                            {{file.file.size|filesizeformat}}
+                            {% endif %}
+                        </td>
+                        <td class="nowrap">
+                            {% if file.file %}
+                            {{file.file|imagesize}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{file.description}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <a href="{% url 'clear_all_files' %}">{% trans 'Clear all' %}</a>
+            {% else %}
+                <p>{% trans 'No files uploaded yet' %}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>{% trans 'References' %}</h3>
+            <ul>
+                <li><a href="https://alexanderae.com/dropzonejs-django.html">Dropzone + Django</a></li>
+                <li><a href="https://gist.github.com/serdardurbaris/039c69fdab60a4c68e34314e2b1ccf35">Django + Dropzone Multiple File Upload</a></li>
+                <li><a href="https://github.com/UpbeatPR/django-dropzone">django-dropzone</a></li>
+                <li><a href="https://docs.djangoproject.com/en/3.0/topics/http/file-uploads/">Django doc: File Uploads</a></li>
+                <li><a href="https://www.sitepoint.com/file-upload-form-express-dropzone-js/">How to Build a File Upload Form with Express and DropzoneJS</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block extrajs %}
+    {{ block.super }}
+    <script type="text/javascript">
+
+
+        $(document).ready(function() {
+
+            $('#btn-use-dropzonejs').change(function(event) {
+                var checked = $(this).prop('checked');
+                var url = window.location.pathname + '?use_dropzonejs=' + (checked ? '1' : '0');
+                window.location.replace(url);
+            });
+
+            {% if use_dropzonejs %}
+            $('#MultiFileUpload').dropzone({
+                url: "/files_upload/",
+                crossDomain: false,
+                paramName: "file",
+                parallelUploads: 5,
+                autoProcessQueue: true,
+                filesizeBase: 1024,
+                maxFilesize: 10000,
+                dictRemoveFileConfirmation: null,
+                init: function () {
+                    this.on("uploadprogress", function (file, progress, bytesSent) {
+                        progress = bytesSent / file.size * 100;
+                        console.log(filesizecalculation(bytesSent))
+                    });
+                    this.on("maxfilesexceeded", function (data) {
+                        var res = eval('(' + data.xhr.responseText + ')');
+                    });
+                    this.on("addedfile", function (file) {
+                        var removeButton = Dropzone.createElement("<button data-dz-remove " +
+                            "class='del_thumbnail btn btn-default'><span class='glyphicon glyphicon-trash'></span> Sil</button>");
+                        var _this = this;
+                        removeButton.addEventListener("click", function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            _this.removeFile(file);
+                        });
+                        file.previewElement.appendChild(removeButton);
+                    });
+                    this.on("error", function (file, message) {
+                        console.log(message);
+                        alert(message);
+                        this.removeFile(file);
+                    });
+                    this.on('sending', function (file, xhr, formData) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        // make sure request.is_ajax() return True on the server
+                        //xhr.setRequestHeader("X-Requested-With", 'XMLHttpRequest');
+                    });
+                }
+
+            });
+            {% endif %}
+
+
+        });
+    </script>
+
+{% endblock extrajs %}
+
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <style>
+
+    #form-container .uploadform_drop_area {
+        background-color: #ffc;
+    }
+    table.container td {
+        padding: 40px;
+        vertical-align: top;
+    }
+    </style>
+
+{% endblock extrastyle %}

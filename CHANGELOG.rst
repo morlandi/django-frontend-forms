@@ -3,6 +3,11 @@
 History
 =======
 
+v0.1.6
+------
+* example django project added
+...
+
 v0.1.5
 ------
 * autofocus_first_visible_input option added

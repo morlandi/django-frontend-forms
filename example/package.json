@@ -1,0 +1,22 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "Project \"example\" ===============",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/morlandi/django-frontend-forms"
+  },
+  "author": "Mario Orlandi",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "bootstrap4-toggle": "^3.6.1",
+    "dropzone": "^5.7.2",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  }
+}
