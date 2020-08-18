@@ -6,7 +6,6 @@ History
 v0.1.6
 ------
 * example django project added
-...
 
 v0.1.5
 ------
