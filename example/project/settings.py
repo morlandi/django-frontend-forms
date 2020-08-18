@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'project',
     'frontend_forms',
+    'project',
+    'samples',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,6 @@ STATICFILES_FINDERS = [
 STATICFILES_FINDERS.append('npm.finders.NpmFinder')
 
 
+X_FRAME_OPTIONS='SAMEORIGIN' # only if django version >= 3.0
 FRONTEND_FORMS_FORM_LAYOUT_FLAVOR = 'bs4'
+

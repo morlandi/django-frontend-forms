@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>A basic modal box which returns a value</h1>
+
+    <button id="button-open-modal" class="btn btn-primary">Open Modal</button>
+    <br />
+    <br />
+    <div id="result-wrapper" style="display: none;">You entered: <span id="result"></span></div>
+
+    <div id="my-modal" class="my-modal">
+        <div class="my-modal-content">
+            <div class="my-modal-header">
+                <span class="close">&times;</span>
+                <h2>Modal Header</h2>
+            </div>
+            <div class="my-modal-body">
+                <br />
+                <p>Text value is: <input type="text" value=""></p>
+                <br />
+            </div>
+            <div class="my-modal-footer">
+                <h3>Modal Footer</h3>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+
+{% block extrastyle %}
+    <style>
+
+        .my-modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .my-modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 30%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        .my-modal-header {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .my-modal-body {padding: 40px;}
+
+        .my-modal-footer {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+{% endblock extrastyle %}
+
+
+{% block extrajs %}
+    <script type="text/javascript">
+
+        'use strict';
+
+        $(document).ready(function() {
+
+            // Get the modal
+            var modal = $('#my-modal');
+
+            // Open the modal
+            var button = $('#button-open-modal');
+            button.on('click', function(event) {
+                open_popup(modal);
+            })
+
+            // Close the modal
+            var close_button = $('.close');
+            close_button.on('click', function(event) {
+                close_popup(modal);
+            })
+
+            $(window).on('click', function(event) {
+                if (event.target.id == modal.attr('id')) {
+                    close_popup(modal);
+                }
+            });
+
+        });
+
+        function open_popup(modal) {
+            var input = modal.find('.my-modal-body input');
+            input.val('');
+            modal.show();
+            input.focus();
+        }
+
+        function close_popup(modal) {
+            var value = modal.find('.my-modal-body input').val();
+            save_text_value(value);
+            modal.hide();
+        }
+
+        function save_text_value(value) {
+            if (value) {
+                $('#result-wrapper').show();
+                $('#result').text(value);
+            }
+            else {
+                $('#result-wrapper').hide();
+            }
+        }
+
+    </script>
+{% endblock %}

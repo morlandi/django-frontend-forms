@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Simple Dialogs with Form validation</h1>
+
+    <table>
+        <tr>
+            <td><a data-value="1" href="#" class="link-button btn btn-primary">dialog1</a></td>
+            <td><p>A dialog which submits a form</p></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'samples:simple-form-validation' %}" class="btn btn-primary" target="_new">standalone page</a></td>
+            <td><p>The same form in a standalone page</p></td>
+        </tr>
+        <tr>
+            <td><a data-value="2" href="#" class="link-button btn btn-primary">dialog2</a></td>
+            <td><p>A dialog with an advanced form</p></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'samples:advanced-form-validation' %}" class="btn btn-primary" target="_new">standalone page</a></td>
+            <td><p>The same form in a standalone page</p></td>
+        </tr>
+    </table>
+
+{% endblock content %}
+
+
+{% block extrajs %}
+<script language="javascript">
+
+
+    function onLinkButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+        var dialogs = [dialog1, dialog2];
+        dialogs[n - 1].open(event);
+    }
+
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkButtonClicked);
+
+        dialog1 = new Dialog({
+            url: "{% url 'samples:simple-form-validation' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true
+        });
+
+        function dialog2_callback(event_name, dialog, params) {
+            switch (event_name) {
+                case "loaded":
+                    //bindSelectables();
+                    dialog.element.find(".datepicker").datepicker({});
+                    break;
+            }
+        }
+
+        dialog2 = new Dialog({
+            url: "{% url 'samples:advanced-form-validation' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true,
+            callback: dialog2_callback
+        });
+
+    });
+
+</script>
+{% endblock extrajs %}

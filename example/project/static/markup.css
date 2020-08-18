@@ -1,0 +1,68 @@
+/* Monokay adjustments */
+pre.code,
+.highlight pre {
+    /* background-color: #49483e; */
+    background-color: #1D1E19;
+    /* color: #75715e; */
+    color: #fff;
+    padding: 20px;
+    font-size: 12px;
+}
+pre.code.bash {
+    color: #0c0;
+}
+
+.figure {
+    text-align: center;
+}
+
+.figure > img {
+    margin: 0 auto;
+    max-width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.figure > .caption {
+    color: #888;
+}
+
+#content > .section {
+    margin-bottom: 30px;
+}
+
+p {
+    text-indent: 20px;
+    margin-bottom: 0.3rem;
+}
+
+
+.section > h1 {
+    /*background-color: #3B7CBC;*/
+    background-color: #343A40;
+    color: white;
+    padding: 8px 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 6px;
+    margin: 30px 0;
+}
+
+.section > h1 a {
+    color: white;
+}
+
+.admonition.note {
+    background-color: #FF6600;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 20px;
+}
+
+.admonition.note .first.admonition-title {
+    display: none;
+}
+
+.admonition.note a {
+    color: yellow;
+}

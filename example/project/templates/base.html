@@ -8,9 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel='stylesheet' href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel='stylesheet' href="{% static 'bootstrap4-toggle/css/bootstrap4-toggle.min.css' %}">
+    <link rel='stylesheet' href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+    <link rel='stylesheet' href="{% static 'sweetalert2/dist/sweetalert2.min.css' %}">
     <link rel='stylesheet' href="{% static 'dropzone/dist/min/dropzone.min.css' %}">
     <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
     <link rel="stylesheet" href="{% static 'example.css' %}">
+    <link rel="stylesheet" href="{% static 'markup.css' %}">
+    <link href="{% static 'pygments/styles/monokai.css' %}" media="screen" rel="stylesheet" type="text/css" />
     {% block extrastyle %}
     {% endblock extrastyle %}
 </head>
@@ -20,7 +24,7 @@
 
     <main role="main" class="container">
 
-        <div id="page-title"><h1>{% block page-title %}{% endblock page-title %}</h1></div>
+        <div id="page-title"><h2>{% block page-title %}{% endblock page-title %}</h2></div>
 
         {% block messages %}
             {% if messages %}
@@ -40,10 +44,20 @@
 
     </main>
 
+
+    {% block modals %}
+        {% include 'frontend_forms/dialogs.html' %}
+    {% endblock modals %}
+
     <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'popper.js/dist/umd/popper.min.js' %}"></script>
+    <script src="{% static 'jquery-ui-dist/jquery-ui.min.js' %}"></script>
     <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'bootstrap4-toggle/js/bootstrap4-toggle.min.js' %}"></script>
+    <script src="{% static 'gasparesganga-jquery-loading-overlay/dist/loadingoverlay.min.js' %}"></script>
+    <script src="{% static 'sweetalert2/dist/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'promise-polyfill/dist/polyfill.min.js' %}"></script>
+    <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
     <script src="{% static 'dropzone/dist/min/dropzone.min.js' %}"></script>
 
     <script>

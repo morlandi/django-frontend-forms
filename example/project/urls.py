@@ -23,9 +23,11 @@ from . import views
 
 
 urlpatterns = [
-    path('', lambda x: redirect('/files_upload/'), name='index'),
+    #path('', lambda x: redirect('/files_upload/'), name='index'),
+    path('', TemplateView.as_view(template_name="pages/index.html"), name="index"),
     path('files_upload/', views.FileFormView.as_view(), name="files_upload"),
     path('admin/', admin.site.urls),
+    path('samples/', include('samples.urls', namespace='samples')),
 ] \
 + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
 + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

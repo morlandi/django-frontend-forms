@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load markup %}
+
+{% block page-title %}django-frontend-forms example project{% endblock page-title %}
+{% block body-class%}index{% endblock body-class %}
+
+
+{% block content %}
+
+{% filter restructuredtext %}
+
+.. contents::
+
+.. sectnum::
+
+{% include 'index/introduction.rst' %}
+{% include 'index/basic_modals.rst' %}
+{% include 'index/basic_modals_in_a_django_template.rst' %}
+{% include 'index/form_submission.rst' %}
+
+{% endfilter %}
+
+{% endblock content %}

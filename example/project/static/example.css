@@ -1,7 +1,7 @@
 
 body {
      padding-top: 5rem;
-     background-color: #fefefe;
+     background-color: #eee;
 }
 
 .messages {
@@ -47,3 +47,27 @@ table.simpletable td {
     padding: 2px 4px;
     font-size: 12px;
 }
+
+
+/*
+ *  Sweetalert2
+ */
+
+/* https://github.com/sweetalert2/sweetalert2/issues/855 */
+/*
+.swal2-popup {
+    font-size: 1.6rem !important;
+}
+
+.swal2-actions button {
+    min-width: 8em;
+    margin: 0 6px;
+}
+*/
+
+.swal2-container {
+    z-index: 3000;
+}
+
+
+
