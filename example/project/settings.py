@@ -141,3 +141,9 @@ STATICFILES_FINDERS.append('npm.finders.NpmFinder')
 X_FRAME_OPTIONS='SAMEORIGIN' # only if django version >= 3.0
 FRONTEND_FORMS_FORM_LAYOUT_FLAVOR = 'bs4'
 
+# Load local settings when supplied
+try:
+    from project.local import *
+    print('Local settings loaded !')
+except ModuleNotFoundError as e:
+    pass
