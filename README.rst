@@ -33,30 +33,37 @@ In your settings, add:
         'frontend_forms',
     ]
 
-
-In your base template, add:
+In your base template, include the default styles, the javascript support,
+and optionally the sample HTML template:
 
 .. code:: html
 
     <link rel='stylesheet' href="{% static 'frontend_forms/css/frontend_forms.css' %}">
+    <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    {% include 'frontend_forms/dialogs.html' %}
+
+
+**OPTIONALLY**, since the js code uses the `class` keyword, you might want to transpile
+`frontend_forms.jsx` for maximum compatibility, to support oldest browsers.
+
+For example, using Babel and django-compress:
+
+.. code:: html
 
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}" type="text/jsx"></script>
 
-    {% include 'frontend_forms/dialogs.html' %}
-
-Also, setup handling of ".jsx" files; for example using Babel::
+then, setup handling for ".jsx" files as follows::
 
     COMPRESS_PRECOMPILERS = (
         ...
         ('text/jsx', 'cat {infile} | ./node_modules/babel-cli/bin/babel.js --presets babel-preset-es2015 > {outfile}'),
     )
 
-and for local debugging::
+(you my want to disable it local debugging)::
 
-    # Remove js tranpiling for easier debugging
+    # Remove js transpiling for easier debugging
     COMPRESS_PRECOMPILERS = (
         ...
-        # !!! ('text/jsx', 'cat {infile} | ./node_modules/babel-cli/bin/babel.js --presets babel-preset-es2015 > {outfile}'),
         ('text/jsx', 'cat {infile} | ./node_modules/babel-cli/bin/babel.js > {outfile}'),
     )
 
@@ -69,8 +76,114 @@ then:
     npm install babel-preset-stage-2
 
 
-Basic Usage
------------
+How to use
+----------
+
+Two actions are required:
+
+1) provide an HTML template for the dialog layout
+2) attach the template to a `Dialog` javascript object to control it's behaviour
+
+Since in most cases you will be primarily interested in customizing the modal content only,
+a default template is provided to render a generic dialog (file frontend_forms/templates/frontend_forms/dialogs.html).
+
+Dialog methods
+..............
+
+=============================== ===================================================================================================================
+Method                          Effects
+------------------------------- -------------------------------------------------------------------------------------------------------------------
+constructor(options={})         See `options` list below
+open(event=null, show=true)     Open the dialog
+
+                                1. the dialog body will be immediately loaded with static content provided by option "html"
+                                2. then the dialog is shown (unless the "show" parameter is false)
+                                3. finally, dynamic content will be loaded from remote address provided by option "url" (if supplied)
+                                4. if successfull, a 'loaded.dialog' event is fired; you can use it to perform any action required after loading
+
+close()                         Close (hide) the dialog
+show()                          Make the dialog visible
+
+=============================== ===================================================================================================================
+
+
+Dialog options
+..............
+
+=============================== ========================== ===============================================================
+Option                          Default value              Notes
+------------------------------- -------------------------- ---------------------------------------------------------------
+dialog_selector                 '#dialog_generic'          The selector for HTML dialog template
+open_event                      null                       Used to "remember" the event which triggered Dialog opening
+html                            ''                         Static content to display in dialog body
+url                             ''                         Optional url to retrieve dialog content via Ajax
+width                           null
+min_width                       null
+max_width                       null
+height                          null
+min_height                      null
+max_height                      null
+button_save_label               'Save'
+button_save_initially_hidden    false                      Will be shown after form rendering
+button_close_label              'Cancel'
+title                           ''
+footer_text                     ''
+enable_trace                    false                      show notifications in debug console
+callback                        null                       a callback to receive events
+autofocus_first_visible_input   true
+=============================== ========================== ===============================================================
+
+Dialog notifications
+....................
+
+============================  ================================
+event_name                    params
+============================  ================================
+created                       options
+closed
+initialized
+shown
+loading                       url
+loaded                        url, data
+loading_failed                jqXHR, textStatus, errorThrown
+open
+submitting                    method, url, data
+submitted                     method, url, data
+============================  ================================
+
+During it's lifetime, the Dialog will notify all interesting events to the caller,
+provided he supplies a suitable callback in the contructor:
+
+    self.options.callback(event_name, dialog, params)
+
+Example:
+
+.. code:: javascript
+
+    dialog1 = new Dialog({
+        ...
+        callback: function(event_name, dialog, params) {
+            console.log('event_name: %o, dialog: %o, params: %o', event_name, dialog, params);
+        }
+    });
+
+Result::
+
+    event_name: "created", dialog: Dialog {options: {…}, element: …}, params: {options: {…}}
+    event_name: "initialized", dialog: Dialog {options: {…}, element: …}, params: {}
+    event_name: "open", dialog: Dialog {options: {…}, element: …}, params: {}
+    event_name: "shown", dialog: Dialog {options: {…}, element: …}, params: {}
+    event_name: "loading", dialog: Dialog {options: {…}, element: …}, params: {url: "/admin_ex/popup/"}
+    event_name: "loaded", dialog: Dialog {options: {…}, element: …}, params: {url: "/admin_ex/popup/"}
+    event_name: "submitting", dialog: Dialog {options: {…}, element: …}, params: {method: "post", url: "/admin_ex/popup/", data: "text=&number=aaa"}
+    event_name: "submitted", dialog: Dialog {options: {…}, element: …}, params: {method: "post", url: "/admin_ex/popup/", data: "text=111&number=111"}
+    event_name: "closed", dialog: Dialog {options: {…}, element: …}, params: {}
+
+You can also trace all events in the console setting the boolean flag `enable_trace`.
+
+
+Opening a Dialog
+----------------
 
 In the following example, we build a Dialog() object providing some custom options;
 then, we use it to open a modal dialog and load it from the specified url.
@@ -157,102 +270,8 @@ Sample usage in a template:
     </a> /
 
 
-Example: editing a Django Model from a Dialog
----------------------------------------------
-
-TODO: TO BE REFINED ... AND VERIFIED ;)
-
-
-First of all, we need a view for form rendering and submission.
-
-For example:
-
-.. code:: python
-
-    @login_required
-    @never_cache
-    def edit_something(request, id_object=None):
-
-        # if not request.user.has_perm('backend.view_something') or not request.is_ajax():
-        #     raise PermissionDenied
-
-        if id_object is not None:
-            object = get_object_or_404(Something, id=id_object)
-        else:
-            object = None
-
-        template_name = 'frontend_forms/generic_form_inner.html'
-
-        if request.method == 'POST':
-
-            form = SomethingForm(data=request.POST, instance=object)
-            if form.is_valid():
-                object = form.save(request)
-                if not request.is_ajax():
-                    # reload the page
-                    next = request.META['PATH_INFO']
-                    return HttpResponseRedirect(next)
-                # if is_ajax(), we just return the validated form, so the modal will close
-        else:
-            form = SomethingForm()
-
-        return render(request, template_name, {
-            'form': form,
-            'object': object,  # unused, but armless
-        })
-
-where:
-
-.. code:: python
-
-    class SomethingForm(forms.ModelForm):
-
-        class Meta:
-            model = Someghing
-            exclude = []
-
-        ...
-
-and an endpoint for Ajax call:
-
-File "urls.py" ...
-
-.. code:: python
-
-    path('j/edit_something/<int:id_object>/', ajax.edit_something, name='j_edit_something'),
-
-We can finally use the form in a Dialog:
-
-.. code:: javascript
-
-    $(document).ready(function() {
-
-        dialog1 = new Dialog({
-            dialog_selector: '#dialog_generic',
-            html: '<h1>Loading ...</h1>',
-            url: '/j/edit_something/{{ object.id }}/',
-            width: '400px',
-            min_height: '200px',
-            title: '<i class="fa fa-add"></i> Edit',
-            footer_text: '',
-            enable_trace: true,
-            callback: function(event_name, dialog, params) {
-                switch (event_name) {
-                    case "created":
-                        console.log('Dialog created: dialog=%o, params=%o', dialog, params);
-                        break;
-                    case "submitted":
-                        FrontendForms.hide_mouse_cursor();
-                        FrontendForms.reload_page(true);
-                        break;
-                }
-            }
-        });
-
-    });
-
-Example: generic Form submission from a Dialog
-----------------------------------------------
+A full, real example for a Django Form submission from a Dialog
+---------------------------------------------------------------
 
 .. image:: screenshots/contract-form.png
 
@@ -509,33 +528,99 @@ after form rendering.
     {% endblock extrajs %}
 
 
-Dialog class public methods
----------------------------
+Editing a Django Model from a Dialog
+------------------------------------
 
-- constructor(options={})
-- open(event, show=true)
-- close()
-- show()
+TODO: TO BE REFINED ... AND VERIFIED ;)
 
-Options (with default values)::
 
-    self.options = {
-        dialog_selector: '#dialog_generic',
-        html: '',
-        url: '',
-        width: null,
-        min_width: null,
-        max_width: null,
-        height: null,
-        min_height: null,
-        max_height: null,
-        button_save_label: 'Save',
-        button_close_label: 'Cancel',
-        title: '',
-        footer_text: '',
-        enable_trace: false,
-        callback: null
-    };
+First of all, we need a view for form rendering and submission.
+
+For example:
+
+.. code:: python
+
+    @login_required
+    @never_cache
+    def edit_something(request, id_object=None):
+
+        # if not request.user.has_perm('backend.view_something') or not request.is_ajax():
+        #     raise PermissionDenied
+
+        if id_object is not None:
+            object = get_object_or_404(Something, id=id_object)
+        else:
+            object = None
+
+        template_name = 'frontend_forms/generic_form_inner.html'
+
+        if request.method == 'POST':
+
+            form = SomethingForm(data=request.POST, instance=object)
+            if form.is_valid():
+                object = form.save(request)
+                if not request.is_ajax():
+                    # reload the page
+                    next = request.META['PATH_INFO']
+                    return HttpResponseRedirect(next)
+                # if is_ajax(), we just return the validated form, so the modal will close
+        else:
+            form = SomethingForm()
+
+        return render(request, template_name, {
+            'form': form,
+            'object': object,  # unused, but armless
+        })
+
+where:
+
+.. code:: python
+
+    class SomethingForm(forms.ModelForm):
+
+        class Meta:
+            model = Someghing
+            exclude = []
+
+        ...
+
+and an endpoint for Ajax call:
+
+File "urls.py" ...
+
+.. code:: python
+
+    path('j/edit_something/<int:id_object>/', ajax.edit_something, name='j_edit_something'),
+
+We can finally use the form in a Dialog:
+
+.. code:: javascript
+
+    $(document).ready(function() {
+
+        dialog1 = new Dialog({
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            url: '/j/edit_something/{{ object.id }}/',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-add"></i> Edit',
+            footer_text: '',
+            enable_trace: true,
+            callback: function(event_name, dialog, params) {
+                switch (event_name) {
+                    case "created":
+                        console.log('Dialog created: dialog=%o, params=%o', dialog, params);
+                        break;
+                    case "submitted":
+                        FrontendForms.hide_mouse_cursor();
+                        FrontendForms.reload_page(true);
+                        break;
+                }
+            }
+        });
+
+    });
 
 
 Default dialog layout
@@ -576,55 +661,6 @@ Notes:
 - adding ".ui-front" to the ".dialog-box" element helps improving the behaviour of the dialog on a mobile client
 
 
-Notifications
--------------
-
-During it's lifetime, the Dialog will notify all interesting events to the caller,
-provided he supplies a suitable callback in the contructor:
-
-    self.options.callback(event_name, dialog, params)
-
-Example:
-
-.. code:: javascript
-
-    dialog1 = new Dialog({
-        ...
-        callback: function(event_name, dialog, params) {
-            console.log('event_name: %o, dialog: %o, params: %o', event_name, dialog, params);
-        }
-    });
-
-Result::
-
-    event_name: "created", dialog: Dialog {options: {…}, element: …}, params: {options: {…}}
-    event_name: "initialized", dialog: Dialog {options: {…}, element: …}, params: {}
-    event_name: "open", dialog: Dialog {options: {…}, element: …}, params: {}
-    event_name: "shown", dialog: Dialog {options: {…}, element: …}, params: {}
-    event_name: "loading", dialog: Dialog {options: {…}, element: …}, params: {url: "/admin_ex/popup/"}
-    event_name: "loaded", dialog: Dialog {options: {…}, element: …}, params: {url: "/admin_ex/popup/"}
-    event_name: "submitting", dialog: Dialog {options: {…}, element: …}, params: {method: "post", url: "/admin_ex/popup/", data: "text=&number=aaa"}
-    event_name: "submitted", dialog: Dialog {options: {…}, element: …}, params: {method: "post", url: "/admin_ex/popup/", data: "text=111&number=111"}
-    event_name: "closed", dialog: Dialog {options: {…}, element: …}, params: {}
-
-You can also trace all events in the console setting the boolean flag `enable_trace`.
-
-
-Event list:
-
-============================  ================================
-event_name                    params
-============================  ================================
-created                       options
-closed
-initialized
-shown
-loading                       url
-loaded                        url
-open
-submitting                    method, url, data
-submitted                     method, url, data
-============================  ================================
 
 Settings
 --------

@@ -3,6 +3,7 @@
     https://www.w3schools.com/howto/howto_css_modals.asp
 */
 
+
 /* The Modal (background) */
 .dialog {
     display: none; /* Hidden by default */
@@ -17,6 +18,10 @@
     /* background-color: rgba(0,0,0,0.4); */
     background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
 
+}
+
+.dialog.draggable .dialog-header {
+    cursor: move;
 }
 
 /* Modal Content/Box */

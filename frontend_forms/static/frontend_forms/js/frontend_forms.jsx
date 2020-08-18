@@ -7,7 +7,6 @@ class Dialog {
     /**
      * Constructor
      *
-     * @param {HTMLElement} element - the dialog box (if null, "#dialog_generic" is used as default)
      * @param {object} options - check "this.options" defaults for a full list of available options
      */
 
@@ -28,6 +27,7 @@ class Dialog {
             min_height: null,
             max_height: null,
             button_save_label: 'Save',
+            button_save_initially_hidden: false,
             button_close_label: 'Cancel',
             title: '',
             footer_text: '',
@@ -134,6 +134,10 @@ class Dialog {
         }
         else {
             btn_save.val(self.options.button_save_label);
+            if (self.options.button_save_initially_hidden) {
+                // Visualization postponed after form rendering
+                btn_save.hide();
+            }
         }
         var btn_close = footer.find('.btn-close');
         if (self.options.button_close_label === null) {
@@ -174,8 +178,9 @@ class Dialog {
             }
         }).done(function(data, textStatus, jqXHR) {
             self.element.find('.dialog-body').html(data);
-            self._notify('loaded', {url: self.options.url});
+            self._notify('loaded', {url: self.options.url, data: data});
         }).fail(function(jqXHR, textStatus, errorThrown) {
+            self._notify('loading_failed', {jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
             console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
             FrontendForms.display_server_error(errorThrown);
         }).always(function() {
@@ -204,7 +209,7 @@ class Dialog {
             self.close();
         });
 
-        // Close botton in the footer, if any
+        // Handle Close botton in the footer, if any
         var btn_close = self.element.find('.dialog-footer .btn-close');
         if (btn_close.length) {
             btn_close.off().on('click', function(event) {
@@ -260,11 +265,12 @@ class Dialog {
 
         // use footer save button, if available
         var btn_save = footer.find('.btn-save');
-        if (btn_save) {
+        if (self.options.button_save_label !== null && btn_save) {
             form.find('.form-submit-row').hide();
             btn_save.off().on('click', function(event) {
                 form.submit();
             });
+            btn_save.show();
         }
 
         // Give focus to first visible form field
