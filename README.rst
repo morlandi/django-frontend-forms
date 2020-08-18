@@ -11,6 +11,16 @@ Bases on my previous research as documented here: `Editing Django models in the 
 .. sectnum::
 
 
+Demo site
+---------
+
+An accompaning `Demo site <http://django-frontend-forms-demo.brainstorm.it/>`_
+provides:
+
+- a detailed description of the techniques used under the hood
+- a list of working code samples (source: https://github.com/morlandi/django-frontend-forms/tree/develop/example/samples)
+
+
 Installation
 ------------
 
