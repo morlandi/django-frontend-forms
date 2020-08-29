@@ -178,10 +178,24 @@ form .field-with-errors .form-check.has-error .form-check-input {
     box-shadow: 0px 0px 0px 1px #dc3545;
 }
 
+form .field-with-errors .form-radio.has-error .invalid-tooltip,
 form .field-with-errors .form-check.has-error .invalid-tooltip {
     display: block;
 }
 
+form .form-group .form-radio {
+    border: 1px solid #ccc;
+    border-radius: .25rem;
+    padding: 4px;
+}
+
+form .form-group.has-success .form-radio {
+    border-color: rgb(40, 167, 69);
+}
+
+form .form-group .form-radio.has-error {
+    border-color: rgb(220, 53, 69);
+}
 
 /*
  * "simpletable" styles

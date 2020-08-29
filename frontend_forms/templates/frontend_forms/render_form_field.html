@@ -46,22 +46,35 @@
                     <small class="form-text text-muted">{{ field.help_text|safe }}</small>
                 {% endif %}
             </div>
+
         {% else %}
 
             {% if field.field.widget.input_type == 'radio' %}
 
-                {% if field.label %}
-                <label {% if field.field.required %}class="required"{% endif %} for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                {% endif %}
+                <div class="form-radio{% if field.errors %} has-error{% endif %}{% if layout == 'horizontal' %} col-md-9 col-sm-offset-3{% endif %}">
+                    {% if field.label %}
+                    <label {% if field.field.required %}class="required"{% endif %} for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {% endif %}
 
-                {% for choice in field %}
-                    <div class="form-check{% if field.errors %} has-error{% endif %}">
-                        {{ choice.tag }}
-                        <label class="form-check-label" for="{{ choice.id_for_label }}">
-                            {{ choice.choice_label }}
-                        </label>
-                    </div>
-                {% endfor %}
+                    {% for choice in field %}
+                        <div class="form-check{% if field.errors %} has-error{% endif %}">
+                            {{ choice.tag }}
+                            <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                {{ choice.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+
+                    {% for error in field.errors %}
+                        <div class="invalid-tooltip">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                    {% endif %}
+                </div>
+
 
             {% else %}
                 {% with field|boostrap_field_class|add:","|add:field_attrs as css %}

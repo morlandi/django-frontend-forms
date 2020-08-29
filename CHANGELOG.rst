@@ -3,6 +3,10 @@
 History
 =======
 
+v0.1.7
+------
+* render_form_field: show errors for radio groups
+
 v0.1.6
 ------
 * example django project added

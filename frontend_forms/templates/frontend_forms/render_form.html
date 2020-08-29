@@ -1,8 +1,12 @@
 {% load i18n frontend_forms_tags %}
 
-{% if form.errors or form.non_field_errors %}
-    <p class="errornote">{% trans 'Please correct the error below.' %}</p>
-{% endif %}
+{% with num_form_errors=form.errors|length num_form_non_field_errors=form.non_field_errors|length %}
+    {% if num_form_errors|add:num_form_non_field_errors == 1 %}
+        <p class="errornote">{% trans 'Please correct the error below.' %}</p>
+    {% elif num_form_errors|add:num_form_non_field_errors > 1 %}
+        <p class="errornote">{% trans 'Please correct the errors below.' %}</p>
+    {% endif %}
+{% endwith %}
 
 {% if FORM_LAYOUT_FLAVOR == "generic" %}
 
