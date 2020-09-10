@@ -3,6 +3,10 @@
 History
 =======
 
+v0.1.8
+------
+* Make sure Sweetalert2 pops up above modal dialog
+
 v0.1.7
 ------
 * render_form_field: show errors for radio groups

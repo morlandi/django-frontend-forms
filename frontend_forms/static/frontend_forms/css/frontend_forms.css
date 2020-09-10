@@ -20,6 +20,11 @@
 
 }
 
+/* Make sure Sweetalert2 pops up above modal dialog */
+.swal2-container {
+    z-index: 2100;
+}
+
 .dialog.draggable .dialog-header {
     cursor: move;
 }
