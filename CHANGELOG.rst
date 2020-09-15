@@ -3,6 +3,10 @@
 History
 =======
 
+v0.1.9
+------
+* Giving a feedback after successful form submission
+
 v0.1.8
 ------
 * Make sure Sweetalert2 pops up above modal dialog

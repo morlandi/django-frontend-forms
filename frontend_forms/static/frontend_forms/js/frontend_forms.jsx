@@ -307,20 +307,30 @@ class Dialog {
                 // update the modal body with the new form
                 body.html(xhr);
 
-                // If the server sends back a successful response,
-                // we need to further check the HTML received
+                // Does the response contain a form ?
+                var form = self.element.find('.dialog-content .dialog-body form');
+                if (form.length > 0) {
+                    // If the server sends back a successful response,
+                    // we need to further check the HTML received
 
-                // If xhr contains any field errors,
-                // the form did not validate successfully,
-                // so we keep it open for further editing
-                //if ($(xhr).find('.has-error').length > 0) {
-                if ($(xhr).find('.has-error').length > 0 || $(xhr).find('.errorlist').length > 0) {
-                    self._notify('loaded', {url: url});
-                    self._form_ajax_submit();
-                } else {
-                    // otherwise, we've done and can close the modal
-                    self._notify('submitted', {method: method, url: url, data: data});
-                    self.close();
+                    // If xhr contains any field errors,
+                    // the form did not validate successfully,
+                    // so we keep it open for further editing
+                    //if ($(xhr).find('.has-error').length > 0) {
+                    if ($(xhr).find('.has-error').length > 0 || $(xhr).find('.errorlist').length > 0) {
+                        self._notify('loaded', {url: url});
+                        self._form_ajax_submit();
+                    } else {
+                        // otherwise, we've done and can close the modal
+                        self._notify('submitted', {method: method, url: url, data: data});
+                        self.close();
+                    }
+                }
+                // If not, assume we received a feedback for the user after successfull submission, so:
+                // - keep the dialog open
+                // - hide the save button
+                else {
+                    btn_save.hide();
                 }
 
             }).fail(function(jqXHR, textStatus, errorThrown) {

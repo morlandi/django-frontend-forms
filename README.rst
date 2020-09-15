@@ -279,6 +279,61 @@ Sample usage in a template:
         Test Popup (2)
     </a> /
 
+Handling form submission
+------------------------
+
+When a form submission is involved, the modal life cycle has to be modified as follows:
+
+- First and foremost, we need to **prevent the form from performing its default submit**.
+
+  If not, after submission we'll be redirected to the form action, outside the context
+  of the dialog.
+
+  We'll do this binding to the form's submit event, where we'll serialize the form's
+  content and sent it to the view for validation via an Ajax call.
+
+- Then, upon a successufull response from the server, **we'll need to further investigate
+  the HTML received**:
+
+    + if it contains any field error, the form did not validate successfully,
+      so we update the modal body with the new form and its errors
+
+    + otherwise, user interaction is completed, and we can finally close the modal
+
+`django-frontend-forms`, upon detecting a form in the content downloaded from the server,
+already takes care of all these needs automatically, and keeps refreshing the modal
+after each submission until the form validation succeedes.
+
+Giving a feedback after successful form submission
+--------------------------------------------------
+
+Sometimes, you might want to notify the user after successful form submission.
+
+To obtain this, all you have to do, after the form has been validated and saved,
+is to return an HTML fragment with no forms in it; in this case:
+
+- the popup will not close
+- the "save" button will be hidden
+
+thus giving to the user a chance to read your feedback.
+
+.. code:: bash
+
+    def form_validation_with_feedback(request):
+
+        assert request.is_ajax()
+
+        if request.method == 'POST':
+            form = MyForm(data=request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponse("<h1>Great !</h1> Your form has been validated")
+        else:
+            form = MyForm()
+
+        return render(request, "my_form.html", {
+            'form': form,
+        })
 
 A full, real example for a Django Form submission from a Dialog
 ---------------------------------------------------------------

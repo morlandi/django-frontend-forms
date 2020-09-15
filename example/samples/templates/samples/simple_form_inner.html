@@ -1,7 +1,7 @@
 {% load i18n frontend_forms_tags %}
 
 
-<form action="{% url 'samples:simple-form-validation' %}" method="post" class="form" novalidate>
+<form action="{{ action }}" method="post" class="form" novalidate>
     {% csrf_token %}
     {% render_form form %}
     <div class="form-group form-submit-row">

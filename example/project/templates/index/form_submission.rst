@@ -229,3 +229,17 @@ Using advanced field widgets
 Nothing prevents you from using advanced widgets in the form; the only provision is to
 rebind all required javascript handlers to the input items after each form submission;
 for than, use the `loaded` event.
+
+Giving a feedback after successful form submission
+--------------------------------------------------
+
+Sometimes, you might want to notify the user after successful form submission.
+
+To obtain this, all you have to do, after the form has been validated and saved,
+is to return an HTML fragment with no forms in it; in this case:
+
+- the popup will not close
+- the "save" button will be hidden
+
+thus giving to the user a chance to read your feedback.
+
