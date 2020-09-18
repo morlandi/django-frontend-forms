@@ -32,4 +32,5 @@ urlpatterns = [
 
     path('simple-form-validation', views.simple_form_validation, name="simple-form-validation"),
     path('advanced-form-validation', views.advanced_form_validation, name="advanced-form-validation"),
+    path('form-validation-with-feedback', views.form_validation_with_feedback, name="form-validation-with-feedback"),
 ]

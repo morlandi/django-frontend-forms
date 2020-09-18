@@ -2,6 +2,7 @@ import time
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib import messages
+from django.urls import reverse
 from .forms import SimpleForm
 from .forms import AdvancedForm
 
@@ -44,6 +45,7 @@ def simple_form_validation(request):
         form = SimpleForm()
 
     return render(request, template_name, {
+        'action': reverse('samples:simple-form-validation'),
         'form': form,
     })
 
@@ -69,3 +71,30 @@ def advanced_form_validation(request):
     return render(request, template_name, {
         'form': form,
     })
+
+def form_validation_with_feedback(request):
+
+    # Simulate network latency
+    time.sleep(1.0)
+
+    if request.is_ajax():
+        template_name = 'samples/simple_form_inner.html'
+    else:
+        template_name = 'samples/simple_form.html'
+
+    if request.method == 'POST':
+        form = SimpleForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            if not request.is_ajax():
+                messages.info(request, "Form has been validated")
+            else:
+                return HttpResponse("<h1>Great !</h1> Your form has been validated")
+    else:
+        form = SimpleForm()
+
+    return render(request, template_name, {
+        'action': reverse('samples:form-validation-with-feedback'),
+        'form': form,
+    })
+

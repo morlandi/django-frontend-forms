@@ -20,6 +20,10 @@
             <td><a href="{% url 'samples:advanced-form-validation' %}" class="btn btn-primary" target="_new">standalone page</a></td>
             <td><p>The same form in a standalone page</p></td>
         </tr>
+        <tr>
+            <td><a data-value="3" href="#" class="link-button btn btn-primary">dialog3</a></td>
+            <td><p>A dialog which shows a feedback after successfull submission</p></td>
+        </tr>
     </table>
 
 {% endblock content %}
@@ -32,7 +36,7 @@
     function onLinkButtonClicked(event) {
         event.preventDefault();
         var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2];
+        var dialogs = [dialog1, dialog2, dialog3];
         dialogs[n - 1].open(event);
     }
 
@@ -73,6 +77,18 @@
             button_save_initially_hidden: true,
             enable_trace: true,
             callback: dialog2_callback
+        });
+
+        dialog3 = new Dialog({
+            url: "{% url 'samples:form-validation-with-feedback' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true
         });
 
     });
