@@ -44,7 +44,7 @@ after each submission until the form validation succeedes.
 Implementation
 --------------
 
-If you're curious, here below is a detailed explanation of how this all is achieved.
+If you're curious, here below is a detailed explanation of how all this is achieved.
 
 Form detection happens at the end of modal opening:
 
@@ -228,4 +228,4 @@ Using advanced field widgets
 
 Nothing prevents you from using advanced widgets in the form; the only provision is to
 rebind all required javascript handlers to the input items after each form submission;
-for than, use the `loaded` event.
+for that, use the `loaded` event.
