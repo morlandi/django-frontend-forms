@@ -1,0 +1,37 @@
+{% load i18n frontend_forms_tags %}
+
+
+{% comment %}
+<form action="{{ action }}" method="post" class="form" novalidate>
+    {% csrf_token %}
+    {% render_form form %}
+    <div class="form-group form-submit-row">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+    </div>
+</form>
+{% endcomment %}
+
+
+<form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field }}
+    {% endfor %}
+
+    <fieldset>
+        {% render_form_field form.value addon='<i class="fa fa-flask"></i>' %}
+    </fieldset>
+
+    <div class="form-group form-submit-row">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+    </div>
+</form>

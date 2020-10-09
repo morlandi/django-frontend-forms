@@ -24,6 +24,10 @@
             <td><a data-value="3" href="#" class="link-button btn btn-primary">dialog3</a></td>
             <td><p>A dialog which shows a feedback after successfull submission</p></td>
         </tr>
+        <tr>
+            <td><a data-value="4" href="#" class="link-button btn btn-primary">dialog4</a></td>
+            <td><p>A simple dialog with an input-group-addon</p></td>
+        </tr>
     </table>
 
 {% endblock content %}
@@ -36,7 +40,7 @@
     function onLinkButtonClicked(event) {
         event.preventDefault();
         var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2, dialog3];
+        var dialogs = [dialog1, dialog2, dialog3, dialog4];
         dialogs[n - 1].open(event);
     }
 
@@ -81,6 +85,18 @@
 
         dialog3 = new Dialog({
             url: "{% url 'samples:form-validation-with-feedback' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true
+        });
+
+        dialog4 = new Dialog({
+            url: "{% url 'samples:simple-form-validation-with-addon' %}",
             dialog_selector: '#dialog_generic',
             html: '<h1>Loading ...</h1>',
             width: '400px',

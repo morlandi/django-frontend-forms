@@ -98,3 +98,27 @@ def form_validation_with_feedback(request):
         'form': form,
     })
 
+def simple_form_validation_with_addon(request):
+
+    # Simulate network latency
+    time.sleep(1.0)
+
+    if request.is_ajax():
+        template_name = 'samples/simple_form_with_addon_inner.html'
+    else:
+        template_name = 'samples/simple_form_with_addon.html'
+
+    if request.method == 'POST':
+        form = SimpleForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            if not request.is_ajax():
+                messages.info(request, "Form has been validated" )
+    else:
+        form = SimpleForm()
+
+    return render(request, template_name, {
+        'action': reverse('samples:simple-form-validation-with-addon'),
+        'form': form,
+    })
+
