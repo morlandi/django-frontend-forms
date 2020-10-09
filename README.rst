@@ -768,7 +768,7 @@ Utilities (module FrontendForms)
 Form rendering helpers
 ----------------------
 
-A `render_form(form, flavor=None)` template tag is available for form rendering:
+A **render_form(form, flavor=None, layout=FORM_LAYOUT_DEFAULT)** template tag is available for form rendering:
 
 .. code:: html
 
@@ -779,12 +779,12 @@ A `render_form(form, flavor=None)` template tag is available for form rendering:
 
         {% render_form form %}
 
-        <div class="form-group">
+        <div class="form-group form-submit-row">
             <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
         </div>
     </form>
 
-For more a more advanced customization, you can use `render_form_field(field, flavor=None, extra_attrs='')` instead:
+For more a more advanced customization, you can use **render_form_field(field, flavor=None, extra_attrs='', layout=FORM_LAYOUT_DEFAULT, index=0, addon='')** instead:
 
 .. code:: html
 
@@ -807,10 +807,10 @@ For more a more advanced customization, you can use `render_form_field(field, fl
 
         <fieldset>
             {% render_form_field form.username extra_attrs="autocomplete=^off,autocorrect=off,autocapitalize=none" %}
-            {% render_form_field form.password extra_attrs="autocomplete=^off,autocorrect=off,autocapitalize=none" %}
+            {% render_form_field form.password extra_attrs="autocomplete=^off,autocorrect=off,autocapitalize=none" addon='<i class="fa fa-user"></i>' %}
         </fieldset>
 
-        <div class="form-group">
+        <div class="form-group form-submit-row">
             <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
         </div>
     </form>

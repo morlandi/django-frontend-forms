@@ -154,6 +154,25 @@
     margin: 0 6px;
 }
 
+/* Remove Safari/Chrome textinput/textarea glow */
+.dialog input:focus {
+    box-shadow: none;
+}
+
+/* input-group-addon reasonable defaults */
+
+.dialog form .input-group-addon {
+    background-color: #fff;
+    border: 1px solid #E5E6E7;
+    border-radius: 1px;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    padding: 9px 12px;
+    text-align: center;
+}
+
 /*
  *  Fixes for Bootstrap 4
  */
