@@ -3,6 +3,12 @@
 History
 =======
 
+v0.1.10
+-------
+* Small adjustments to default styles; "important" removed where possible
+* Partial support for Bootstrap's "input-group-addon"
+* Example updated
+
 v0.1.9
 ------
 * Giving a feedback after successful form submission
