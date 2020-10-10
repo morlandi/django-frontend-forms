@@ -2,8 +2,9 @@ import sys
 import inspect
 from django import forms
 from django.apps import apps
-# from backend.models import Artist
-# from backend.models import Album
+from backend.models import Artist
+from backend.models import Album
+from backend.models import Track
 
 
 # def get_model_form_class(app_label, model_name):
@@ -112,3 +113,13 @@ class AdvancedForm(forms.Form):
 #             'artist',
 #             'year',
 #         ]
+
+
+class TrackForm(forms.ModelForm):
+
+    class Meta:
+        model = Track
+        fields = [
+            'name',
+            'album',
+        ]

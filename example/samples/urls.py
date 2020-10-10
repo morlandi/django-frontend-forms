@@ -34,4 +34,6 @@ urlpatterns = [
     path('advanced-form-validation', views.advanced_form_validation, name="advanced-form-validation"),
     path('form-validation-with-feedback', views.form_validation_with_feedback, name="form-validation-with-feedback"),
     path('simple-form-validation-with-addon', views.simple_form_validation_with_addon, name="simple-form-validation-with-addon"),
+
+    path('new-track', views.new_track, name="new-track"),
 ]

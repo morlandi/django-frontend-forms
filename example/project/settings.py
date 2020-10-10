@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'frontend_forms',
     'project',
+    'backend',
     'samples',
 ]
 

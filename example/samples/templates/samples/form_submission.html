@@ -30,6 +30,14 @@
         </tr>
     </table>
 
+    <br />
+    <h1>Forms with advanced widgets</h1>
+    <table>
+        <tr>
+            <td><a data-value="5" href="#" class="link-button btn btn-primary">Using select2</a></td>
+            <td><p>A dialog with a form which uses select2</p></td>
+        </tr>
+    </table>
 {% endblock content %}
 
 
@@ -40,7 +48,7 @@
     function onLinkButtonClicked(event) {
         event.preventDefault();
         var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2, dialog3, dialog4];
+        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
         dialogs[n - 1].open(event);
     }
 
@@ -102,6 +110,18 @@
             width: '400px',
             min_height: '200px',
             title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true
+        });
+
+        dialog5 = new Dialog({
+            url: "{% url 'samples:new-track' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Edit a new track ...',
             button_save_label: "Save",
             button_save_initially_hidden: true,
             enable_trace: true

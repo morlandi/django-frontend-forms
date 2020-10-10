@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
+
 {% block content %}
-{% include 'samples/simple_form_inner_with_addon.html' %}
+{% include 'dialogs/advanced_form_inner.html' %}
 {% endblock content %}
+
 
 {% block extrastyle %}
 <style>
@@ -14,3 +16,14 @@
     }
 </style>
 {% endblock extrastyle %}
+
+
+{% block extrajs %}
+<script>
+    $(document).ready(function() {
+        $("form .datepicker").datepicker({});
+    });
+</script>
+{% endblock extrajs %}
+
+
