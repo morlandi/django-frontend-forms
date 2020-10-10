@@ -5,6 +5,7 @@ from django.apps import apps
 from backend.models import Artist
 from backend.models import Album
 from backend.models import Track
+from .widgets import AlbumWidget
 
 
 # def get_model_form_class(app_label, model_name):
@@ -123,3 +124,6 @@ class TrackForm(forms.ModelForm):
             'name',
             'album',
         ]
+        widgets = {
+            'album': AlbumWidget(),
+        }

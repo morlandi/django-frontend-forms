@@ -216,7 +216,7 @@ to make a spinner icon visible until we're ready to either update or close the m
 
 .. |link_form-submission| raw:: html
 
-   <a href="/samples/form-submission/" target="_blank">Simple Dialogs with Form validation</a>
+   <a href="/samples/form-submission/" target="_blank">Dialogs with Form validation</a>
 
 
 

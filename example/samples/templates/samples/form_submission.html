@@ -124,7 +124,16 @@
             title: '<i class="fa fa-calculator"></i> Edit a new track ...',
             button_save_label: "Save",
             button_save_initially_hidden: true,
-            enable_trace: true
+            enable_trace: true,
+            callback: function(event_name, dialog, params) {
+                switch (event_name) {
+                    case "loaded":
+                        dialog.element.find('.django-select2').djangoSelect2({
+                            dropdownParent: dialog.element
+                        });
+                        break;
+                }
+            }
         });
 
     });

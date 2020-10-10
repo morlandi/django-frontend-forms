@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="{% static 'example.css' %}">
     <link rel="stylesheet" href="{% static 'markup.css' %}">
     <link href="{% static 'pygments/styles/monokai.css' %}" media="screen" rel="stylesheet" type="text/css" />
+
+    {# Select2 support #}
+    <link rel="stylesheet" type="text/css" href="{% static 'select2/dist/css/select2.min.css' %}" />
+
     {% block extrastyle %}
     {% endblock extrastyle %}
 </head>
@@ -68,6 +72,18 @@
     <script src="{% static 'promise-polyfill/dist/polyfill.min.js' %}"></script>
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
     <script src="{% static 'dropzone/dist/min/dropzone.min.js' %}"></script>
+
+    {# Select2 support #}
+    <script src="{% static 'select2/dist/js/select2.min.js' %}"></script>
+    <script src="{% static 'select2/dist/js/i18n/it.js' %}"></script>
+    <script>
+        // "Select2 does not function properly when I use it inside a Bootstrap modal"
+        // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
+        // Do this before you initialize any of your modals
+        //$.fn.modal.Constructor.prototype._enforceFocus = function() {};
+        $.fn.select2.defaults.set("language", "it");
+    </script>
+    <script src="{% static 'django_select2/django_select2.js' %}"</script>
 
     <script>
     Dropzone.autoDiscover = false;

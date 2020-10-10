@@ -3,5 +3,7 @@ pillow==7.2.0
 django-npm==1.0.0
 docutils==0.16
 pygments==2.6.1
+django-select2==7.4.2
+redis==4.12.1
 -e ../
 

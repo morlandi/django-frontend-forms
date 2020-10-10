@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'frontend_forms',
+    'django_select2',
     'project',
     'backend',
     'samples',
@@ -141,6 +142,36 @@ STATICFILES_FINDERS.append('npm.finders.NpmFinder')
 
 X_FRAME_OPTIONS='SAMEORIGIN' # only if django version >= 3.0
 FRONTEND_FORMS_FORM_LAYOUT_FLAVOR = 'bs4'
+
+#REDIS_URL = 'redis://localhost:6379/0'
+redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_port = 6379
+REDIS_URL = 'redis://%s:%d/0' % (redis_host, redis_port)
+
+CACHES = {
+    # … default cache config and others
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    # … default cache config and others
+    "select2": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Tell select2 which cache configuration to use:
+SELECT2_CACHE_BACKEND = "select2"
+
+SELECT2_JS = ''
+SELECT2_CSS = ''
 
 # Load local settings when supplied
 try:
