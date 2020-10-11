@@ -146,7 +146,7 @@ X_FRAME_OPTIONS='SAMEORIGIN' # only if django version >= 3.0
 FRONTEND_FORMS_FORM_LAYOUT_FLAVOR = 'bs4'
 
 
-PROJECT_PREFIX = "frontend_forms_example_"
+PROJECT_INSTANCE_PREFIX = "frontend_forms_example_"
 
 #REDIS_URL = 'redis://localhost:6379/0'
 redis_host = os.environ.get('REDIS_HOST', 'localhost')
@@ -172,10 +172,12 @@ CACHES = {
     }
 }
 
-# Tell select2 which cache configuration to use:
+# Tell select2 which cache configuration to use;
+# Best practices:
+# 1) either usa a specific Redis db (for example: 1),
+# 2) or use a Project's specific prefix
 SELECT2_CACHE_BACKEND = "select2"
-SELECT2_CACHE_PREFIX = PROJECT_PREFIX + 'select2_'
-
+SELECT2_CACHE_PREFIX = PROJECT_INSTANCE_PREFIX + 'select2_'
 SELECT2_JS = ''
 SELECT2_CSS = ''
 

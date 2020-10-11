@@ -1,5 +1,8 @@
 {% load i18n frontend_forms_tags %}
 
+{# Not required, but harmless #}
+{{ form.media }}
+
 <form method="post" class="form" novalidate>
     {% csrf_token %}
     {% render_form form %}

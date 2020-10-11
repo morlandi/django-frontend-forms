@@ -42,7 +42,7 @@ p {
     color: white;
     padding: 8px 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 6px;
+    border-radius: 4px;
     margin: 30px 0;
 }
 
@@ -51,18 +51,25 @@ p {
 }
 
 .admonition.note {
-    background-color: #FF6600;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
+    background-color: #E7F2FA;
+    color: #666;
+    /*padding: 20px;*/
+    border: 1px solid #666;
+    /*border-radius: 4px;*/
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin-bottom: 20px;
 }
 
 .admonition.note .first.admonition-title {
-    display: none;
+    background-color: #6AB0DE;
+    color: white;
 }
 
 .admonition.note a {
-    color: yellow;
+    color: #007bff;
 }
+
+.admonition.note .last {
+    padding: 16px;
+}
+

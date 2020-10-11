@@ -37,6 +37,10 @@
             <td><a data-value="5" href="#" class="link-button btn btn-primary">Using select2</a></td>
             <td><p>A dialog with a form which uses select2</p></td>
         </tr>
+        <tr>
+            <td><a href="{% url 'samples:new-track' %}" class="btn btn-primary" target="_new">Using select2 (standalone page)</a></td>
+            <td><p>The same form in a standalone page</p></td>
+        </tr>
     </table>
 {% endblock content %}
 
@@ -128,6 +132,8 @@
             callback: function(event_name, dialog, params) {
                 switch (event_name) {
                     case "loaded":
+                        // "Select2 does not function properly when I use it inside a Bootstrap modal":
+                        // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
                         dialog.element.find('.django-select2').djangoSelect2({
                             dropdownParent: dialog.element
                         });

@@ -939,21 +939,20 @@ Follow these steps:
 django-select2 support
 ----------------------
 
-Requirements::
+Requirements (in file "base.html")::
+
+    <link rel="stylesheet" type="text/css" href="{% static 'select2/dist/css/select2.min.css' %}" />
 
     <script src="{% static 'select2/dist/js/select2.min.js' %}"></script>
     <script src="{% static 'select2/dist/js/i18n/it.js' %}"></script>
-    <script src="{% static 'django_select2/django_select2.js' %}"</script>
-
     <script language="javascript">
-        $( document ).ready(function() {
-            $.fn.select2.defaults.set('language', 'it');
-        });
+        $.fn.select2.defaults.set('language', 'it');
     </script>
+    <script src="{% static 'django_select2/django_select2.js' %}"</script>
 
 Follow these steps:
 
-(1) In your form, add the `multiselect` class to the SelectMultiple() widget
+(1) In your form, use one or more Select2Widget():
 
 .. code:: python
 
@@ -971,7 +970,7 @@ Follow these steps:
                 )
             }
 
-(2) Later on, bind the widget using `apply_multiselect()` helper:
+(2) Later on, bind the widgets using `djangoSelect2()` helper:
 
 .. code:: javascript
 
@@ -980,9 +979,40 @@ Follow these steps:
         callback: function(event_name, dialog, params) {
             switch (event_name) {
                 case "loaded":
-                    dialog.element.find('.django-select2').djangoSelect2();
+                    dialog.element.find('.django-select2').djangoSelect2({
+
+                        // "dropdownParent" is required for Bootstrap; see:
+                        // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
+
+                        dropdownParent: dialog.element
+                    });
                     break;
                 ...
             }
         }
     });
+
+
+I normally opt to include all required static files in "base.hmtml", since I'm already
+including so much javascript stuff.
+
+In this case, make sure django-select2 won't istall them twice;
+for example:
+
+.. code:: python
+
+    class MySelect2Widget():
+        """
+        Avoid inclusion of select2 by django-select2 as a result of {{form.media}},
+        since we're already including everything in base.html
+        """
+        def _get_media(self):
+            return None
+        media = property(_get_media)
+
+
+    class AlbumWidget(MySelect2Widget, ModelSelect2Widget):
+        model = Album
+        search_fields = [
+            'name__istartswith',
+        ]
