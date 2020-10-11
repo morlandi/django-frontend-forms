@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'frontend_forms',
     'django_select2',
+    'query_inspector',
     'project',
     'backend',
     'samples',
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'query_inspector.middleware.QueryCountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -143,6 +145,9 @@ STATICFILES_FINDERS.append('npm.finders.NpmFinder')
 X_FRAME_OPTIONS='SAMEORIGIN' # only if django version >= 3.0
 FRONTEND_FORMS_FORM_LAYOUT_FLAVOR = 'bs4'
 
+
+PROJECT_PREFIX = "frontend_forms_example_"
+
 #REDIS_URL = 'redis://localhost:6379/0'
 redis_host = os.environ.get('REDIS_HOST', 'localhost')
 redis_port = 6379
@@ -160,7 +165,7 @@ CACHES = {
     # … default cache config and others
     "select2": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
+        "LOCATION": 'redis://%s:%d/1' % (redis_host, redis_port),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -169,9 +174,28 @@ CACHES = {
 
 # Tell select2 which cache configuration to use:
 SELECT2_CACHE_BACKEND = "select2"
+SELECT2_CACHE_PREFIX = PROJECT_PREFIX + 'select2_'
 
 SELECT2_JS = ''
 SELECT2_CSS = ''
+
+QUERYCOUNT = {
+    'IGNORE_ALL_REQUESTS': False,
+    'IGNORE_REQUEST_PATTERNS': [],
+    'IGNORE_SQL_PATTERNS': [],
+    'THRESHOLDS': {
+        'MEDIUM': 50,
+        'HIGH': 200,
+        'MIN_TIME_TO_LOG': 0,
+        'MIN_QUERY_COUNT_TO_LOG': 0
+    },
+    'DISPLAY_ALL': True,
+    'DISPLAY_PRETTIFIED': True,
+    'COLOR_FORMATTER_STYLE': 'monokai',
+    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count',
+    'DISPLAY_DUPLICATES': 0,
+}
+
 
 # Load local settings when supplied
 try:
