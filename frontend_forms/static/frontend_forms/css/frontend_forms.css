@@ -221,6 +221,19 @@ form .form-group .form-radio.has-error {
     border-color: rgb(220, 53, 69);
 }
 
+/* select2 with success */
+.form-group.has-success .select2-container--default .select2-selection--single,
+.form-group.has-success .select2-container--default .select2-selection--multiple {
+    border: 1px solid #1ab394;
+}
+
+/* select2 with errors */
+.form-group.has-error .select2-container--default .select2-selection--single,
+.form-group.has-error .select2-container--default .select2-selection--multiple {
+    border: 1px solid #ed5565;
+}
+
+
 /*
  * "simpletable" styles
  */
