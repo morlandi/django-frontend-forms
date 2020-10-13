@@ -125,5 +125,9 @@ class TrackForm(forms.ModelForm):
             'album',
         ]
         widgets = {
+            # "data-minimum-input-length":
+            # - either set as attr here,
+            # - or override build_attrs() in the widget class
+            #'album': AlbumWidget(attrs={'data-minimum-input-length': 0,}),
             'album': AlbumWidget(),
         }
