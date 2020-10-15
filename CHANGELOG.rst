@@ -3,6 +3,10 @@
 History
 =======
 
+v0.1.11
+-------
+* Select2 support and examples
+
 v0.1.10
 -------
 * Small adjustments to default styles; "important" removed where possible
