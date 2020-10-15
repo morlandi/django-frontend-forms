@@ -207,6 +207,10 @@ form .field-with-errors .form-check.has-error .invalid-tooltip {
     display: block;
 }
 
+form .form-group.is_hidden {
+    display: none;
+}
+
 form .form-group .form-radio {
     border: 1px solid #ccc;
     border-radius: .25rem;
