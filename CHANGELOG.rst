@@ -5,7 +5,7 @@ History
 
 v0.1.12
 -------
-* Make sure invalid-tooltip is visibile with BS4
+* Make sure invalid-tooltip is visible with BS4
 
 v0.1.11
 -------
