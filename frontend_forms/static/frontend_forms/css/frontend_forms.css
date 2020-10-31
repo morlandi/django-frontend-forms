@@ -207,6 +207,10 @@ form .field-with-errors .form-check.has-error .invalid-tooltip {
     display: block;
 }
 
+form .field-with-errors .invalid-tooltip {
+    display: block;
+}
+
 form .form-group.is_hidden {
     display: none;
 }

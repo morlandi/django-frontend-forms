@@ -806,8 +806,8 @@ For more a more advanced customization, you can use **render_form_field(field, f
         {% endfor %}
 
         <fieldset>
-            {% render_form_field form.username extra_attrs="autocomplete=^off,autocorrect=off,autocapitalize=none" %}
-            {% render_form_field form.password extra_attrs="autocomplete=^off,autocorrect=off,autocapitalize=none" addon='<i class="fa fa-user"></i>' %}
+            {% render_form_field form.username extra_attrs="autocomplete=^off,role=presentation,autocorrect=off,autocapitalize=none" %}
+            {% render_form_field form.password extra_attrs="autocomplete=^off,role=presentation,autocorrect=off,autocapitalize=none" addon='<i class="fa fa-user"></i>' %}
         </fieldset>
 
         <div class="form-group form-submit-row">
