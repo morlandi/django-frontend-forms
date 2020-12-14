@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+
+{% block extrajs %}
+    <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+    <script src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+{% endblock extrajs %}
+
+
+{% block content %}
+
+<h3>Replicating Django’s admin form popups</h3>
+
+Adapted from: <a href="https://www.hoboes.com/Mimsy/hacks/replicating-djangos-admin/">https://www.hoboes.com/Mimsy/hacks/replicating-djangos-admin/</a>
+
+<br />
+See also:<br />
+- <a href="https://stackoverflow.com/questions/5744480/django-admin-relatedobjectlookups-how-does-it-refresh-and-set-the-select-on">Django Admin - RelatedObjectLookups - How Does it refresh and set the select on the parent window?</a><br />
+- <a href="https://stackoverflow.com/questions/2347582/django-admin-popup-functionality">Django Admin popup functionality</a><br />
+
+{% include 'dialogs/track_form_ex_inner.html' %}
+{% endblock content %}
+
+{% block extrastyle %}
+<style>
+    form {
+        max-width: 400px;
+        border: 1px solid black;
+        padding: 40px;
+    }
+</style>
+{% endblock extrastyle %}

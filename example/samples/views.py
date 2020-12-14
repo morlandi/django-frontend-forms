@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from .forms import SimpleForm
 from .forms import AdvancedForm
 from .forms import TrackForm
+from .forms import TrackFormEx
 
 
 def simple_content(request):
@@ -150,6 +151,37 @@ def new_track(request):
                 )
     else:
         form = TrackForm()
+
+    #action = request.get_full_path()
+
+    return render(request, template_name, {
+        #'action': action,
+        'form': form,
+    })
+
+
+def new_track_ex(request):
+
+    # Simulate network latency
+    time.sleep(1.0)
+
+    if request.is_ajax():
+        template_name = 'dialogs/track_form_ex_inner.html'
+    else:
+        template_name = 'dialogs/track_form_ex.html'
+
+    if request.method == 'POST':
+        form = TrackFormEx(data=request.POST)
+        if form.is_valid():
+            #form.save()
+            if not request.is_ajax():
+                messages.info(request, "Form has been validated")
+            else:
+                return HttpResponse(
+                    '<h1>Great !</h1> Your form has been validated<br /><br />You entered <b>"%s"</b>' % form.cleaned_data['name']
+                )
+    else:
+        form = TrackFormEx()
 
     #action = request.get_full_path()
 

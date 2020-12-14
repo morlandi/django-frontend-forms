@@ -1,0 +1,17 @@
+{% load i18n static utils_tags %}
+{% comment %}
+<a
+href="/add/{{ field }}"
+class="add-another"
+id="add_id_{{ field }}"
+onclick="return showAddAnotherPopup(this);">
+<img src="/media/img/admin/icon_addlink.gif" width="10" height="10" alt="Add Another"/>
+</a>
+{% endcomment %}
+
+<a class="related-widget-wrapper-link add-related"
+   id="add_id_{{field}}"
+   href="/add/{{field}}?_to_field=id&_popup=1"
+   title="{% trans 'Add another' %} {{field}}">
+    <img src="{% static 'admin/img/icon-addlink.svg' %}" alt="Add">
+</a>

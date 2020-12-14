@@ -30,18 +30,6 @@
         </tr>
     </table>
 
-    <br />
-    <h1>Forms with advanced widgets</h1>
-    <table>
-        <tr>
-            <td><a data-value="5" href="#" class="link-button btn btn-primary">Using select2</a></td>
-            <td><p>A dialog with a form which uses select2</p></td>
-        </tr>
-        <tr>
-            <td><a href="{% url 'samples:new-track' %}" class="btn btn-primary" target="_new">Using select2 (standalone page)</a></td>
-            <td><p>The same form in a standalone page</p></td>
-        </tr>
-    </table>
 {% endblock content %}
 
 
@@ -52,7 +40,7 @@
     function onLinkButtonClicked(event) {
         event.preventDefault();
         var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
+        var dialogs = [dialog1, dialog2, dialog3, dialog4];
         dialogs[n - 1].open(event);
     }
 
@@ -117,29 +105,6 @@
             button_save_label: "Save",
             button_save_initially_hidden: true,
             enable_trace: true
-        });
-
-        dialog5 = new Dialog({
-            url: "{% url 'samples:new-track' %}",
-            dialog_selector: '#dialog_generic',
-            html: '<h1>Loading ...</h1>',
-            width: '400px',
-            min_height: '200px',
-            title: '<i class="fa fa-calculator"></i> Edit a new track ...',
-            button_save_label: "Save",
-            button_save_initially_hidden: true,
-            enable_trace: true,
-            callback: function(event_name, dialog, params) {
-                switch (event_name) {
-                    case "loaded":
-                        // "Select2 does not function properly when I use it inside a Bootstrap modal":
-                        // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
-                        dialog.element.find('.django-select2').djangoSelect2({
-                            dropdownParent: dialog.element
-                        });
-                        break;
-                }
-            }
         });
 
     });

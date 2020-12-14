@@ -1,3 +1,4 @@
+from django.template.loader import render_to_string
 from django_select2.forms import (
     HeavySelect2MultipleWidget, HeavySelect2Widget, ModelSelect2MultipleWidget,
     ModelSelect2TagWidget, ModelSelect2Widget, Select2MultipleWidget,
@@ -30,3 +31,12 @@ class AlbumWidget(MySelect2Widget, ModelSelect2Widget):
         #   'album': AlbumWidget(attrs={'data-minimum-input-length': 0,}),
         attrs['data-minimum-input-length'] = 0
         return attrs
+
+
+class AlbumWidgetWithAddPopup(AlbumWidget):
+
+    def render(self, name, *args, **kwargs):
+        html = super().render(name, *args, **kwargs)
+        popupplus = render_to_string("dialogs/form/popupplus.html", {'field': name})
+        return popupplus + html
+

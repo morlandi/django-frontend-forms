@@ -28,7 +28,11 @@ urlpatterns = [
 
     path('form-submission/',
         TemplateView.as_view(template_name="samples/form_submission.html"),
-        name="form-sumbission"),
+        name="form-submission"),
+    path('form-advanced/',
+        TemplateView.as_view(template_name="samples/form_advanced.html"),
+        name="form-advanced"),
+
 
     path('simple-form-validation', views.simple_form_validation, name="simple-form-validation"),
     path('advanced-form-validation', views.advanced_form_validation, name="advanced-form-validation"),
@@ -36,4 +40,5 @@ urlpatterns = [
     path('simple-form-validation-with-addon', views.simple_form_validation_with_addon, name="simple-form-validation-with-addon"),
 
     path('new-track', views.new_track, name="new-track"),
+    path('new-track-ex', views.new_track_ex, name="new-track-ex"),
 ]

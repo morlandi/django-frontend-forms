@@ -1,11 +1,12 @@
 import sys
 import inspect
+from django.template.loader import render_to_string
 from django import forms
 from django.apps import apps
 from backend.models import Artist
 from backend.models import Album
 from backend.models import Track
-from .widgets import AlbumWidget
+from .widgets import AlbumWidget, AlbumWidgetWithAddPopup
 
 
 # def get_model_form_class(app_label, model_name):
@@ -118,6 +119,8 @@ class AdvancedForm(forms.Form):
 
 class TrackForm(forms.ModelForm):
 
+    name = forms.CharField(label='Track name')
+
     class Meta:
         model = Track
         fields = [
@@ -130,4 +133,37 @@ class TrackForm(forms.ModelForm):
             # - or override build_attrs() in the widget class
             #'album': AlbumWidget(attrs={'data-minimum-input-length': 0,}),
             'album': AlbumWidget(),
+        }
+
+
+
+class SelectWithAddPopup(forms.Select):
+    def render(self, name, *args, **kwargs):
+        html = super().render(name, *args, **kwargs)
+        popupplus = render_to_string("form/popupplus.html", {'field': name})
+        return html + popupplus
+
+class MultipleSelectWithAddPopup(forms.SelectMultiple):
+    def render(self, name, *args, **kwargs):
+        html = super().render(name, *args, **kwargs)
+        popupplus = render_to_string("form/popupplus.html", {'field': name})
+        return html + popupplus
+
+
+class TrackFormEx(forms.ModelForm):
+
+    name = forms.CharField(label='Track name')
+
+    class Meta:
+        model = Track
+        fields = [
+            'name',
+            'album',
+        ]
+        widgets = {
+            # "data-minimum-input-length":
+            # - either set as attr here,
+            # - or override build_attrs() in the widget class
+            #'album': AlbumWidget(attrs={'data-minimum-input-length': 0,}),
+            'album': AlbumWidgetWithAddPopup(),
         }

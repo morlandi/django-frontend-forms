@@ -210,26 +210,6 @@ repeat the whole process or close the dialog:
 One last detail: during content loading, we add a "loading" class to the dialog header,
 to make a spinner icon visible until we're ready to either update or close the modal.
 
-.. note::
-
-    Code sample: |link_form-submission|
-
-.. |link_form-submission| raw:: html
-
-   <a href="/samples/form-submission/" target="_blank">Dialogs with Form validation</a>
-
-
-
-In the sample project, a sleep of 1 sec has been included in the view to simulate network latency
-or a more complex elaboration which might occur in real situations
-
-Using advanced field widgets
-----------------------------
-
-Nothing prevents you from using advanced widgets in the form; the only provision is to
-rebind all required javascript handlers to the input items after each form submission;
-for that, use the `loaded` event.
-
 Giving a feedback after successful form submission
 --------------------------------------------------
 
@@ -242,3 +222,15 @@ is to return an HTML fragment with no forms in it; in this case:
 - the "save" button will be hidden
 
 thus giving to the user a chance to read your feedback.
+
+.. note::
+
+    Code sample: |link_form-submission|
+
+.. |link_form-submission| raw:: html
+
+   <a href="/samples/form-submission/" target="_blank">Dialogs with Form validation</a>
+
+In these samples, a sleep of 1 sec has been included in the view to simulate network latency
+or a more complex elaboration which might occur in real situations
+
