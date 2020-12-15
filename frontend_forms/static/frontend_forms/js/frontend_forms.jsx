@@ -358,11 +358,12 @@ window.FrontendForms = (function() {
                 cancelButtonClass: 'btn btn-lg btn-default',
                 buttonsStyling: false,
                 reverseButtons: true,
-                title: 'ERRORE',
+                title: 'ERROR',
                 text: errorDetails,
                 type: 'error',
+                icon: 'error',
                 confirmButtonClass: 'btn btn-lg btn-danger',
-                confirmButtonText: 'Chiudi'
+                confirmButtonText: 'Close'
             });
         }
         // failing that, we fallback to a simple alert
@@ -613,18 +614,24 @@ window.FrontendForms = (function() {
         };
         Object.assign(_options, options);
 
-        swal.fire({
-            confirmButtonClass: 'btn btn-lg ' + _options.confirmButtonClass,
-            cancelButtonClass: 'btn btn-lg ' + _options.cancelButtonClass,
-            buttonsStyling: _options.buttonsStyling,
-            reverseButtons: _options.reverseButtons,
-            title: _options.title,
-            text: _options.text,
-            type: _options.type,
-            showCancelButton: _options.showCancelButton,
-            cancelButtonText: _options.cancelButtonText,
-            confirmButtonText: _options.confirmButtonText
-        }).then((result) => {
+        _options.confirmButtonClass += ' btn btn-lg';
+        _options.cancelButtonClass += ' btn btn-lg';
+
+        swal.fire(
+        // {
+        //     confirmButtonClass: 'btn btn-lg ' + _options.confirmButtonClass,
+        //     cancelButtonClass: 'btn btn-lg ' + _options.cancelButtonClass,
+        //     buttonsStyling: _options.buttonsStyling,
+        //     reverseButtons: _options.reverseButtons,
+        //     title: _options.title,
+        //     text: _options.text,
+        //     type: _options.type,
+        //     showCancelButton: _options.showCancelButton,
+        //     cancelButtonText: _options.cancelButtonText,
+        //     confirmButtonText: _options.confirmButtonText,
+        // }
+            _options
+        ).then((result) => {
             if (result.value) {
                 // User selected "Yes", so proceed with remote call
                 var promise = null;

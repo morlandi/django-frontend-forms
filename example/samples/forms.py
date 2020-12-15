@@ -70,51 +70,51 @@ class AdvancedForm(forms.Form):
         return value
 
 
-# class ArtistCreateForm(forms.ModelForm):
+class ArtistCreateForm(forms.ModelForm):
 
-#     class Meta:
-#         model = Artist
-#         fields = [
-#             'description',
-#             'notes',
-#         ]
-
-
-# class ArtistUpdateForm(forms.ModelForm):
-
-#     class Meta:
-#         model = Artist
-#         fields = [
-#             'description',
-#             'notes',
-#         ]
+    class Meta:
+        model = Artist
+        fields = [
+            'name',
+            'notes',
+        ]
 
 
-# class ArtistEditForm(forms.ModelForm):
-#     """
-#     To be used for both creation and update
-#     """
+class ArtistUpdateForm(forms.ModelForm):
 
-#     class Meta:
-#         model = Artist
-#         fields = [
-#             'description',
-#             'notes',
-#         ]
+    class Meta:
+        model = Artist
+        fields = [
+            'name',
+            'notes',
+        ]
 
 
-# class AlbumEditForm(forms.ModelForm):
-#     """
-#     To be used for both creation and update
-#     """
+class ArtistEditForm(forms.ModelForm):
+    """
+    To be used for both creation and update
+    """
 
-#     class Meta:
-#         model = Album
-#         fields = [
-#             'description',
-#             'artist',
-#             'year',
-#         ]
+    class Meta:
+        model = Artist
+        fields = [
+            'name',
+            'notes',
+        ]
+
+
+class AlbumEditForm(forms.ModelForm):
+    """
+    To be used for both creation and update
+    """
+
+    class Meta:
+        model = Album
+        fields = [
+            'name',
+            'artist',
+            'year',
+        ]
 
 
 class TrackForm(forms.ModelForm):

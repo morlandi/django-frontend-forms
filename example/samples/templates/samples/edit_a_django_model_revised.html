@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block extrastyle %}
+    <style>
+        tr.selected { background-color: #ffff99 !important; }
+        table a.btn { padding: 2px 8px; font-size: 12px; }
+    </style>
+{% endblock extrastyle %}
+
+
+{% block content %}
+    <h1>Edit a Django Model (Revised)</h1>
+
+    <table>
+        <tr>
+            <td><a href="{% url 'samples:artist-add' %}" class="btn btn-primary">Add</a></td>
+            <td><p>Create an Artist (standalone form)</p></td>
+        </tr>
+    </table>
+    <br />
+
+    <h3>Artists</h3>
+    <table class="table table-striped table-responsive table-sm table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Notes</th>
+                <th><a href="{% url 'samples:artist-add' %}" class="btn btn-primary" onclick="open_artist_edit_dialog(event, 'Create an Artist ...'); return false;">Add</a></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for artist in artists %}
+            <tr id="artist-{{artist.id}}" class="{% if request.GET.selected_record == artist.id|stringformat:'s' %}selected{% endif %}">
+                <td>{{artist.name}}</td>
+                <td>{{artist.notes|linebreaksbr}}</td>
+                <td>
+                    <a href="{% url 'samples:artist-change' artist.id %}" class="btn btn-primary" onclick="open_artist_edit_dialog(event); return false;">Edit</a>
+                    <a href="{% url 'samples:artist-delete' artist.id %}" class="btn btn-danger" onclick="delete_artist(event, 'Deleting {{artist.name}}'); return false;">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock content %}
+
+
+{% block extrajs %}
+<script language="javascript">
+
+
+    function open_artist_edit_dialog(event, title) {
+        event.preventDefault();
+        var url = $(event.target).attr('href');
+        dialog_edit.options.url = url;
+        dialog_edit.options.title = title;
+        dialog_edit.open(event);
+    }
+
+    function delete_artist(event, title) {
+        event.preventDefault();
+        var url = $(event.target).attr('href');
+        FrontendForms.confirmRemoteAction(
+            url,
+            {
+                title: title,
+                text: 'Are you sure?',
+                confirmButtonClass: 'btn-danger',
+                icon: 'question'
+            },
+            function(data) {
+
+                // FrontendForms.reload_page(true);
+                var row = $('tr#artist-'+data.object_id);
+                row.remove();
+
+                Swal.fire({
+                    text: 'Artist "' + data.object_id + '" has been deleted',
+                    icon: 'warning'
+                })
+            },
+            data=true   // set to any value to obtain POST
+        );
+    }
+
+
+    $(document).ready(function() {
+
+        dialog_edit = new Dialog({
+            //url: "{% url 'samples:artist-add' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            //title: '<i class="fa fa-calculator"></i> Create an Artist ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true,
+            callback: function(event_name, dialog, params) {
+                switch (event_name) {
+                    case "submitting":
+                        FrontendForms.overlay_show('.dialog-body');
+                        break;
+                    case "loaded":
+                        FrontendForms.overlay_hide('.dialog-body');
+                        break;
+                    case "submitted":
+                        var object_id = dialog.element.find('input[name=object_id]').val();
+                        // Reload page, with last selection enhanced
+                        var url = new URL(document.location.href);
+                        url.searchParams.set('selected_record', object_id);
+                        FrontendForms.gotourl(url, show_layer=true);
+                        break;
+                }
+            }
+        });
+
+    });
+
+</script>
+{% endblock extrajs %}

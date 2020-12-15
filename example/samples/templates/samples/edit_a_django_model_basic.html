@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block extrastyle %}
+    <style>
+        tr.selected { background-color: #ffff99 !important; }
+    </style>
+{% endblock extrastyle %}
+
+
+{% block content %}
+    <h1>Edit a Django Model</h1>
+
+    <table>
+        <tr>
+            <td><a href="{% url 'samples:artist-add-basic' %}" class="btn btn-primary">Add</a></td>
+            <td><p>Create an Artist (standalone form)</p></td>
+        </tr>
+    </table>
+    <br />
+
+    <h3>Artists</h3>
+    <table class="table table-striped table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Notes</th>
+                <th><a href="#" class="btn btn-primary" onclick="dialog_artist_add.open(event); return false;">Add</a></th>
+            </tr>
+        </thead>
+        {% for artist in artists %}
+            <tr class="{% if request.GET.selected_artist == artist.id|stringformat:'s' %}selected{% endif %}">
+                <td>{{artist.name}}</td>
+                <td>{{artist.notes|linebreaksbr}}</td>
+                <td>
+                    <a href="{% url 'samples:artist-change-basic' artist.id %}" class="btn btn-primary" onclick="open_artist_change_dialog(event); return false;">Edit</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}
+
+
+{% block extrajs %}
+<script language="javascript">
+
+
+    function open_artist_change_dialog(event) {
+        event.preventDefault();
+        var url = $(event.target).attr('href');
+        dialog_artist_change.options.url = url;
+        dialog_artist_change.open(event);
+    }
+
+
+    $(document).ready(function() {
+
+        dialog_artist_add = new Dialog({
+            url: "{% url 'samples:artist-add-basic' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Create an Artist ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true,
+            callback: function(event_name, dialog, params) {
+                switch (event_name) {
+                    case "submitting":
+                        FrontendForms.overlay_show('.dialog-body');
+                        break;
+                    case "loaded":
+                        FrontendForms.overlay_hide('.dialog-body');
+                        break;
+                    case "submitted":
+                        var object_id = dialog.element.find('input[name=object_id]').val();
+                        // Reload page, with last selection enhanced
+                        var url = new URL(document.location.href);
+                        url.searchParams.set('selected_artist', object_id);
+                        FrontendForms.gotourl(url, show_layer=true);
+                        break;
+                }
+            }
+        });
+
+        dialog_artist_change = new Dialog({
+            url: "...",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Update an Artist ...',
+            button_save_label: "Save",
+            button_save_initially_hidden: true,
+            enable_trace: true,
+            callback: function(event_name, dialog, params) {
+                switch (event_name) {
+                    case "submitting":
+                        FrontendForms.overlay_show('.dialog-body');
+                        break;
+                    case "loaded":
+                        FrontendForms.overlay_hide('.dialog-body');
+                        break;
+                    case "submitted":
+                        var object_id = dialog.element.find('input[name=object_id]').val();
+                        // Reload page, with last selection enhanced
+                        var url = new URL(document.location.href);
+                        url.searchParams.set('selected_artist', object_id);
+                        FrontendForms.gotourl(url, show_layer=true);
+                        break;
+                }
+            }
+        });
+
+    });
+
+</script>
+{% endblock extrajs %}

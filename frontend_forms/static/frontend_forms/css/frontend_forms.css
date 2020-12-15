@@ -154,6 +154,12 @@
     margin: 0 6px;
 }
 
+.swal2-cancel.btn-default {
+    border: 1px solid #ccc;
+
+}
+
+
 /* Remove Safari/Chrome textinput/textarea glow */
 .dialog input:focus {
     box-shadow: none;

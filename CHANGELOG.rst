@@ -3,6 +3,11 @@
 History
 =======
 
+v0.1.13
+-------
+* Improved example project (Creating or updating a Django Model from the front-end)
+* revised confirmRemoteAction() helper
+
 v0.1.12
 -------
 * Make sure invalid-tooltip is visible with BS4

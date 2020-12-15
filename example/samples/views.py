@@ -1,13 +1,27 @@
 import time
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from frontend_forms.utils import get_object_by_uuid_or_404
+from backend.models import Artist
 from .forms import SimpleForm
 from .forms import AdvancedForm
+from .forms import ArtistCreateForm
+from .forms import ArtistUpdateForm
+from .forms import ArtistEditForm
 from .forms import TrackForm
 from .forms import TrackFormEx
+
+
+def simulate_network_latency():
+    if settings.DEBUG:
+        time.sleep(1.0)
 
 
 def simple_content(request):
@@ -30,8 +44,7 @@ def simple_content2(request):
 
 def simple_form_validation(request):
 
-    # Simulate network latency
-    time.sleep(1.0)
+    simulate_network_latency()
 
     if request.is_ajax():
         template_name = 'dialogs/simple_form_inner.html'
@@ -55,8 +68,7 @@ def simple_form_validation(request):
 
 def advanced_form_validation(request):
 
-    # Simulate network latency
-    time.sleep(1.0)
+    simulate_network_latency()
 
     if request.is_ajax():
         template_name = 'dialogs/advanced_form_inner.html'
@@ -79,8 +91,7 @@ def advanced_form_validation(request):
 
 def form_validation_with_feedback(request):
 
-    # Simulate network latency
-    time.sleep(1.0)
+    simulate_network_latency()
 
     if request.is_ajax():
         template_name = 'dialogs/simple_form_inner.html'
@@ -106,8 +117,7 @@ def form_validation_with_feedback(request):
 
 def simple_form_validation_with_addon(request):
 
-    # Simulate network latency
-    time.sleep(1.0)
+    simulate_network_latency()
 
     if request.is_ajax():
         template_name = 'dialogs/simple_form_with_addon_inner.html'
@@ -129,10 +139,148 @@ def simple_form_validation_with_addon(request):
     })
 
 
+@login_required
+def add_artist(request):
+
+    if not request.user.has_perm('backend.add_artist'):
+        raise PermissionDenied
+
+    # Either render only the modal content, or a full standalone page
+    if request.is_ajax():
+        template_name = 'frontend_forms/generic_form_inner.html'
+    else:
+        template_name = 'dialogs/generic_form.html'
+
+    object = None
+    if request.method == 'POST':
+
+        simulate_network_latency()
+
+        form = ArtistCreateForm(data=request.POST)
+        if form.is_valid():
+            object = form.save()
+            if not request.is_ajax():
+                # reload the page
+                message = 'The object "%s" was added successfully.' % object
+                messages.success(request, message)
+                next = request.META['PATH_INFO']
+                return HttpResponseRedirect(next)
+            # if is_ajax(), we just return the validated form, so the modal will close
+    else:
+        form = ArtistCreateForm()
+
+    return render(request, template_name, {
+        'form': form,
+        'object': object,
+    })
+
+
+@login_required
+def update_artist(request, pk):
+
+    if not request.user.has_perm('backend.change_artist'):
+        raise PermissionDenied
+
+    # Either render only the modal content, or a full standalone page
+    if request.is_ajax():
+        template_name = 'frontend_forms/generic_form_inner.html'
+    else:
+        template_name = 'dialogs/generic_form.html'
+
+    object = get_object_by_uuid_or_404(Artist, pk)
+    if request.method == 'POST':
+
+        simulate_network_latency()
+
+        form = ArtistUpdateForm(instance=object, data=request.POST)
+        if form.is_valid():
+            object = form.save()
+            if not request.is_ajax():
+                # reload the page
+                message = 'The object "%s" was changed successfully.' % object
+                messages.success(request, message)
+                next = request.META['PATH_INFO']
+                return HttpResponseRedirect(next)
+            # if is_ajax(), we just return the validated form, so the modal will close
+    else:
+        form = ArtistUpdateForm(instance=object)
+
+    return render(request, template_name, {
+        'form': form,
+        'object': object,
+    })
+
+
+@login_required
+def edit_artist(request, pk=None):
+    """
+    Either add a new Artist,
+    or change an existing one
+    """
+
+    # Retrieve object
+    if pk is None:
+        # "Add" mode
+        object = None
+        required_permission = 'backend.add_artist'
+    else:
+        # "Change" mode
+        object = get_object_by_uuid_or_404(Artist, pk)
+        required_permission = 'backend.change_artist'
+
+    # Check user permissions
+    if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+        raise PermissionDenied
+
+
+    # Either render only the modal content, or a full standalone page
+    if request.is_ajax():
+        template_name = 'frontend_forms/generic_form_inner.html'
+    else:
+        template_name = 'dialogs/generic_form.html'
+
+    if request.method == 'POST':
+
+        simulate_network_latency()
+
+        form = ArtistEditForm(instance=object, data=request.POST)
+        if form.is_valid():
+            object = form.save()
+            if not request.is_ajax():
+                # reload the page
+                if pk is None:
+                    message = 'The object "%s" was added successfully.' % object
+                else:
+                    message = 'The object "%s" was changed successfully.' % object
+                messages.success(request, message)
+                next = request.META['PATH_INFO']
+                return HttpResponseRedirect(next)
+            # if is_ajax(), we just return the validated form, so the modal will close
+    else:
+        form = ArtistEditForm(instance=object)
+
+    return render(request, template_name, {
+        'form': form,
+        'object': object,
+    })
+
+
+def delete_artist(request, pk):
+
+    required_permission = 'backend.delete_artist'
+    if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+        raise PermissionDenied
+
+    object = get_object_by_uuid_or_404(Artist, pk)
+    object_id = object.id
+    object.delete()
+
+    return JsonResponse({'object_id': object_id})
+
+
 def new_track(request):
 
-    # Simulate network latency
-    time.sleep(1.0)
+    simulate_network_latency()
 
     if request.is_ajax():
         template_name = 'dialogs/track_form_inner.html'
@@ -162,8 +310,7 @@ def new_track(request):
 
 def new_track_ex(request):
 
-    # Simulate network latency
-    time.sleep(1.0)
+    simulate_network_latency()
 
     if request.is_ajax():
         template_name = 'dialogs/track_form_ex_inner.html'

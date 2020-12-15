@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+{% include 'frontend_forms/generic_form_inner.html' %}
+{% endblock content %}
+
+{% block extrastyle %}
+<style>
+    form {
+        max-width: 400px;
+        border: 1px solid black;
+        padding: 40px;
+    }
+</style>
+{% endblock extrastyle %}
