@@ -41,11 +41,11 @@ def format_datetime(dt, include_time=True, include_seconds=False, exclude_date=F
     if dt is None:
         return ''
 
-    if not isinstance(dt, datetime.datetime):
-        include_time = False
-
-    if include_time:
+    if isinstance(dt, datetime.datetime):
         dt = timezone.localtime(dt)
+    else:
+        assert isinstance(dt, datetime.date)
+        include_time = False
 
     if exclude_date:
         text = ''
