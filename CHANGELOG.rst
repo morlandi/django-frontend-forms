@@ -3,6 +3,13 @@
 History
 =======
 
+v0.2.0
+------
+* Login view suitable for modal forms
+* check_logged_in() decorator
+* fix format_datetime
+* POSSIBLE INCOMPATIBLE CHANGE: provided templates now extend "base.html" instead of "frontend/base.html"
+
 v0.1.13
 -------
 * Improved example project (Creating or updating a Django Model from the front-end)
