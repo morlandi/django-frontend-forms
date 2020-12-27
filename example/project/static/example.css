@@ -18,12 +18,8 @@ body {
     margin-bottom: 30px;
 }
 
-main {
-}
-
-body.page-index a.nav-link.page-index,
-body.page-compress-image a.nav-link.page-compress-image,
-body.page-test a.nav-link.page-test {
+.navbar-nav .nav-item,
+a.nav-link {
     color: #fff;
 }
 

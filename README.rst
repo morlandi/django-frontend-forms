@@ -43,6 +43,15 @@ In your settings, add:
         'frontend_forms',
     ]
 
+Optionally, include library's views mapping (file `urls.py`):
+
+.. code:: python
+
+    urlpatterns = [
+        ...
+        path('frontend_forms/', include('frontend_forms.urls', namespace='frontend_forms')),
+        ...
+
 In your base template, include the default styles, the javascript support,
 and optionally the sample HTML template:
 
@@ -277,7 +286,7 @@ Sample usage in a template:
     <a href="#" onclick="dialog2.open(event, show=false); return false;">
         <i class="fa fa-plus-circle"></i>
         Test Popup (2)
-    </a> /
+    </a>
 
 Handling form submission
 ------------------------
@@ -335,6 +344,64 @@ thus giving to the user a chance to read your feedback.
             'form': form,
         })
 
+Logging in with a modal form
+----------------------------
+
+If you're trying to minimize page switching and reduce navigation in your frontend,
+why not provide a modal window for login as well ?
+
+The library contains a login view adapted from the standard (function based) Django
+login view, which can be used for either a standalone HTML page or in a Dialog:
+
+.. code:: html
+
+    <script language="javascript">
+
+        login_dialog = new Dialog({
+            url: "{% url 'frontend_forms:login' %}",
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-sign-in"></i> Login ...',
+            button_save_label: "Login",
+            button_close_label: "Close"
+        });
+
+    </script>
+
+    <a href="#" onclick="login_dialog.open(event); return false;">
+        <i class="fa fa-sign-in"></i>
+        Login
+    </a>
+
+.. image:: screenshots/login-dialog.png
+
+You can customize the following templates:
+
+- frontend_forms/login.html
+- frontend_forms/login_inner.html
+- frontend_forms/login_successful_message.html
+
+
+Replacing login_required
+------------------------
+
+A decorator suitable for modal forms is provided to replace login_required():
+
+.. code:: python
+
+    from frontend_forms.decorators import check_logged_in
+
+    @check_logged_in()
+    def my_view(request, ...):
+        ...
+
+It checks that the user is logged in, showing an error message in place if not.
+
+You can customize the following template:
+
+- frontend_forms/check_logged_in_failed.html
+
+
 A full, real example for a Django Form submission from a Dialog
 ---------------------------------------------------------------
 
@@ -347,13 +414,13 @@ file `ajax.py`:
 .. code:: python
 
     import time
-    from django.contrib.auth.decorators import login_required
+    from frontend_forms.decorators import check_logged_in
     from django.views.decorators.cache import never_cache
     from django.core.exceptions import PermissionDenied
     from django.http import HttpResponseRedirect
 
 
-    @login_required
+    @check_logged_in()
     @never_cache
     def select_contract(request):
 
@@ -605,7 +672,7 @@ For example:
 
 .. code:: python
 
-    @login_required
+    @check_logged_in()
     @never_cache
     def edit_something(request, id_object=None):
 

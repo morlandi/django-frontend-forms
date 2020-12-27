@@ -13,13 +13,13 @@ This is the view:
 
 .. code:: python
 
-    from django.contrib.auth.decorators import login_required
+    from frontend_forms.decorators import check_logged_in
     from django.core.exceptions import PermissionDenied
     from django.http import HttpResponseRedirect
     from .forms import ArtistCreateForm
 
 
-    @login_required
+    @check_logged_in()
     def add_artist(request):
 
         if not request.user.has_perm('backend.add_artist'):
@@ -153,14 +153,15 @@ The view:
 
 .. code:: python
 
-    from django.contrib.auth.decorators import login_required
+    from frontend_forms.decorators import check_logged_in
+    from django.views.decorators.cache import never_cache
     from django.core.exceptions import PermissionDenied
     from django.http import HttpResponseRedirect
     from frontend_forms.utils import get_object_by_uuid_or_404
     from .forms import ArtistUpdateForm
 
 
-    @login_required
+    @check_logged_in()
     def update_artist(request, pk):
 
         if not request.user.has_perm('backend.change_artist'):
@@ -227,7 +228,7 @@ with the required object id before opening it:
 Possible optimizations
 ----------------------
 
-In the code above, we can detect at list three redundancies:
+In the code above, we can recognize at list three redundancies:
 
 - the two model forms are identical
 - the two views are similar

@@ -27,6 +27,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="pages/index.html"), name="index"),
     path('files_upload/', views.FileFormView.as_view(), name="files_upload"),
     path('admin/', admin.site.urls),
+    path('frontend_forms/', include('frontend_forms.urls', namespace='frontend_forms')),
     path('samples/', include('samples.urls', namespace='samples')),
     path('select2/', include('django_select2.urls')),
 ] \

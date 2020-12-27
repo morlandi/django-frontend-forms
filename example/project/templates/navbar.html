@@ -24,6 +24,21 @@
             </li>
             {% endcomment %}
         </ul>
+        <ul class="navbar-nav my-2 my-lg-0">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <span class="nav-link">({{request.user}})</span>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'frontend_forms:logout' %}" class="nav-link">{% trans 'Logout' %}</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'frontend_forms:login' %}" class="nav-link">{% trans 'Login' %}</a>
+                </li>
+            {% endif %}
+            </li>
+        </ul>
         {% comment %}
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">

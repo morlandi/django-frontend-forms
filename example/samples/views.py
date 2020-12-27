@@ -6,8 +6,8 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from frontend_forms.decorators import check_logged_in
 from frontend_forms.utils import get_object_by_uuid_or_404
 from backend.models import Artist
 from .forms import SimpleForm
@@ -139,7 +139,7 @@ def simple_form_validation_with_addon(request):
     })
 
 
-@login_required
+@check_logged_in()
 def add_artist(request):
 
     if not request.user.has_perm('backend.add_artist'):
@@ -175,7 +175,7 @@ def add_artist(request):
     })
 
 
-@login_required
+@check_logged_in()
 def update_artist(request, pk):
 
     if not request.user.has_perm('backend.change_artist'):
@@ -211,7 +211,7 @@ def update_artist(request, pk):
     })
 
 
-@login_required
+@check_logged_in()
 def edit_artist(request, pk=None):
     """
     Either add a new Artist,

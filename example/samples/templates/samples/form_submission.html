@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
     <h1>Simple Dialogs with Form validation</h1>
@@ -28,6 +29,10 @@
             <td><a data-value="4" href="#" class="link-button btn btn-primary">dialog4</a></td>
             <td><p>A simple dialog with an input-group-addon</p></td>
         </tr>
+        <tr>
+            <td><a data-value="5" href="#" class="link-button btn btn-primary">Login</a></td>
+            <td><p>Login with a modal form</p></td>
+        </tr>
     </table>
 
 {% endblock content %}
@@ -40,7 +45,7 @@
     function onLinkButtonClicked(event) {
         event.preventDefault();
         var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2, dialog3, dialog4];
+        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
         dialogs[n - 1].open(event);
     }
 
@@ -105,6 +110,15 @@
             button_save_label: "Save",
             button_save_initially_hidden: true,
             enable_trace: true
+        });
+
+        dialog5 = new Dialog({
+            url: "{% url 'frontend_forms:login' %}",
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-sign-in"></i> Login ...',
+            button_save_label: "Login",
+            button_close_label: "Close"
         });
 
     });

@@ -1,0 +1,24 @@
+{% extends "frontend_forms/base.html" %}
+{% load static i18n %}
+
+
+{% block extrastyle %}
+    <style>
+        .login-form-wrapper {
+            max-width: 400px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+    </style>
+{% endblock extrastyle %}
+
+
+{% block content %}
+    <div class="login-form-wrapper">
+        <div class="heading">
+            <h3>{% trans 'Login' %}</h3>
+            <p>{% trans 'Please enter your username and password below' %}.</p>
+        </div>
+        {% include 'frontend_forms/generic_form_inner.html' %}
+    </div>
+{% endblock content %}

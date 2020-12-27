@@ -6,6 +6,9 @@ from . import views
 app_name = 'frontend_forms'
 
 urlpatterns = [
+    path('login/', views.login, {'template_name': 'frontend_forms/login.html', }, name="login"),
+    path('logout/', views.logout, {'next_page': '/'}, name="logout"),
+
     path('<str:app_label>/<str:model_name>/add/', views.edit_object, name="object-add"),
 
     path('<str:app_label>/<str:model_name>/<int:pk>/change/', views.edit_object, name="object-change"),

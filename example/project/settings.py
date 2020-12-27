@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -182,7 +183,7 @@ SELECT2_JS = ''
 SELECT2_CSS = ''
 
 QUERYCOUNT = {
-    'IGNORE_ALL_REQUESTS': False,
+    'IGNORE_ALL_REQUESTS': True,
     'IGNORE_REQUEST_PATTERNS': [],
     'IGNORE_SQL_PATTERNS': [],
     'THRESHOLDS': {
@@ -198,6 +199,10 @@ QUERYCOUNT = {
     'DISPLAY_DUPLICATES': 0,
 }
 
+LOGIN_URL = reverse_lazy('frontend_forms:login')
+LOGOUT_URL = reverse_lazy('frontend_forms:logout')
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 # Load local settings when supplied
 try:

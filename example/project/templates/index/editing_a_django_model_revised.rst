@@ -6,18 +6,18 @@ Creating or updating a Django Model (revised)
 Let's start our optimizations by removing some redundancies.
 
 Sharing a single view for both creating a new specific Model or updating
-an existing one is now straitforward; see `edit_artist()` belows:
+an existing one is now straightforward; see `edit_artist()` belows:
 
 .. code:: python
 
-    from django.contrib.auth.decorators import login_required
     from django.core.exceptions import PermissionDenied
     from django.http import HttpResponseRedirect
     from frontend_forms.utils import get_object_by_uuid_or_404
+    from frontend_forms.decorators import check_logged_in
     from .forms import ArtistUpdateForm
 
 
-    @login_required
+    @check_logged_in()
     def edit_artist(request, pk=None):
         """
         Either add a new Artist,
@@ -132,12 +132,12 @@ before opening the dialog:
         $(document).ready(function() {
 
             dialog_edit = new Dialog({
-                //url: ...,
+                //url: none,
                 dialog_selector: '#dialog_generic',
                 html: '<h1>Loading ...</h1>',
                 width: '600px',
                 min_height: '200px',
-                //title: ...,
+                //title: none,
                 button_save_label: "Save",
                 button_save_initially_hidden: true,
                 enable_trace: true,
