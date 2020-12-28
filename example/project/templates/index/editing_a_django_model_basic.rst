@@ -234,11 +234,10 @@ In the code above, we can recognize at list three redundancies:
 - the two views are similar
 - and, last but not least, we might try to generalize the views for reuse with any Django model
 
-We'll investigate all these opportunities below;
+We'll investigate all these opportunities later on;
 
-nonetheless, it's nice to
-have a simple snippet available for copy and paste to be used as a starting point
-anytime a specific customization is in order.
+nonetheless, it's nice to have a simple snippet available for copy and paste
+to be used as a starting point anytime a specific customization is in order.
 
 
 .. note::

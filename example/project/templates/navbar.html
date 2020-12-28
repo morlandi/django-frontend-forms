@@ -34,7 +34,11 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a href="{% url 'frontend_forms:login' %}" class="nav-link">{% trans 'Login' %}</a>
+                    <a href="{% url 'frontend_forms:login' %}" class="nav-link">{% trans 'Login (standalone)' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a id="login_with_dialog" href="{% url 'frontend_forms:login' %}" class="nav-link">{% trans 'Login (popup)' %}
+                    </a>
                 </li>
             {% endif %}
             </li>

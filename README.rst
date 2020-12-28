@@ -351,27 +351,55 @@ If you're trying to minimize page switching and reduce navigation in your fronte
 why not provide a modal window for login as well ?
 
 The library contains a login view adapted from the standard (function based) Django
-login view, which can be used for either a standalone HTML page or in a Dialog:
+login view, which can be used for either a standalone HTML page or in a Dialog.
+
+For example:
 
 .. code:: html
 
-    <script language="javascript">
-
-        login_dialog = new Dialog({
-            url: "{% url 'frontend_forms:login' %}",
-            width: '400px',
-            min_height: '200px',
-            title: '<i class="fa fa-sign-in"></i> Login ...',
-            button_save_label: "Login",
-            button_close_label: "Close"
-        });
-
-    </script>
-
-    <a href="#" onclick="login_dialog.open(event); return false;">
+    <a id="login_with_dialog" href="{% url 'frontend_forms:login' %}">
         <i class="fa fa-sign-in"></i>
         Login
     </a>
+
+    <script language="javascript">
+
+        $(document).ready(function() {
+
+            $('#login_with_dialog').on('click', function(event) {
+                event.preventDefault();
+                var target = $(event.target);
+                var url = target.attr('href');
+                var logged_in = false;
+
+                var login_dialog = new Dialog({
+                    url: url,
+                    width: '400px',
+                    min_height: '200px',
+                    title: '<i class="fa fa-sign-in"></i> Login ...',
+                    button_save_label: "Login",
+                    button_close_label: "Close",
+                    callback: function(event_name, dialog, params) {
+                        switch (event_name) {
+                            case "submitted":
+                                logged_in = true;
+                                break;
+                            case "closed":
+                                if (logged_in) {
+                                    FrontendForms.redirect('/', true);
+                                }
+                                break;
+                        }
+                    }
+
+                });
+
+                login_dialog.open(event);
+            });
+
+        });
+
+    </script>
 
 .. image:: screenshots/login-dialog.png
 
