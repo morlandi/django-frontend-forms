@@ -330,6 +330,8 @@ class Dialog {
                 // - keep the dialog open
                 // - hide the save button
                 else {
+                    // We also notify the user about successful submission
+                    self._notify('submitted', {method: method, url: url, data: data});
                     btn_save.hide();
                 }
 
