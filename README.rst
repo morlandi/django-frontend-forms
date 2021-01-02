@@ -72,7 +72,7 @@ Please note the third row in the snippets above:
 
     <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
 
-**Since v0.3.0 it is mandatory to include the dynamically generated
+**Since v0.2.1 it is mandatory to include the dynamically generated
 javascript catalog**, since a few messages have been translated in javascript code
 following these instructions: `Django Internationalization: in JavaScript code <https://docs.djangoproject.com/en/3.1/topics/i18n/translation/#internationalization-in-javascript-code>`_.
 

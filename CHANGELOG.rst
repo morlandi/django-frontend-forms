@@ -3,6 +3,13 @@
 History
 =======
 
+v0.2.1
+------
+- POSSIBLE INCOMPATIBLE CHANGE: Added javascript catalog for translating messages in JS code
+- Italian transation added
+- Example: chain selection sample
+- [fix] Send missing "submitted" notification
+
 v0.2.0
 ------
 * Login view suitable for modal forms
