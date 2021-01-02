@@ -23,7 +23,7 @@
             <div id="form-container">
 
                 {% comment %}
-                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload" action="{% url 'files_upload' %}" novalidate autocomplete="off">
+                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload" action="{% url 'others:files_upload' %}" novalidate autocomplete="off">
                     {% csrf_token %}
                     <div class="fallback">
                         {# <input id="file" name="file" type="file" multiple="multiple"/> #}
@@ -35,7 +35,7 @@
 
 
                 {% comment %}
-                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload" action="{% url 'files_upload' %}" novalidate autocomplete="off">
+                <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload" action="{% url 'others:files_upload' %}" novalidate autocomplete="off">
                     {% csrf_token %}
 
                     <div class="fallback">
@@ -51,7 +51,7 @@
 
 
                 <form method="post" enctype="multipart/form-data" class="dropzone clsbox" id="MultiFileUpload"
-                    action="{% url 'files_upload' %}?use_dropzonejs={% if use_dropzonejs %}1{% else %}0{% endif %}" novalidate autocomplete="off">
+                    action="{% url 'others:files_upload' %}?use_dropzonejs={% if use_dropzonejs %}1{% else %}0{% endif %}" novalidate autocomplete="off">
                     {% csrf_token %}
 
                     {% if form.non_field_errors %}
@@ -154,7 +154,7 @@
 
             {% if use_dropzonejs %}
             $('#MultiFileUpload').dropzone({
-                url: "/files_upload/",
+                url: "/others/files_upload/",
                 crossDomain: false,
                 paramName: "file",
                 parallelUploads: 5,

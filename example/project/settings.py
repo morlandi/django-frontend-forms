@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'project',
     'backend',
     'samples',
+    'others',
 ]
 
 MIDDLEWARE = [
