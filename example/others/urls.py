@@ -11,4 +11,5 @@ app_name = 'others'
 
 urlpatterns = [
     path('files_upload/', views.FileFormView.as_view(), name="files_upload"),
+    path('chained_selection/', views.chained_selection, name="chained_selection"),
 ]

@@ -2,16 +2,15 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.utils.safestring import mark_safe
 from django.contrib import messages
 from django.conf import settings
 from django.views.generic.edit import FormView
+from django.urls import reverse
 
 from .forms import FileForm
-try:
-    from django.urls import reverse
-except ModuleNotFoundError as e:
-    # for Django < v1.10
-    from django.core.urlresolvers import reverse
+from .forms import ChainedSelectionForm
+
 from .models import File
 
 
@@ -21,7 +20,7 @@ def clear_all_files(request):
 
 
 class FileFormView(FormView):
-    template_name = 'pages/files_upload.html'
+    template_name = 'others/files_upload.html'
     form_class = FileForm
     success_url = '/'
     use_dropzonejs = True
@@ -84,3 +83,44 @@ class FileFormView(FormView):
                 return self.render_to_response(self.get_context_data(form=form))
             else:
                 return JsonResponse({'form': False})
+
+
+def dump_result(form, prompt=""):
+    html = ""
+    if prompt:
+        html += prompt + '<br />'
+    html += """
+        artist: <b>{artist}</b><br />
+        album: <b>{album}</b><br />
+        track: <b>{track}</b><br />
+    """.format(
+        artist=form.cleaned_data['artist'],
+        album=form.cleaned_data['album'],
+        track=form.cleaned_data['track'],
+    )
+    return mark_safe(html)
+
+
+def chained_selection(request):
+
+    if request.is_ajax():
+        template_name = 'others/chained_selection_inner.html'
+    else:
+        template_name = 'others/chained_selection.html'
+
+    if request.method == 'POST':
+        form = ChainedSelectionForm(data=request.POST)
+        if form.is_valid():
+            #form.save()
+            message = dump_result(form, "Form has been validated")
+            if not request.is_ajax():
+                messages.info(request, message)
+                return HttpResponseRedirect(reverse('others:chained_selection'))
+            else:
+                return HttpResponse(message)
+    else:
+        form = ChainedSelectionForm()
+
+    return render(request, template_name, {
+        'form': form,
+    })

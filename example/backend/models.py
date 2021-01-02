@@ -78,7 +78,7 @@ class Artist(BaseModel):
 
 class Album(BaseModel):
 
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=False, blank=False)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=False, blank=False, related_name="albums")
     year = models.IntegerField(null=True, blank=True)
 
     class Meta(BaseModel.Meta):

@@ -1111,3 +1111,12 @@ for example:
         search_fields = [
             'name__istartswith',
         ]
+
+        def build_attrs(self, base_attrs, extra_attrs=None):
+            attrs = super().build_attrs(base_attrs=base_attrs, extra_attrs=extra_attrs)
+            # "data-minimum-input-length";
+            # - either override build_attrs() here,
+            # - or provide as attr in the instance; for example:
+            #   'album': AlbumWidget(attrs={'data-minimum-input-length': 0,}),
+            attrs['data-minimum-input-length'] = 0
+            return attrs

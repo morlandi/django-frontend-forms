@@ -1,0 +1,12 @@
+{% load i18n frontend_forms_tags %}
+
+
+<form method="post" novalidate autocomplete="off">
+    {% csrf_token %}
+
+    {% render_form form %}
+
+    <div class="form-group form-submit-row">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+    </div>
+</form>
