@@ -26,9 +26,9 @@ class Dialog {
             height: null,
             min_height: null,
             max_height: null,
-            button_save_label: 'Save',
+            button_save_label: gettext('Save'),
             button_save_initially_hidden: false,
-            button_close_label: 'Cancel',
+            button_close_label: gettext('Cancel'),
             title: '',
             footer_text: '',
             enable_trace: false,
@@ -360,12 +360,12 @@ window.FrontendForms = (function() {
                 cancelButtonClass: 'btn btn-lg btn-default',
                 buttonsStyling: false,
                 reverseButtons: true,
-                title: 'ERROR',
+                title: gettext('ERROR'),
                 text: errorDetails,
                 type: 'error',
                 icon: 'error',
                 confirmButtonClass: 'btn btn-lg btn-danger',
-                confirmButtonText: 'Close'
+                confirmButtonText: gettext('Close')
             });
         }
         // failing that, we fallback to a simple alert

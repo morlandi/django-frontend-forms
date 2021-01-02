@@ -72,6 +72,7 @@
     <script src="{% static 'sweetalert2/dist/sweetalert2.min.js' %}"></script>
     <script src="{% static 'promise-polyfill/dist/polyfill.min.js' %}"></script>
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     <script src="{% static 'dropzone/dist/min/dropzone.min.js' %}"></script>
 
     {# Select2 support #}
@@ -102,8 +103,8 @@
                     width: '400px',
                     min_height: '200px',
                     title: '<i class="fa fa-sign-in"></i> Login ...',
-                    button_save_label: "Login",
-                    button_close_label: "Close",
+                    button_save_label: "{% trans 'Login' %}",
+                    button_close_label: "{% trans 'Close' %}",
                     callback: function(event_name, dialog, params) {
                         switch (event_name) {
                             case "submitted":

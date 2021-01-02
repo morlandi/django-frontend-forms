@@ -16,7 +16,7 @@
             {% render_form form %}
             <input type="hidden" name="object_id" value="{{ object.id|default:'' }}">
             <div class="form-submit-row">
-                <input type="submit" value="Save" />
+                <input type="submit" value="{% trans 'Save' %}" />
             </div>
         </form>
     </div>

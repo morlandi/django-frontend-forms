@@ -43,7 +43,7 @@ In your settings, add:
         'frontend_forms',
     ]
 
-Optionally, include library's views mapping (file `urls.py`):
+Include library's views mapping (file `urls.py`):
 
 .. code:: python
 
@@ -59,11 +59,23 @@ and optionally the sample HTML template:
 
     <link rel='stylesheet' href="{% static 'frontend_forms/css/frontend_forms.css' %}">
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     {% include 'frontend_forms/dialogs.html' %}
 
 
 **OPTIONALLY**, since the js code uses the `class` keyword, you might want to transpile
 `frontend_forms.jsx` for maximum compatibility, to support oldest browsers.
+
+Please note the third row in the snippets above:
+
+.. code:: html
+
+    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
+
+**Since v0.3.0 it is mandatory to include the dynamically generated
+javascript catalog**, since a few messages have been translated in javascript code
+following these instructions: `Django Internationalization: in JavaScript code <https://docs.djangoproject.com/en/3.1/topics/i18n/translation/#internationalization-in-javascript-code>`_.
+
 
 For example, using Babel and django-compress:
 
@@ -1034,7 +1046,19 @@ Follow these steps:
 django-select2 support
 ----------------------
 
-Requirements (in file "base.html")::
+Requirements::
+
+    pip install django-select2
+    npm install select2
+
+Changes to "settings.py"::
+
+    INSTALLED_APPS = [
+        ...
+        'django_select2',
+        ...
+
+Changes to "base.html"::
 
     <link rel="stylesheet" type="text/css" href="{% static 'select2/dist/css/select2.min.css' %}" />
 
@@ -1043,7 +1067,7 @@ Requirements (in file "base.html")::
     <script language="javascript">
         $.fn.select2.defaults.set('language', 'it');
     </script>
-    <script src="{% static 'django_select2/django_select2.js' %}"</script>
+    <script src="{% static 'django_select2/django_select2.js' %}"></script>
 
 Follow these steps:
 
