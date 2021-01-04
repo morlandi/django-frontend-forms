@@ -6,6 +6,8 @@ A Django helper app to add editing capabilities to the frontend using modal form
 
 Bases on my previous research as documented here: `Editing Django models in the front end <https://editing-django-models-in-the-frontend.readthedocs.io/en/latest/>`_
 
+.. image:: screenshots/main_screen.png
+
 .. contents::
 
 .. sectnum::
