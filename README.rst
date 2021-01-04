@@ -836,13 +836,24 @@ Notes:
 
 
 
-Settings
---------
+App Settings
+------------
 
-FRONTEND_FORMS_FORM_LAYOUT_FLAVOR
-    Default flavor for form rendering
-        - Default: "generic"
-        - Accepted values: "generic", "bs4"
+=========================================== ===============================================================
+Option                                      Accepted values
+------------------------------------------- ---------------------------------------------------------------
+FRONTEND_FORMS_FORM_LAYOUT_FLAVOR           "generic", "bs4"
+FRONTEND_FORMS_FORM_LAYOUT_DEFAULT          "vertical", "horizontal"
+FRONTEND_FORMS_MODEL_FORMS_MODULES
+=========================================== ===============================================================
+
+Default values::
+
+    FRONTEND_FORMS_FORM_LAYOUT_FLAVOR  = "generic"
+    FRONTEND_FORMS_FORM_LAYOUT_DEFAULT = "vertical"
+    FRONTEND_FORMS_MODEL_FORMS_MODULES = ['frontend.forms', ]
+
+
 
 "bs4" flavor
 ------------
