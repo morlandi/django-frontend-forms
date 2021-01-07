@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.2
+------
+* non-destructive form_class annotation
+
 v0.2.1
 ------
 * POSSIBLE INCOMPATIBLE CHANGE: Added javascript catalog for translating messages in JS code
