@@ -118,6 +118,7 @@ def edit_object(request, app_label, model_name, pk=None):
     """
     Choose a suitable ModelForm class, than invoke generic_edit_view()
     """
+
     model_form_class = get_model_form_class(app_label, model_name)
     template_name = 'frontend_forms/generic_form.html'
 
@@ -206,7 +207,11 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
 
     # Add a specific form class attribute so we can characterize the form in the template;
     # i.e.:   <form class="form {{form.form_class}}" ...
-    form.form_class = 'form-%s-%s' % (app_label, model_name)
+    if hasattr(form, 'form_class'):
+        form.form_class += ' '
+    else:
+        form.form_class = ''
+    form.form_class += 'form-%s-%s' % (app_label, model_name)
 
     return render(request, template_name, {
         'object': object,
