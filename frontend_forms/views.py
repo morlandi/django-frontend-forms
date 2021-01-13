@@ -195,6 +195,11 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
                 next = request.META['PATH_INFO']
                 return HttpResponseRedirect(next)
             # if is_ajax(), we just return the validated form, so the modal will close
+        else:
+            print('INVALID FORM:')
+            print('non_field_errors: ' + str(form.non_field_errors()))
+            print('errors: ' + str(form.errors))
+
     else:
 
         # Provide initial values fro specific model

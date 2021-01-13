@@ -336,7 +336,8 @@ class Dialog {
                 }
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
+                console.error('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
+                console.error(jqXHR.responseText);
                 FrontendForms.display_server_error(errorThrown);
             }).always(function() {
                 header.removeClass('loading');

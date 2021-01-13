@@ -13,6 +13,24 @@ from frontend_forms.app_settings import FORM_LAYOUT_DEFAULT
 
 register = template.Library()
 
+@register.filter
+def pdb(element):
+    """ Usage: {{ template_var|pdb }}
+        then inspect 'element' from pdb
+    """
+    import pdb
+    pdb.set_trace()
+    return element
+
+
+@register.filter
+def ipdb(element):
+    """ Usage: {{ template_var|pdb }}
+        then inspect 'element' from pdb
+    """
+    import ipdb
+    ipdb.set_trace()
+    return element
 
 ################################################################################
 # Support for generic editing in the front-end
