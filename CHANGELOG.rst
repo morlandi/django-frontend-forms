@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.3
+------
+* transpile frontend_forms.jsx
+
 v0.2.2
 ------
 * non-destructive form_class annotation
