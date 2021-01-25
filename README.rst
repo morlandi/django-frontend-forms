@@ -80,7 +80,7 @@ Notes:
 
 2) compatibility with older browsers
 
-    `frontend_forms/js/frontend_forms.jsx` has been transpiled to product `frontend_forms/js/frontend_forms.js`
+    `frontend_forms/js/frontend_forms.jsx` has been transpiled to produce `frontend_forms/js/frontend_forms.js`
     for maximum compatibility with older browsers (using `transpile_jsx.py` helper script).
 
     If you don't care, or you plan to transpile via django-compressor, you can include
