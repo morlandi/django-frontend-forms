@@ -60,53 +60,33 @@ and optionally the sample HTML template:
 .. code:: html
 
     <link rel='stylesheet' href="{% static 'frontend_forms/css/frontend_forms.css' %}">
-    <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    <script src="{% static 'frontend_forms/js/frontend_forms.js' %}"></script>
     <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     {% include 'frontend_forms/dialogs.html' %}
 
+Notes:
 
-Please note the third row in the snippets above:
+1) javascript catalog
 
-.. code:: html
+    Please note the third row in the snippets above:
 
-    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
+    .. code:: html
 
-**Since v0.2.1 it is mandatory to include the dynamically generated
-javascript catalog**, since a few messages have been translated in javascript code
-following these instructions: `Django Internationalization: in JavaScript code <https://docs.djangoproject.com/en/3.1/topics/i18n/translation/#internationalization-in-javascript-code>`_.
+        <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
 
+    **Since v0.2.1 it is mandatory to include the dynamically generated
+    javascript catalog**, as a few messages have been translated in javascript code
+    following these instructions: `Django Internationalization: in JavaScript code <https://docs.djangoproject.com/en/3.1/topics/i18n/translation/#internationalization-in-javascript-code>`_.
 
-**OPTIONALLY**, since the js code uses the `class` keyword, you might want to transpile
-`frontend_forms.jsx` for maximum compatibility, to support oldest browsers.
+2) compatibility with older browsers
 
-For example, using Babel and django-compress:
+    `frontend_forms/js/frontend_forms.jsx` has been transpiled to product `frontend_forms/js/frontend_forms.js`
+    for maximum compatibility with older browsers (using `transpile_jsx.py` helper script).
 
-.. code:: html
+    If you don't care, or you plan to transpile via django-compressor, you can include
+    the ".jsx" file instead::
 
-    <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}" type="text/jsx"></script>
-
-then, setup handling for ".jsx" files as follows::
-
-    COMPRESS_PRECOMPILERS = (
-        ...
-        ('text/jsx', 'cat {infile} | ./node_modules/babel-cli/bin/babel.js --presets babel-preset-es2015 > {outfile}'),
-    )
-
-(you my want to disable it local debugging)::
-
-    # Remove js transpiling for easier debugging
-    COMPRESS_PRECOMPILERS = (
-        ...
-        ('text/jsx', 'cat {infile} | ./node_modules/babel-cli/bin/babel.js > {outfile}'),
-    )
-
-then:
-
-.. code:: bash
-
-    npm install babel-cli
-    npm install babel-preset-es2015
-    npm install babel-preset-stage-2
+        <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}" type="text/jsx"></script>
 
 
 How to use
