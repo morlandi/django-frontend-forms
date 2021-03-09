@@ -1,4 +1,4 @@
- #node ./example/node_modules/babel-cli/bin/babel.js --presets /Users/morlandi/Projects/github_public/django-frontend-forms/example/node_modules/babel-preset-es2015  frontend_forms/static/frontend_forms/js/frontend_forms.jsx
+ #!/usr/bin/env python3
 import os
 
 source = './frontend_forms/static/frontend_forms/js/frontend_forms.jsx'
@@ -18,6 +18,3 @@ print("\n" + command + "\n")
 os.system(command)
 
 print('New target "%s" created' % target)
-
-
-#/Users/morlandi/Projects/github_public/django-frontend-forms/example/node_modules/babel-preset-es2015

@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.4
+------
+* in case of form errors, autofocus now selects the first editable invalid field
+
 v0.2.3
 ------
 * transpile frontend_forms.jsx

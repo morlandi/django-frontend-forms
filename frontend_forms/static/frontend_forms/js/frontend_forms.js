@@ -293,6 +293,8 @@ var Dialog = function () {
     }, {
         key: '_form_ajax_submit',
         value: function _form_ajax_submit() {
+            var with_errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
             var self = this;
 
             var content = self.element.find('.dialog-content');
@@ -313,7 +315,12 @@ var Dialog = function () {
 
             // Give focus to first visible form field
             if (self.options.autofocus_first_visible_input) {
-                form.find('input:visible').first().focus().select();
+                if (with_errors) {
+                    // In case of error, move focus to first failing input
+                    form.find('.field-with-errors input:visible').first().focus().select();
+                } else {
+                    form.find('input:visible').first().focus().select();
+                }
             }
 
             // bind to the form’s submit event
@@ -357,7 +364,7 @@ var Dialog = function () {
                         //if ($(xhr).find('.has-error').length > 0) {
                         if ($(xhr).find('.has-error').length > 0 || $(xhr).find('.errorlist').length > 0) {
                             self._notify('loaded', { url: url });
-                            self._form_ajax_submit();
+                            self._form_ajax_submit(true);
                         } else {
                             // otherwise, we've done and can close the modal
                             self._notify('submitted', { method: method, url: url, data: data });
