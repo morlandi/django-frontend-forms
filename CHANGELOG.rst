@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.7
+------
+* Removed wrong [fix] render_form_field rendering for bootstrap
+
 v0.2.6
 ------
 * Update Pillow (example project)
