@@ -140,11 +140,44 @@ button_save_label               'Save'
 button_save_initially_hidden    false                      Will be shown after form rendering
 button_close_label              'Cancel'
 title                           ''
+subtitle                        ''
 footer_text                     ''
 enable_trace                    false                      show notifications in debug console
 callback                        null                       a callback to receive events
 autofocus_first_visible_input   true
 =============================== ========================== ===============================================================
+
+Unspecified options will be retrieved from corresponding HTML attributes on the
+element which fires the dialog opening;
+for example:
+
+.. code:: html
+
+    <a href="{% url 'frontend:whatever' object.id %}"
+       data-title="My title"
+       data-subtitle="My Subtitle"
+       onclick="new Dialog().open(event); return false;">
+            Open
+    </a>
+
+=============================== ==========================
+Option                          HTML attribute
+------------------------------- --------------------------
+url                             href
+html                            data-html
+width                           data-width
+min_width                       data-min-width
+max_width                       data-max-width
+height                          data-height
+min_height                      data-min-height
+max_height                      data-max-height
+button_save_label               data-button-save-label
+button_close_label              data-button-close-label
+title                           data-title
+subtitle                        data-subtitle
+footer_text                     data-footer-text
+=============================== ==========================
+
 
 Dialog notifications
 ....................
