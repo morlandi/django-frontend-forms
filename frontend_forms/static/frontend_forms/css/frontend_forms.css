@@ -66,6 +66,11 @@
     color: white;
 }
 
+.dialog .dialog-content .dialog-header .subtitle {
+    font-size: 12px;
+    color: white;
+}
+
 .dialog .dialog-header .spinner {
     float: left;
     padding: 0;

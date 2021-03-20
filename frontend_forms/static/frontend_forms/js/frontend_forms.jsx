@@ -30,6 +30,7 @@ class Dialog {
             button_save_initially_hidden: false,
             button_close_label: gettext('Cancel'),
             title: '',
+            subtitle: '',
             footer_text: '',
             enable_trace: false,
             callback: null,
@@ -126,6 +127,12 @@ class Dialog {
         if (self.options.max_height) { body.css('max-height', self.options.max_height); }
 
         header.find('.title').html('&nbsp;' + self.options.title);
+        if (!self.options.subtitle) {
+            header.find('.subtitle').hide();
+        }
+        else {
+            header.find('.subtitle').html('&nbsp;' + self.options.subtitle);
+        }
         footer.find('.text').html('&nbsp;' + self.options.footer_text);
 
         var btn_save = footer.find('.btn-save');
