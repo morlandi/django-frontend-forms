@@ -3,6 +3,13 @@
 History
 =======
 
+v0.2.5
+------
+* Upgrade Django (in example project)
+* [fix] render_form_field rendering for bootstrap
+* Optionally retrieve missing Dialog options from HTML attributes
+* subtitle added to dialog_generic
+
 v0.2.4
 ------
 * in case of form errors, autofocus now selects the first editable invalid field
