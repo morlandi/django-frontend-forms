@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.6
+------
+* Update Pillow (example project)
+
 v0.2.5
 ------
 * Upgrade Django (in example project)
