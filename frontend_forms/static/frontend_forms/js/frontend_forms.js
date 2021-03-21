@@ -42,6 +42,7 @@ var Dialog = function () {
             button_save_initially_hidden: false,
             button_close_label: gettext('Cancel'),
             title: '',
+            subtitle: '',
             footer_text: '',
             enable_trace: false,
             callback: null,
@@ -130,6 +131,25 @@ var Dialog = function () {
         value: function _initialize(open_event) {
             var self = this;
 
+            // Retrieve missing options from open_event
+            if (open_event && open_event.target) {
+                var target = $(open_event.target);
+                var options = self.options;
+                if (!options.url) options.url = target.attr('href') || '';
+                if (!options.html) options.html = target.data('html') || '';
+                if (!options.width) options.width = target.data('width') || '';
+                if (!options.min_width) options.min_width = target.data('min-width') || '';
+                if (!options.max_width) options.max_width = target.data('max-width') || '';
+                if (!options.height) options.height = target.data('height') || '';
+                if (!options.min_height) options.min_height = target.data('min-height') || '';
+                if (!options.max_height) options.max_height = target.data('max-height') || '';
+                if (!options.button_save_label) options.button_save_label = target.data('button-save-label') || '';
+                if (!options.button_close_label) options.button_close_label = target.data('button-close-label') || '';
+                if (!options.title) options.title = target.data('title') || '';
+                if (!options.subtitle) options.subtitle = target.data('subtitle') || '';
+                if (!options.footer_text) options.footer_text = target.data('footer-text') || '';
+            }
+
             self.options.open_event = open_event;
 
             var content = self.element.find('.dialog-content');
@@ -157,6 +177,11 @@ var Dialog = function () {
             }
 
             header.find('.title').html('&nbsp;' + self.options.title);
+            if (!self.options.subtitle) {
+                header.find('.subtitle').hide();
+            } else {
+                header.find('.subtitle').html('&nbsp;' + self.options.subtitle);
+            }
             footer.find('.text').html('&nbsp;' + self.options.footer_text);
 
             var btn_save = footer.find('.btn-save');

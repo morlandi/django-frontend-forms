@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.8
+------
+* [fix] frontend_forms.js was out of sync with frontend_forms.jsx
+
 v0.2.7
 ------
 * Removed wrong [fix] render_form_field rendering for bootstrap
