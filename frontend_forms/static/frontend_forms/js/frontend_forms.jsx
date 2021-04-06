@@ -155,7 +155,7 @@ class Dialog {
         footer.find('.text').html('&nbsp;' + self.options.footer_text);
 
         var btn_save = footer.find('.btn-save');
-        if (self.options.button_save_label === null) {
+        if (!self.options.button_save_label) {
             btn_save.hide();
         }
         else {
@@ -166,7 +166,7 @@ class Dialog {
             }
         }
         var btn_close = footer.find('.btn-close');
-        if (self.options.button_close_label === null) {
+        if (!self.options.button_close_label) {
             btn_close.hide();
         }
         else {

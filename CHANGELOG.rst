@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.9
+------
+* [fix] Properly hide btn_save and btn_close when corresponding label is empty
+
 v0.2.8
 ------
 * [fix] frontend_forms.js was out of sync with frontend_forms.jsx

@@ -185,7 +185,7 @@ var Dialog = function () {
             footer.find('.text').html('&nbsp;' + self.options.footer_text);
 
             var btn_save = footer.find('.btn-save');
-            if (self.options.button_save_label === null) {
+            if (!self.options.button_save_label) {
                 btn_save.hide();
             } else {
                 btn_save.val(self.options.button_save_label);
@@ -195,7 +195,7 @@ var Dialog = function () {
                 }
             }
             var btn_close = footer.find('.btn-close');
-            if (self.options.button_close_label === null) {
+            if (!self.options.button_close_label) {
                 btn_close.hide();
             } else {
                 btn_close.val(self.options.button_close_label);
