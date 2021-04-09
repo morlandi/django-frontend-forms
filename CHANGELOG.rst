@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.10
+-------
+* Add never cache to all views for extra safeness
+
 v0.2.9
 ------
 * [fix] Properly hide btn_save and btn_close when corresponding label is empty

@@ -75,6 +75,7 @@ def login(request, template_name='frontend_forms/login.html',
     return render(request, template_name, context)
 
 
+@never_cache
 def logout(request, next_page=None,
            template_name='registration/logged_out.html',
            redirect_field_name=REDIRECT_FIELD_NAME,
@@ -114,6 +115,7 @@ def logout(request, next_page=None,
 ################################################################################
 # Edit any object
 
+@never_cache
 def edit_object(request, app_label, model_name, pk=None):
     """
     Choose a suitable ModelForm class, than invoke generic_edit_view()
@@ -136,6 +138,7 @@ def edit_object(request, app_label, model_name, pk=None):
 # works with any Django model
 
 @check_logged_in()
+@never_cache
 def generic_edit_view(request, model_form_class, pk=None, template_name='frontend_forms/generic_form.html'):
 
     model_class = model_form_class._meta.model
@@ -227,6 +230,7 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
 ################################################################################
 # Deleting an object
 
+@never_cache
 def delete_object(request, app_label, model_name, pk):
 
     required_permission = '%s.delete_%s' % (app_label, model_name)
@@ -244,6 +248,7 @@ def delete_object(request, app_label, model_name, pk):
 ################################################################################
 # Cloning an object
 
+@never_cache
 def clone_object(request, app_label, model_name, pk):
 
     required_permission = '%s.add_%s' % (app_label, model_name)
