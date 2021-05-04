@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.11
+-------
+* Replace $() with jQuery() for higher compatibility
+
 v0.2.10
 -------
 * Add never cache to all views for extra safeness

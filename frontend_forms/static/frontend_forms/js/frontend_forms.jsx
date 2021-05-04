@@ -42,7 +42,7 @@ class Dialog {
             Object.assign(self.options, options);
         }
 
-        self.element = $(self.options.dialog_selector);
+        self.element = jQuery(self.options.dialog_selector);
         if (self.element.length <= 0) {
             var message = 'ERROR: dialog "' + self.options.dialog_selector + '" not found';
             console.log(message);
@@ -60,8 +60,8 @@ class Dialog {
      *
      * Sample usage client-side:
      *
-     *  $('#dialog_generic').on('created.dialog', function(event, arg1, arg2) {
-     *      var target = $(event.target);
+     *  jQuery('#dialog_generic').on('created.dialog', function(event, arg1, arg2) {
+     *      var target = jQuery(event.target);
      *      console.log('Dialog created: target=%o, arg1=%o, arg2=%o', target, arg1, arg2);
      *  });
      */
@@ -99,12 +99,12 @@ class Dialog {
         var self = this;
 
         self.element.find('.close').off();
-        //$(window).off();
+        //jQuery(window).off();
         self.element.hide();
 
         // Restore normal page scrolling in case the recently opened modal
         // had disable it to scroll it's own contents instead
-        $('body').css('overflow', 'auto');
+        jQuery('body').css('overflow', 'auto');
 
         self._notify('closed');
     }
@@ -114,7 +114,7 @@ class Dialog {
 
         // Retrieve missing options from open_event
         if (open_event && open_event.target) {
-            var target = $(open_event.target);
+            var target = jQuery(open_event.target);
             var options = self.options;
             if (!options.url) options.url = target.attr('href') || '';
             if (!options.html) options.html = target.data('html') || '';
@@ -245,7 +245,7 @@ class Dialog {
 
         /*
         // When the user clicks anywhere outside of the modal, close it
-        $(window).off().on('click', function(event) {
+        jQuery(window).off().on('click', function(event) {
             //if (event.target.id == modal.attr('id')) {
             if (event.target == self.element.get(0)) {
                 self.close();
@@ -348,8 +348,8 @@ class Dialog {
                     // If xhr contains any field errors,
                     // the form did not validate successfully,
                     // so we keep it open for further editing
-                    //if ($(xhr).find('.has-error').length > 0) {
-                    if ($(xhr).find('.has-error').length > 0 || $(xhr).find('.errorlist').length > 0) {
+                    //if (jQuery(xhr).find('.has-error').length > 0) {
+                    if (jQuery(xhr).find('.has-error').length > 0 || jQuery(xhr).find('.errorlist').length > 0) {
                         self._notify('loaded', {url: url});
                         self._form_ajax_submit(true);
                     } else {
@@ -446,7 +446,7 @@ window.FrontendForms = (function() {
      */
 
     function overlay_show(element) {
-        $(element).LoadingOverlay(
+        jQuery(element).LoadingOverlay(
             'show', {
                 //background: 'rgba(0, 167, 140, 0.2)',
                 background: 'rgba(0, 0, 0, 0.3)',
@@ -457,14 +457,14 @@ window.FrontendForms = (function() {
     }
 
     function overlay_hide(element) {
-        $(element).LoadingOverlay('hide');
+        jQuery(element).LoadingOverlay('hide');
     }
 
     function hide_mouse_cursor() {
         // https://stackoverflow.com/questions/9681080/changing-cursor-to-waiting-in-javascript-jquery#25207986
-        //$('body').css('cursor', 'none');
-        //$('body').addClass('waiting');
-        $("body").css("cursor", "none");
+        //jQuery('body').css('cursor', 'none');
+        //jQuery('body').addClass('waiting');
+        jQuery("body").css("cursor", "none");
     }
 
 
@@ -942,7 +942,7 @@ window.FrontendForms = (function() {
      */
 
     function apply_multiselect(elements) {
-        $(elements).multiSelect({
+        jQuery(elements).multiSelect({
             selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='cerca ...'>",
             selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='cerca ...'>",
             afterInit: function(ms) {
