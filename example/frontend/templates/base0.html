@@ -1,31 +1,43 @@
-{% load i18n static %}
-
+{% load i18n static utils_tags %}
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="Mario Orlandi - Brainstorm S.n.c.">
+        <title>Frontend-forms example</title>
 
-    <link rel='stylesheet' href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
-    <link rel='stylesheet' href="{% static 'bootstrap4-toggle/css/bootstrap4-toggle.min.css' %}">
-    <link rel='stylesheet' href="{% static 'font-awesome/css/font-awesome.min.css' %}">
-    <link rel='stylesheet' href="{% static 'sweetalert2/dist/sweetalert2.min.css' %}">
-    <link rel='stylesheet' href="{% static 'dropzone/dist/min/dropzone.min.css' %}">
-    <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
-    <link rel="stylesheet" href="{% static 'example.css' %}">
-    <link rel="stylesheet" href="{% static 'markup.css' %}">
-    <link href="{% static 'pygments/styles/monokai.css' %}" media="screen" rel="stylesheet" type="text/css" />
+        <link rel='stylesheet' href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+        <link rel='stylesheet' href="{% static 'bootstrap4-toggle/css/bootstrap4-toggle.min.css' %}">
+        <link rel='stylesheet' href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+        <link rel='stylesheet' href="{% static 'sweetalert2/dist/sweetalert2.min.css' %}">
+        <link rel='stylesheet' href="{% static 'dropzone/dist/min/dropzone.min.css' %}">
+        <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
+        <link rel="stylesheet" href="{% static 'markup.css' %}">
+        <link href="{% static 'pygments/styles/monokai.css' %}" media="screen" rel="stylesheet" type="text/css" />
 
-    {# Select2 support #}
-    <link rel="stylesheet" type="text/css" href="{% static 'select2/dist/css/select2.min.css' %}" />
+        {# Select2 support #}
+        <link rel="stylesheet" type="text/css" href="{% static 'select2/dist/css/select2.min.css' %}" />
 
-    {% block extrastyle %}
-    {% endblock extrastyle %}
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <link rel="stylesheet" href="{% static 'frontend.css' %}">
 
-</head>
+        {% block extrastyle %}
+        {% endblock extrastyle %}
 
-<body class="page-{% block body-class%}{% endblock body-class%}">
+        <meta name="theme-color" content="#563d7c">
+
+    </head>
+    <body>
+
+        {% include 'toolbar.html' %}
+
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'sidebar.html' %}
+                <main id="main" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 
     <a href="https://github.com/morlandi/django-frontend-forms" style="float: right">
         <img loading="lazy" width="149" height="149"
@@ -35,29 +47,32 @@
         data-recalc-dims="1">
     </a>
 
-    {% include 'navbar.html' %}
+                    {% block messages %}
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                {% get_twitter_bootstrap_alert_msg_css_name message.tags as alert_tag %}
+                                <li class="alert alert-{{ alert_tag }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% endblock messages %}
 
-    <main role="main" class="container">
+                    <div class="page">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">{% block page-title %}{{ page_title }}{% endblock page-title %}</h1>
+                            <a href="{% url 'frontend:code' page_index %}"><i class="fa fa-search"></i> view code</a>
+                        </div>
 
-        <div id="page-title"><h2>{% block page-title %}{% endblock page-title %}</h2></div>
+                        {# <h2>{% block page-subtitle %}Page subtitle{% endblock page-subtitle %}</h2> #}
 
-        {% block messages %}
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="{{message.tag}}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        {% endblock messages %}
+                        {% block page-content %}
+                        {% endblock page-content %}
+                    </div>
 
-        <div id="content">
-        {% block content %}
-            <h1>Content goes here</h1>
-        {% endblock content %}
+                </main>
+            </div>
         </div>
-
-    </main>
 
     {% block modals %}
         {% include 'frontend_forms/dialogs.html' %}
@@ -151,7 +166,6 @@
 
     {% block extrajs %}
     {% endblock extrajs %}
-
-</body>
+    </body>
 
 </html>

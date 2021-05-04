@@ -70,3 +70,9 @@ def imagesize(obj):
     w, h = image.size
     text = '%s (%dx%d)' % (image_type, w, h)
     return text
+
+
+
+@register.simple_tag
+def get_twitter_bootstrap_alert_msg_css_name(tags):
+    return 'danger' if tags == 'error' else tags

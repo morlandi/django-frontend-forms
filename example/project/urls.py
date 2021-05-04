@@ -23,7 +23,8 @@ from django.conf import settings
 
 urlpatterns = [
     #path('', lambda x: redirect('/files_upload/'), name='index'),
-    path('', TemplateView.as_view(template_name="pages/index.html"), name="index"),
+    path('', include('frontend.urls', namespace='frontend')),
+    path('home/', TemplateView.as_view(template_name="pages/index.html"), name="home"),
     path('admin/', admin.site.urls),
     path('frontend_forms/', include('frontend_forms.urls', namespace='frontend_forms')),
     path('samples/', include('samples.urls', namespace='samples')),

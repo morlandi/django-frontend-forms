@@ -1,0 +1,40 @@
+
+ul.messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px;
+}
+
+#main {
+    padding: 0 !important;
+}
+
+#sidebarMenu .nav-item a {
+    padding: 2px 16px;
+    font-size: 12px;
+}
+
+#sidebarMenu h6 {
+    margin: 0 !important;
+    padding: 8px !important;
+}
+
+#sidebarMenu hr {
+    margin: 0;
+    padding: 0;
+    margin-top: 4px;
+}
+
+.page {
+    padding: 80px 140px;
+    padding-bottom: 60px;
+}
+
+.page p {
+    font-family: helvetica;
+    font-weight: normal;
+    text-indent: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+}

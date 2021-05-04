@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'query_inspector',
     'project',
     'backend',
+    'frontend',
     'samples',
     'others',
 ]
