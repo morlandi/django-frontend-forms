@@ -8,7 +8,7 @@ Sample Web Server configuration files:
 
 Sample deployment layout::
 
-    /home/django-frontend-forms-demo/
+    /home/frontend-forms/
     ├── django-frontend-forms
     ├── etc
     ├── logs
@@ -21,7 +21,7 @@ Usage:
 
 .. code:: bash
 
-    cp -R /home/django-frontend-forms-demo/django-frontend-forms/example/etc /home/django-frontend-forms-demo/
+    cp -R /home/frontend-forms/django-frontend-forms/example/etc /home/frontend-forms/
     ... adjust files if as required ...
-    sudo ln -s /home/django-frontend-forms-demo/etc/nginx.conf /etc/nginx/sites-enabled/django-frontend-forms-demo.conf
-    sudo ln -s /home/django-frontend-forms-demo/etc/supervisor.conf /etc/supervisor/conf.d/django-frontend-forms-demo.conf
+    sudo ln -s /home/frontend-forms/etc/nginx.conf /etc/nginx/sites-enabled/frontend-forms.conf
+    sudo ln -s /home/frontend-forms/etc/supervisor.conf /etc/supervisor/conf.d/frontend-forms.conf
