@@ -20,6 +20,7 @@ from django.shortcuts import redirect
 from django.conf.urls.static import static
 from django.conf import settings
 
+admin.site.enable_nav_sidebar = False
 
 urlpatterns = [
     #path('', lambda x: redirect('/files_upload/'), name='index'),
