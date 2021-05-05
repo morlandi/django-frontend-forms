@@ -275,6 +275,7 @@ var Dialog = function () {
             var btn_close = self.element.find('.dialog-footer .btn-close');
             if (btn_close.length) {
                 btn_close.off().on('click', function (event) {
+                    event.preventDefault();
                     self.close();
                 });
             }

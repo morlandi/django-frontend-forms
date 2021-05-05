@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.12
+-------
+* Prevent default on close button submission
+
 v0.2.11
 -------
 * Replace $() with jQuery() for higher compatibility
