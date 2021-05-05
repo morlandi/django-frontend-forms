@@ -1,0 +1,29 @@
+
+<style>
+
+    #bottom-navigation {
+        border-top: 1px solid #ccc;
+        margin-top: 20px;
+    }
+
+    #bottom-navigation .next {
+        float: right;
+    }
+
+</style>
+
+<div id="bottom-navigation">
+    {% if previous_page %}
+    <a class="previous" href="{{previous_page}}">
+        <i class="fa fa-arrow-left"></i>
+        previous
+    </a>
+    {% endif %}
+    {% if next_page %}
+    <a class="next" href="{{next_page}}">
+        next
+        <i class="fa fa-arrow-right"></i>
+    </a>
+    {% endif %}
+</div>
+</div>

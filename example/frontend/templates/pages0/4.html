@@ -7,8 +7,8 @@
 
 How can we collect a value from the user in the modal window, and return it to the main page?
 
-We have access to any javascript functions available (after all, we're living in the same HTML page),
-so we can call any helper just before closing the modal.
+Easy: since we have access to any javascript functions available (after all, we're living in the same HTML page),
+we can call any helper just before closing the modal.
 
 .. code:: javascript
 
@@ -31,7 +31,7 @@ so we can call any helper just before closing the modal.
 |
 
 Always remember to clean the input box every time before showing the modal box,
-as this will be reused again and again ...
+as this will be reused again and again:
 
 .. code:: javascript
 
@@ -51,7 +51,7 @@ as this will be reused again and again ...
     <button id="button-open-modal" class="btn btn-primary">Open Modal</button>
     <br />
     <br />
-    <div id="result-wrapper" style="display: none;">You entered: <span id="result"></span></div>
+    <h3 id="result-wrapper" style="display: none;">You entered: <span id="result"></span></h3>
 
     <div id="my-modal" class="my-modal">
         <div class="my-modal-content">
@@ -81,7 +81,7 @@ as this will be reused again and again ...
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
+            padding-top: 200px; /* Location of the box */
             left: 0;
             top: 0;
             width: 100%; /* Full width */
@@ -97,12 +97,12 @@ as this will be reused again and again ...
             margin: auto;
             padding: 0;
             border: 1px solid #888;
-            width: 30%;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
             -webkit-animation-name: animatetop;
             -webkit-animation-duration: 0.4s;
             animation-name: animatetop;
-            animation-duration: 0.4s
+            animation-duration: 0.4s;
+            max-width: 400px;
         }
 
         .my-modal-header {
@@ -111,7 +111,9 @@ as this will be reused again and again ...
             color: white;
         }
 
-        .my-modal-body {padding: 40px;}
+        .my-modal-body {
+            padding: 40px;
+        }
 
         .my-modal-footer {
             padding: 2px 16px;
@@ -173,6 +175,12 @@ as this will be reused again and again ...
             input.val('');
             modal.show();
             input.focus();
+
+            $(input).on('keyup', function (e) {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    close_popup(modal);
+                }
+            });
         }
 
         function close_popup(modal) {

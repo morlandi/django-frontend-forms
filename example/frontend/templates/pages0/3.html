@@ -4,7 +4,7 @@
 {% block page-content %}
 
 {% filter restructuredtext %}
-w3schools.com supplies an example; here is the code:
+w3schools.com supplies an example; here is the full code:
 
 https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal2
 
@@ -65,6 +65,8 @@ Here is how it works:
 
     <h2 class="code-sample">Code sample</h2>
 
+    <div>A basic modal box with pure Javascript ...</div>
+
     <button id="button-open-modal" class="btn btn-primary">Open Modal</button>
 
     <div id="my-modal" class="my-modal">
@@ -93,7 +95,7 @@ Here is how it works:
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
+            padding-top: 200px; /* Location of the box */
             left: 0;
             top: 0;
             width: 100%; /* Full width */
@@ -109,12 +111,12 @@ Here is how it works:
             margin: auto;
             padding: 0;
             border: 1px solid #888;
-            width: 30%;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
             -webkit-animation-name: animatetop;
             -webkit-animation-duration: 0.4s;
             animation-name: animatetop;
-            animation-duration: 0.4s
+            animation-duration: 0.4s;
+            max-width: 400px;
         }
 
         .my-modal-header {
@@ -123,7 +125,9 @@ Here is how it works:
             color: white;
         }
 
-        .my-modal-body {padding: 40px;}
+        .my-modal-body {
+            padding: 40px;
+        }
 
         .my-modal-footer {
             padding: 2px 16px;

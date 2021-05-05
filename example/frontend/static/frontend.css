@@ -26,8 +26,7 @@ ul.messages {
 }
 
 .page {
-    padding: 80px 140px;
-    padding-bottom: 60px;
+    padding: 3rem;
 }
 
 .page p {
@@ -37,4 +36,8 @@ ul.messages {
     font-size: 16px;
     line-height: 24px;
     color: #666;
+}
+
+.btn {
+    margin: 6px;
 }

@@ -1,5 +1,6 @@
 import os
 from django.shortcuts import render
+from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse
 from django.utils.html import escape
@@ -30,6 +31,14 @@ sections = [
 ]
 
 
+def get_last_page_index():
+    for i in range(len(sections)-1, -1, -1):
+        section = sections[i]
+        if section['pages']:
+            page_index = section['pages'][-1]['index']
+            return page_index
+    return 0
+
 def get_page_template_name(page):
     return "pages0/%d.html" % page
 
@@ -48,10 +57,13 @@ def page(request, page):
         return ''
 
     template_name = "pages0/%d.html" % page
+
     return render(request, get_page_template_name(page), {
         'page_index': page,
         'page_title': get_page_title(page),
         'sections': sections,
+        'previous_page': reverse('frontend:page', args=(page-1, )) if page > 1 else None,
+        'next_page': reverse('frontend:page', args=(page+1, )) if page < get_last_page_index() else None,
     })
 
 

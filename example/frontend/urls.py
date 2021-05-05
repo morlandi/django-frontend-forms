@@ -7,7 +7,7 @@ from . import views
 app_name = 'frontend'
 
 urlpatterns = [
-    path('', lambda x: redirect('/page/1/')),
+    path('', lambda x: redirect('/page/1/'), name="index"),
     path('page/<int:page>/', views.page, name="page"),
     path('page/<int:page>/view-code/', views.code, name="code"),
 ]
