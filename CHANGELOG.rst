@@ -3,6 +3,10 @@
 History
 =======
 
+...
+* package up data from form with FormData (instead of form.serialize()) to allow files upload
+* allow customization of `enctype` in generic form template
+
 v0.2.12
 -------
 * Prevent default on close button submission
