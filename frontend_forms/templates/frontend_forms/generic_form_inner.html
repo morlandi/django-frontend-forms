@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <form action="{{ action }}" method="post" class="form {{form.form_class}}" novalidate autocomplete="off">
+        <form method="post"{% if action %} action="{{ action }}"{% endif %} class="form{% if form_class %} {{form.form_class}}{% endif %}" novalidate autocomplete="off"{% if form.form_enctype %} enctype="{{form.form_enctype}}"{% endif %}>
             {% csrf_token %}
             {% render_form form %}
             <input type="hidden" name="object_id" value="{{ object.id|default:'' }}">
