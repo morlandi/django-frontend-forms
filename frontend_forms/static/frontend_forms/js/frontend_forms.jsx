@@ -322,13 +322,22 @@ class Dialog {
             // using the form’s defined method and action
             var url = form.attr('action') || self.options.url;
             var method = form.attr('method') || 'post';
-            var data = form.serialize();
+            //var data = form.serialize();
+
+            // We now use FormData instead of form.serialize() to package up data from form,
+            // to allow files upload (i.e. process <input type="file"> as expected);
+            // Note that, using FormData, we also need:
+            // - processData: false
+            // - contentType: false
+            var data = new FormData(form.get(0));
 
             self._notify('submitting', {method: method, url: url, data:data});
             $.ajax({
                 type: method,
                 url: url,
                 data: data,
+                processData: false,
+                contentType: false,
                 cache: false,
                 crossDomain: true,
                 headers: {
