@@ -194,6 +194,7 @@ loaded                        url, data
 loading_failed                jqXHR, textStatus, errorThrown
 open
 submitting                    method, url, data
+submission_failure            method, url, data
 submitted                     method, url, data
 ============================  ================================
 
