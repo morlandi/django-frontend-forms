@@ -378,6 +378,7 @@ class Dialog {
                 }
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
+                self._notify('submission_failure', {method: method, url: url, data:data});
                 console.error('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
                 console.error(jqXHR.responseText);
                 FrontendForms.display_server_error(errorThrown);
