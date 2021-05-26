@@ -227,10 +227,21 @@ form .form-group.is_hidden {
 }
 
 form .form-group .form-radio {
-    border: 1px solid #ccc;
+    border: 1px solid transparent;
     border-radius: .25rem;
     padding: 4px;
+    display: inline-block;
+    width:  100%;
 }
+
+/*
+Hint: set this style to render radio button horizontally (on a single row)
+
+form .form-group .form-radio .form-check {
+    display:  inline;
+    margin-right:  20px;
+}
+*/
 
 form .form-group.has-success .form-radio {
     border-color: rgb(40, 167, 69);
