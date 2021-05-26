@@ -52,6 +52,12 @@
 
             {% if field.field.widget.input_type == 'radio' %}
 
+                {% comment %}
+
+                    Radio group layout refactored in v 0.2.13
+                    -----------------------------------------
+
+
                 <div class="form-radio{% if field.errors %} has-error{% endif %}{% if layout == 'horizontal' %} col-md-9 col-sm-offset-3{% endif %}">
                     {% if field.label %}
                     <label {% if field.field.required %}class="required"{% endif %} for="{{ field.id_for_label }}">{{ field.label }}:</label>
@@ -74,6 +80,38 @@
                     {% if field.help_text %}
                         <small class="form-text text-muted">{{ field.help_text|safe }}</small>
                     {% endif %}
+                </div>
+                {% endcomment %}
+
+                <div class="form-radio{% if field.errors %} has-error{% endif %}">
+
+                    {% if field.label %}
+                    <label class="control-label{% if layout == 'horizontal' %} col-md-3{% endif %}{% if field.field.required %} required{% endif %}"
+                        for="{{ field.id_for_label }}">{{ field.label }}:
+                    </label>
+                    {% endif %}
+
+                    <div{% if layout == 'horizontal' %} class="col-md-9"{% endif %}>
+                        {% for choice in field %}
+                            <div class="form-check{% if field.errors %} has-error{% endif %}">
+                                {{ choice.tag }}
+                                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+
+                        {% for error in field.errors %}
+                            <div class="invalid-tooltip">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                        {% endif %}
+
+                    </div>
+
                 </div>
 
 
