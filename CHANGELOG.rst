@@ -3,7 +3,12 @@
 History
 =======
 
-...
+v0.2.13
+-------
+
+* POSSIBLE INCOMPATIBLE CHANGE: Radio button layout refactored in "render_form_field.html"
+* send "submission_failure" notification
+* example refactoring wip ...
 * package up data from form with FormData (instead of form.serialize()) to allow files upload
 * allow customization of `enctype` in generic form template
 * send "submission_failure" notification
