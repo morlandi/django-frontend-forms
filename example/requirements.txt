@@ -1,4 +1,4 @@
-Django==3.1.8
+Django==3.1.13
 pillow==8.1.2
 django-npm==1.0.0
 docutils==0.16
