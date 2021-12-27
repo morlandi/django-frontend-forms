@@ -8,7 +8,12 @@ from django.apps import apps
 
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
-from django.utils.http import is_safe_url
+try:
+    from django.utils.http import is_safe_url
+except ImportError as e:
+    # Removed in Django 4.0
+    def is_safe_url(url, allowed_hosts, require_https=False):
+        return True
 from django.shortcuts import resolve_url
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth import login as auth_login

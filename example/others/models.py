@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from project.templatetags.utils_tags import format_datetime
 from .utils import auto_delete_filefields_on_delete
 
