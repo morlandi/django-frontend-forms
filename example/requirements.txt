@@ -1,5 +1,5 @@
 Django==3.2.10
-pillow==8.1.2
+pillow==8.4.0
 django-npm==1.0.0
 docutils==0.16
 pygments==2.8.1
