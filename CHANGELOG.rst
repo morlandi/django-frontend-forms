@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.14
+-------
+* Prepare for Django 4.0
+
 v0.2.13
 -------
 
