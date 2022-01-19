@@ -4,6 +4,12 @@ django-frontend-forms
 
 A Django helper app to add editing capabilities to the frontend using modal forms.
 
+An accompaning `Demo site <http://frontend-forms.brainstorm.it/>`_
+provides:
+
+- a detailed description of the techniques used under the hood
+- a list of working code samples (source: https://github.com/morlandi/django-frontend-forms/tree/master/example/samples)
+
 Bases on my previous research as documented here: `Editing Django models in the front end <https://editing-django-models-in-the-frontend.readthedocs.io/en/latest/>`_
 
 .. image:: screenshots/main_screen.png
@@ -11,17 +17,6 @@ Bases on my previous research as documented here: `Editing Django models in the 
 .. contents::
 
 .. sectnum::
-
-
-Demo site
----------
-
-An accompaning `Demo site <http://frontend-forms.brainstorm.it/>`_
-provides:
-
-- a detailed description of the techniques used under the hood
-- a list of working code samples (source: https://github.com/morlandi/django-frontend-forms/tree/master/example/samples)
-
 
 Installation
 ------------
@@ -54,8 +49,8 @@ Include library's views mapping (file `urls.py`):
         path('frontend_forms/', include('frontend_forms.urls', namespace='frontend_forms')),
         ...
 
-In your base template, include the default styles, the javascript support,
-and optionally the sample HTML template:
+In your base template, include: the default styles, the javascript support,
+the javascript messaeg catalog, and optionally the sample HTML template:
 
 .. code:: html
 
@@ -64,41 +59,53 @@ and optionally the sample HTML template:
     <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     {% include 'frontend_forms/dialogs.html' %}
 
-Notes:
 
-1) javascript catalog
+How to use it
+-------------
 
-    Please note the third row in the snippets above:
-
-    .. code:: html
-
-        <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
-
-    **Since v0.2.1 it is mandatory to include the dynamically generated
-    javascript catalog**, as a few messages have been translated in javascript code
-    following these instructions: `Django Internationalization: in JavaScript code <https://docs.djangoproject.com/en/3.1/topics/i18n/translation/#internationalization-in-javascript-code>`_.
-
-2) compatibility with older browsers
-
-    `frontend_forms/js/frontend_forms.jsx` has been transpiled to produce `frontend_forms/js/frontend_forms.js`
-    for maximum compatibility with older browsers (using `transpile_jsx.py` helper script).
-
-    If you don't care, or you plan to transpile via django-compressor, you can include
-    the ".jsx" file instead::
-
-        <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}" type="text/jsx"></script>
+Follow the intructions given on the `Demo site <http://frontend-forms.brainstorm.it/>`_
 
 
-How to use
-----------
+Basic example
+.............
 
-Two actions are required:
+In the following example, we build a Dialog() object providing some custom options;
+then, we use it to open a modal dialog and load it from the specified url.
 
-1) provide an HTML template for the dialog layout
-2) attach the template to a `Dialog` javascript object to control it's behaviour
+For demonstration purposes, we also subscribe the 'created' notification.
 
-Since in most cases you will be primarily interested in customizing the modal content only,
-a default template is provided to render a generic dialog (file frontend_forms/templates/frontend_forms/dialogs.html).
+.. code:: html
+
+    <script language="javascript">
+
+        $(document).ready(function() {
+
+            dialog1 = new Dialog({
+                html: '<h1>Loading ...</h1>',
+                url: '{% url 'frontend:j_object' %}',
+                width: '400px',
+                min_height: '200px',
+                title: '<i class="fa fa-calculator"></i> Selezione Oggetto',
+                footer_text: 'testing dialog ...',
+                enable_trace: true,
+                callback: function(event_name, dialog, params) {
+                    switch (event_name) {
+                        case "created":
+                            console.log('Dialog created: dialog=%o, params=%o', dialog, params);
+                            break;
+                    }
+                }
+            });
+
+        });
+
+    </script>
+
+
+    <a href="#" class="btn btn-primary pull-right" onclick="dialog1.open(event); return false;">
+        <i class="fa fa-plus-circle"></i>
+        Test Popup
+    </a>
 
 Dialog methods
 ..............
@@ -228,93 +235,6 @@ Result::
 
 You can also trace all events in the console setting the boolean flag `enable_trace`.
 
-
-Opening a Dialog
-----------------
-
-In the following example, we build a Dialog() object providing some custom options;
-then, we use it to open a modal dialog and load it from the specified url.
-
-For demonstration purposes, we also subscribe the 'created' notification.
-
-.. code:: html
-
-    <script language="javascript">
-
-        $(document).ready(function() {
-
-            dialog1 = new Dialog({
-                html: '<h1>Loading ...</h1>',
-                url: '{% url 'frontend:j_object' %}',
-                width: '400px',
-                min_height: '200px',
-                title: '<i class="fa fa-calculator"></i> Selezione Oggetto',
-                footer_text: 'testing dialog ...',
-                enable_trace: true,
-                callback: function(event_name, dialog, params) {
-                    switch (event_name) {
-                        case "created":
-                            console.log('Dialog created: dialog=%o, params=%o', dialog, params);
-                            break;
-                    }
-                }
-            });
-
-        });
-
-    </script>
-
-
-    <a href="#" class="btn btn-primary pull-right" onclick="dialog1.open(event); return false;">
-        <i class="fa fa-plus-circle"></i>
-        Test Popup
-    </a>
-
-
-Open the Dialog and perform some actions after content has been loaded
-----------------------------------------------------------------------
-
-In the following example:
-
-- we subscribe the 'loaded' event
-- we call open() with show=false, so the Dialog will remain hidden during loading
-- after loading is completed, our handle is called
-- in this handle, we show the dialog and hide it after a 3 seconds timeout
-
-Sample usage in a template:
-
-.. code:: html
-
-    <script language="javascript">
-        $(document).ready(function() {
-
-            dialog2 = new Dialog({
-                url: "{% url 'frontend:j_object' %}",
-                width: '400px',
-                min_height: '200px',
-                enable_trace: true,
-                callback: dialog2_callback
-            });
-
-        });
-
-        function dialog2_callback(event_name, dialog, params) {
-            switch (event_name) {
-                case "loaded":
-                    dialog.show();
-                    setTimeout(function() {
-                        dialog.close();
-                    }, 3000);
-                    break;
-            }
-        }
-    </script>
-
-
-    <a href="#" onclick="dialog2.open(event, show=false); return false;">
-        <i class="fa fa-plus-circle"></i>
-        Test Popup (2)
-    </a>
 
 Handling form submission
 ------------------------

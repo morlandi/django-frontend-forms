@@ -1,0 +1,101 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+**Opening a static Dialog**
+
+The layout of the Dialog is fully described by the referenced HTML template:
+either the default "#dialog_generic" of a specific one.
+
+You can fully customize the rendering with CSS; the default styles are provided
+by `static/frontend_forms/css/frontend_forms.css`
+
+.. code:: javascript
+
+    dialog1 = new Dialog({
+        dialog_selector: '#dialog_generic',
+        html: '<h1>Static content goes here ...</h1>',
+        width: '600px',
+        min_height: '200px',
+        title: '<i class="fa fa-calculator"></i> Select an object ...',
+        footer_text: 'testing dialog ...',
+        enable_trace: true
+    });
+
+    dialog1.open()
+
+.. figure:: /static/images/static_dialog.png
+
+   A simple static Dialog
+
+**Opening a dynamic Dialog**
+
+In most cases, you will rather produce the dialog content dynamically.
+
+To obtain that, just add an "url" option to the Djalog constructor,
+and it will be automatically used to obtain the Dialog content from the server via an Ajax call.
+
+.. code:: javascript
+
+    dialog1 = new Dialog({
+        ...
+        url: "{% url 'samples:simple-content' %}",
+        ...
+
+Sometimes it is convenient to reuse the very same single view to render either a
+modal dialog, or a standalone HTML page.
+
+This can be easily accomplished providing:
+
+- an "inner" template which renders the content
+- an "outer" container template which renders the full page, then includes the "inner" template
+- in the view, detect the call context and render one or another
+
+.. code:: python
+
+    def simple_content2(request):
+
+        # Either render only the modal content, or a full standalone page
+        if request.is_ajax():
+            template_name = 'frontend/includes/simple_content2_inner.html'
+        else:
+            template_name = 'frontend/includes/simple_content2.html'
+
+        return render(request, template_name, {
+        })
+
+here, the "inner" template provides the content:
+
+.. code:: html
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% lorem 1 p random %}
+        </div>
+        <div class="col-sm-4">
+            {% lorem 1 p random %}
+        </div>
+        <div class="col-sm-4">
+            {% lorem 1 p random %}
+        </div>
+    </div>
+
+while the "outer" one renders the full page:
+
+.. code:: html
+
+    {% verbatim %}
+    {% extends "base.html" %}
+    {% load static staticfiles i18n %}
+
+    {% block content %}
+    {% include 'frontend/includes/simple_content2_inner.html' %}
+    {% endblock content %}
+    {% endverbatim %}
+
+{% endfilter %}
+
+{% endblock page-content %}

@@ -26,6 +26,13 @@ sections = [
     {
         'title': 'Basic modals in a Django template',
         'pages': [
+            {'index': 6, 'title': 'Objectives', },
+            {'index': 7, 'title': 'Usage', },
+            {'index': 8, 'title': 'Opening a Dialog', },
+            {'index': 9, 'title': 'Dialog methods and options', },
+            {'index': 10, 'title': 'Dialog notifications', },
+            {'index': 11, 'title': 'Examples', },
+            {'index': 12, 'title': 'Files organization', },
         ]
     },
 ]

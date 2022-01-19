@@ -1,0 +1,17 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+Moving our attention to a dynamic site based on Django, our main objectives become:
+
+- having a dialog box, to be used as "container" for user interaction, whose layout
+  is coherent with the front-end pages
+- the content and life cycle of the dialog can be controlled "server-side"
+- the dialog will close when the user has completed or cancelled the operation
+
+{% endfilter %}
+
+{% endblock page-content %}
