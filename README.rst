@@ -7,6 +7,7 @@ A Django helper app to add editing capabilities to the frontend using modal form
 An accompaning `Demo site <http://frontend-forms.brainstorm.it/>`_
 provides:
 
+- usage instructions and suggestions
 - a detailed description of the techniques used under the hood
 - a list of working code samples (source: https://github.com/morlandi/django-frontend-forms/tree/master/example/samples)
 
