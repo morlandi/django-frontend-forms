@@ -1,0 +1,94 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+**Dialog methods**
+
+=============================== ===================================================================================================================
+Method                          Effects
+------------------------------- -------------------------------------------------------------------------------------------------------------------
+constructor(options={})         See `options` list below
+open(event=null, show=true)     Open the dialog
+
+                                1. the dialog body will be immediately loaded with static content provided by option "html"
+                                2. then the dialog is shown (unless the "show" parameter is false)
+                                3. finally, dynamic content will be loaded from remote address provided by option "url" (if supplied)
+                                4. if successfull, a 'loaded.dialog' event is fired; you can use it to perform any action required after loading
+
+close()                         Close (hide) the dialog
+show()                          Make the dialog visible
+
+=============================== ===================================================================================================================
+
+|
+|
+
+**Dialog options**
+
+=============================== ========================== ===============================================================
+Option                          Default value              Notes
+------------------------------- -------------------------- ---------------------------------------------------------------
+dialog_selector                 '#dialog_generic'          The selector for HTML dialog template
+open_event                      null                       Used to "remember" the event which triggered Dialog opening
+html                            ''                         Static content to display in dialog body
+url                             ''                         Optional url to retrieve dialog content via Ajax
+width                           null
+min_width                       null
+max_width                       null
+height                          null
+min_height                      null
+max_height                      null
+button_save_label               'Save'
+button_save_initially_hidden    false                      Will be shown after form rendering
+button_close_label              'Cancel'
+title                           ''
+subtitle                        ''
+footer_text                     ''
+enable_trace                    false                      show notifications in debug console
+callback                        null                       a callback to receive events
+autofocus_first_visible_input   true
+=============================== ========================== ===============================================================
+
+|
+|
+
+Unspecified options will be retrieved from corresponding HTML attributes on the
+element which fires the dialog opening;
+for example:
+
+.. code:: html
+
+    {% verbatim %}
+    <a href="{% url 'frontend:whatever' object.id %}"
+       data-title="My title"
+       data-subtitle="My Subtitle"
+       onclick="new Dialog().open(event); return false;">
+            Open
+    </a>
+    {% endverbatim %}
+
+=============================== ==========================
+Option                          HTML attribute
+------------------------------- --------------------------
+url                             href
+html                            data-html
+width                           data-width
+min_width                       data-min-width
+max_width                       data-max-width
+height                          data-height
+min_height                      data-min-height
+max_height                      data-max-height
+button_save_label               data-button-save-label
+button_close_label              data-button-close-label
+title                           data-title
+subtitle                        data-subtitle
+footer_text                     data-footer-text
+=============================== ==========================
+
+
+{% endfilter %}
+
+{% endblock page-content %}

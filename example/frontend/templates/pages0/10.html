@@ -1,0 +1,59 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+============================  ================================
+event_name                    params
+============================  ================================
+created                       options
+closed
+initialized
+shown
+loading                       url
+loaded                        url, data
+loading_failed                jqXHR, textStatus, errorThrown
+open
+submitting                    method, url, data
+submission_failure            method, url, data
+submitted                     method, url, data
+============================  ================================
+
+|
+|
+
+During it's lifetime, the Dialog will notify all interesting events to the caller,
+provided he supplies a suitable callback in the contructor:
+
+    self.options.callback(event_name, dialog, params)
+
+Example:
+
+.. code:: javascript
+
+    dialog1 = new Dialog({
+        ...
+        callback: function(event_name, dialog, params) {
+            console.log('event_name: %o, dialog: %o, params: %o', event_name, dialog, params);
+        }
+    });
+
+Result::
+
+    event_name: "created", dialog: Dialog {options: {…}, element: …}, params: {options: {…}}
+    event_name: "initialized", dialog: Dialog {options: {…}, element: …}, params: {}
+    event_name: "open", dialog: Dialog {options: {…}, element: …}, params: {}
+    event_name: "shown", dialog: Dialog {options: {…}, element: …}, params: {}
+    event_name: "loading", dialog: Dialog {options: {…}, element: …}, params: {url: "/admin_ex/popup/"}
+    event_name: "loaded", dialog: Dialog {options: {…}, element: …}, params: {url: "/admin_ex/popup/"}
+    event_name: "submitting", dialog: Dialog {options: {…}, element: …}, params: {method: "post", url: "/admin_ex/popup/", data: "text=&number=aaa"}
+    event_name: "submitted", dialog: Dialog {options: {…}, element: …}, params: {method: "post", url: "/admin_ex/popup/", data: "text=111&number=111"}
+    event_name: "closed", dialog: Dialog {options: {…}, element: …}, params: {}
+
+You can also trace all events in the console setting the boolean flag `enable_trace`.
+
+{% endfilter %}
+
+{% endblock page-content %}

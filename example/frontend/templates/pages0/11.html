@@ -1,0 +1,212 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+In the following example, we build a Dialog() object providing some custom options;
+then, we use it to open a modal dialog and load it from the specified url.
+
+For demonstration purposes, we also subscribe the 'created' notification.
+
+.. code:: html
+
+    <script language="javascript">
+
+        $(document).ready(function() {
+
+            dialog1 = new Dialog({
+                html: '<h1>Loading ...</h1>',
+                url: '/j/object/',
+                width: '400px',
+                min_height: '200px',
+                title: '<i class="fa fa-calculator"></i> Selezione Oggetto',
+                footer_text: 'testing dialog ...',
+                enable_trace: true,
+                callback: function(event_name, dialog, params) {
+                    switch (event_name) {
+                        case "created":
+                            console.log('Dialog created: dialog=%o, params=%o', dialog, params);
+                            break;
+                    }
+                }
+            });
+
+        });
+
+    </script>
+
+
+    <a href="#" class="btn btn-primary pull-right" onclick="dialog1.open(event); return false;">
+        <i class="fa fa-plus-circle"></i>
+        Test Popup
+    </a>
+
+|
+
+**Open the Dialog and perform some actions after content has been loaded**
+
+In the following example:
+
+- we subscribe the 'loaded' event
+- we call open() with show=false, so the Dialog will remain hidden during loading
+- after loading is completed, our handle is called
+- in this handle, we show the dialog and hide it after a 3 seconds timeout
+
+.. code:: html
+
+    <script language="javascript">
+
+        $(document).ready(function() {
+
+            dialog2 = new Dialog({
+                url: "/j/object/",
+                width: '400px',
+                min_height: '200px',
+                enable_trace: true,
+                callback: dialog2_callback
+            });
+
+        });
+
+        function dialog2_callback(event_name, dialog, params) {
+            switch (event_name) {
+                case "loaded":
+                    dialog.show();
+                    setTimeout(function() {
+                        dialog.close();
+                    }, 3000);
+                    break;
+            }
+        }
+    </script>
+
+    <a href="#" onclick="dialog2.open(event, show=false); return false;">
+        <i class="fa fa-plus-circle"></i>
+        Test Popup (2)
+    </a>
+
+{% endfilter %}
+
+    <h1>Simple Dialogs with Django</h1>
+
+    <table>
+        <tr>
+            <td><a data-value="1" href="" class="link-button btn btn-primary">dialog1</a></td>
+            <td><p>A simple dialog with static content</p></td>
+        </tr>
+        <tr>
+            <td><a data-value="2" href="" class="link-button btn btn-primary">dialog2</a></td>
+            <td><p>A dialog which closest itself</p></td>
+        </tr>
+        <tr>
+            <td><a data-value="3" href="#" class="link-button btn btn-primary">dialog3</a></td>
+            <td><p>A dialog whose content is obtained via an Ajax call</p></td>
+        </tr>
+        <tr>
+            <td><a data-value="4" href="#" class="link-button btn btn-primary">dialog4</a></td>
+            <td><p>A dialog who tries to load content via Ajax, but a server-side error occurs</p></td>
+        </tr>
+        <tr>
+            <td><a data-value="5" href="#" class="link-button btn btn-primary">dialog5</a></td>
+            <td><p>A dialog which renders a flexible view ...</p></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'samples:simple-content2' %}" class="btn btn-primary">standalone page</a></td>
+            <td><p>... which can also produce a standalone HTML page</p></td>
+        </tr>
+    </table>
+
+{% endblock page-content %}
+
+
+{% block extrajs %}
+<script language="javascript">
+
+
+    function onLinkButtonClicked(event) {
+        event.preventDefault();
+        var n = $(event.target).data('value');
+        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
+        dialogs[n - 1].open(event);
+    }
+
+
+    $(document).ready(function() {
+
+        $('.link-button').on('click', onLinkButtonClicked);
+
+        dialog1 = new Dialog({
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Static content goes here ...</h1>',
+            width: '600px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            footer_text: 'testing dialog ...',
+            enable_trace: true
+        });
+
+        function dialog2_callback(event_name, dialog, params) {
+            switch (event_name) {
+                case "created":
+                    console.log('Dialog created: dialog=%o, params=%o', dialog, params);
+                    break;
+                case "shown":
+                    setTimeout(function() {
+                        dialog.close();
+                    }, 3000);
+                    break;
+            }
+        }
+
+        dialog2 = new Dialog({
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Will close in a few seconds ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: null,
+            enable_trace: true,
+            callback: dialog2_callback
+        });
+
+        dialog3 = new Dialog({
+            url: "{% url 'samples:simple-content' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+
+        dialog4 = new Dialog({
+            url: "{% url 'samples:simple-content-forbidden' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+
+        dialog5 = new Dialog({
+            url: "{% url 'samples:simple-content2' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '800px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_label: null,
+            enable_trace: true
+        });
+
+        //dialog1.open();
+
+    });
+
+</script>
+{% endblock extrajs %}

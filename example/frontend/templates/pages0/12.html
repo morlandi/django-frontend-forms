@@ -1,0 +1,35 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+You should include the default styles and the javascript support in your base template.
+
+For convenience, a sample HTML template has been provided for a generic dialog,
+and should be included as well.
+
+.. code:: html
+
+    {% verbatim %}
+    <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
+    <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
+
+    {% block modals %}
+        {% include 'frontend_forms/dialogs.html' %}
+    {% endblock modals %}
+    {% endverbatim %}
+
+Since the js code uses the `class` keyword, you might want to transpile `frontend_forms.jsx`
+with Babel for maximum compatibility, to support oldest browsers. Alternatively, include `frontend_forms.js` instead, which has already been transpiled for you.
+
+Since v0.2.1 it is mandatory to include the dynamically generated **javascript catalog**,
+as a few messages have been translated in javascript code following these instructions:
+
+`Django Internationalization: in JavaScript code <https://docs.djangoproject.com/en/3.2/topics/i18n/translation/#internationalization-in-javascript-code>`_.
+
+{% endfilter %}
+
+{% endblock page-content %}

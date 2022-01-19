@@ -1,0 +1,70 @@
+{% extends 'base0.html' %}
+{% load markup %}
+
+{% block page-content %}
+
+{% filter restructuredtext %}
+
+The solution provided by `django-frontend-forms` requires two actions:
+
+1) to provide an HTML template for the dialog layout
+2) attach the template to a `Dialog()` javascript object to control it's behaviour
+
+Since in most cases you will be primarily interested in customizing the modal
+content only, a default template is provided to render a generic dialog
+(file `frontend_forms/templates/frontend_forms/dialogs.html`):
+
+.. code:: html
+
+    <div id="dialog_generic" class="dialog draggable">
+        <div class="dialog-dialog">
+            <div class="dialog-content">
+                <div class="dialog-header">
+                    <span class="spinner">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                    <span class="close">&times;</span>
+                    <div class="title">Title</div>
+                </div>
+                <div class="dialog-body ui-front">
+                    {% comment %}
+                    <p>Some text in the dialog ...</p>
+                    {% endcomment %}
+                </div>
+                <div class="dialog-footer">
+                    <input type="submit" value="Close" class="btn btn-close" />
+                    <input type="submit" value="Save" class="btn btn-save" />
+                    <div class="text">footer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+When instantiating the javascript `Dialog` object, you can select an alternative
+template instead, providing a suitable value for `djalog_selector`:
+
+.. code:: javascript
+
+    $(document).ready(function() {
+
+        dialog1 = new Dialog({
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            footer_text: 'testing dialog ...'
+        });
+
+    });
+
+It is advisable to use an HTML structure similar to the default layout;
+
+Notes:
+
+- adding ".ui-front" to the ".dialog-box" element helps improving the behaviour of the dialog on a mobile client
+- adding class ".draggable" makes the Dialog draggable - this is optional, and requires jquery-ui
+
+{% endfilter %}
+
+{% endblock page-content %}

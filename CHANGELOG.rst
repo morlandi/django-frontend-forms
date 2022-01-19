@@ -3,10 +3,12 @@
 History
 =======
 
-...
+v0.2.13
+-------
 * package up data from form with FormData (instead of form.serialize()) to allow files upload
 * allow customization of `enctype` in generic form template
 * send "submission_failure" notification
+* revised example project
 
 v0.2.12
 -------
