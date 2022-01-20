@@ -156,6 +156,17 @@ def testhasperm(context, model, action):
         {% if not can_view_objects %}
             <h2>Sorry, you have no permission to view these objects</h2>
         {% endif %}
+
+    or:
+
+        {% testhasperm 'backend.message' 'view' as can_view_message %}
+        ...
+
+    or:
+
+        {% testhasperm 'backend.' 'my_custom_permission' as user_has_custom_permission %}
+        ...
+
     """
     user = context['request'].user
     if isinstance(model, str):
@@ -163,7 +174,9 @@ def testhasperm(context, model, action):
     else:
         app_label = model._meta.app_label
         model_name = model._meta.model_name
-    required_permission = '%s.%s_%s' % (app_label, action, model_name)
+    required_permission = '%s.%s' % (app_label, action)
+    if model_name:
+        required_permission += '_%s' % model_name
     return user.is_authenticated and user.has_perm(required_permission)
 
 
