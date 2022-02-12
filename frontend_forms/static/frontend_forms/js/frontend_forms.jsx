@@ -418,6 +418,24 @@ window.FrontendForms = (function() {
         }
     }
 
+    function display_message(html_content, title='', message_type='success') {
+        // Try with SweetAlert2
+        try {
+            swal.fire({
+                buttonsStyling: false,
+                title: title,
+                html: html_content,
+                type: message_type,
+                confirmButtonClass: 'btn btn-lg btn-' + message_type,
+                confirmButtonText: gettext('Close')
+            });
+        }
+        // failing that, we fallback to a simple alert
+        catch (err) {
+            alert(html_content);
+        }
+    }
+
     /*
      * Routing
      */
@@ -992,6 +1010,7 @@ window.FrontendForms = (function() {
 
     return {
         display_server_error: display_server_error,
+        display_message: display_message,
         redirect: redirect,
         gotourl: gotourl,
         reload_page: reload_page,

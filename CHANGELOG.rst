@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.17
+-------
+* diplay_message() helper added
+
 v0.2.16
 -------
 * small style fix for checkbox in horizontal generic form rendering

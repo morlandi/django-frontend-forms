@@ -457,6 +457,27 @@ window.FrontendForms = function () {
         }
     }
 
+    function display_message(html_content) {
+        var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+        var message_type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'success';
+
+        // Try with SweetAlert2
+        try {
+            swal.fire({
+                buttonsStyling: false,
+                title: title,
+                html: html_content,
+                type: message_type,
+                confirmButtonClass: 'btn btn-lg btn-' + message_type,
+                confirmButtonText: gettext('Close')
+            });
+        }
+        // failing that, we fallback to a simple alert
+        catch (err) {
+            alert(html_content);
+        }
+    }
+
     /*
      * Routing
      */
@@ -1014,6 +1035,7 @@ window.FrontendForms = function () {
 
     return {
         display_server_error: display_server_error,
+        display_message: display_message,
         redirect: redirect,
         gotourl: gotourl,
         reload_page: reload_page,
