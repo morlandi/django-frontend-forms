@@ -30,7 +30,7 @@
 
         {% if field.field.widget.input_type == 'checkbox' %}
 
-            <div class="form-check{% if field.errors %} has-error{% endif %}{% if layout == 'horizontal' %} col-md-9 col-sm-offset-3{% endif %}">
+            <div class="form-check{% if field.errors %} has-error{% endif %}{% if layout == 'horizontal' %} col-9 offset-1{% endif %}">
                 <input class="form-check-input" type="checkbox" name="{{ field.html_name }}" id="{{ field.auto_id }}"
                     {% if field.value %}checked{% endif %}
                 >
