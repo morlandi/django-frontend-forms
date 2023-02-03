@@ -800,25 +800,32 @@ Add the .compact-fields class to the form to modify the layout as in the right p
 Utilities (module FrontendForms)
 --------------------------------
 
-- display_server_error(errorDetails)
-- redirect(url, show_layer=false)
-- gotourl(url, show_layer=false)
-- reload_page(show_layer=false)
-- overlay_show(element)
-- overlay_hide(element)
-- hide_mouse_cursor()
-- logObject(element, obj)
-- dumpObject(obj, max_depth, depth)
-- isEmptyObject(obj)
-- cloneObject(obj)
-- lookup(array, prop, value)
-- adjust_canvas_size(id)
-- getCookie(name)
-- confirmRemoteAction(url, options, afterDoneCallback, data=null)
-- downloadFromAjaxPost(url, params, headers, callback)
-- querystring_parse(qs, sep, eq, options)
-- set_datepicker_defaults(language_code)
-- apply_multiselect(elements)
+======================================================= ========================================================================================
+Helper                                                  Purpose
+------------------------------------------------------- ----------------------------------------------------------------------------------------
+display_server_error(errorDetails)                      Display an error message using SweetAlert2; failing that, uses a simple alert instead
+display_message(html_content)                           Display a message using SweetAlert2; failing that, uses a simple alert instead
+redirect(url, show_overlay=False)                       Similar behavior as an HTTP redirect; optionally calls overlay_show('body')
+gotourl(url, show_overlay=False)                        Similar behavior as clicking on a link; optionally calls overlay_show('body')
+reload_page(show_overlay=False)                         Reload the current page; optionally calls overlay_show('body')
+overlay_show(element)                                   Show overlay on given element; Requires: gasparesganga-jquery-loading-overlay
+overlay_hide(element)                                   Hide overlay on given element; Requires: gasparesganga-jquery-loading-overlay
+hide_mouse_cursor                                       Hide the mouse cursor
+dumpObject(obj, max_depth)                              Serialize the given dictionary up to `max_depth` levels
+logObject(element, obj)                                 Render `obj` content as HTML table an assign to given element
+isEmptyObject(obj)                                      Check if given `obj` is empty
+cloneObject(obj)                                        Deep clone an object in JavaScript
+lookup(array, prop, value)                              Find an Object by attribute in an Array
+formdata_serialize(formData)                            Serializing form data with the vanilla JS FormData() object
+formdata_to_querystring(formData)                       Transform FormData into query string
+adjust_canvas_size(id)                                  Adapts canvas size to desired size
+getCookie(name)                                         Add to POST headers as follows: FrontendForms.getCookie('csrftoken')
+confirmRemoteAction(url, options, afterDoneCallback)    Invoke remote action upon user confirmation.
+downloadFromAjaxPost(url, params, headers, callback)    Handle file download from ajax post
+querystring_parse(qs, sep, eq, options)                 Parse query string
+set_datepicker_defaults(language_code)                  Set datepicker defaults, and optionally select language ("it" or "es" for now)
+apply_multiselect(elements)                             Bind MultiSelect widget
+======================================================= ========================================================================================
 
 Form rendering helpers
 ----------------------
