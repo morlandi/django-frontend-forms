@@ -3,6 +3,11 @@
 History
 =======
 
+v0.2.18
+-------
+- [fix] "it" language selection for datepicker
+- formdata_serialize() and formdata_to_querystring() helpers added
+
 v0.2.17
 -------
 * diplay_message() helper added
