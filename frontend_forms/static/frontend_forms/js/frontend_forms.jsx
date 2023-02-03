@@ -957,7 +957,14 @@ window.FrontendForms = (function() {
         };
 
         $.datepicker.setDefaults($.datepicker.common);
+
         if (language_code) {
+            if (language_code == 'it') {
+                language_code = 'it-it';
+            }
+            if (!(language_code in $.datepicker.regional)) {
+                console.error("ERROR: language_code '%s' not found in $.datepicker.regional", language_code);
+            }
             $.datepicker.setDefaults($.datepicker.regional[language_code]);
         }
     }
