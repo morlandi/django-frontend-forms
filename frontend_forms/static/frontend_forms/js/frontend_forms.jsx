@@ -602,6 +602,24 @@ window.FrontendForms = (function() {
         return null;
     }
 
+    // Serializing form data with the vanilla JS FormData() object
+    // Adapted from:
+    // https://gomakethings.com/serializing-form-data-with-the-vanilla-js-formdata-object/
+    function formdata_serialize(formData) {
+        var items = {};
+        for (var key of formData.keys()) {
+            items[key] = formData.get(key);
+        }
+        return items;
+    }
+
+    // Transform FormData into query string
+    // Adapted from:
+    // https://stackoverflow.com/questions/42980645/easier-way-to-transform-formdata-into-query-string#48950600
+    function formdata_to_querystring(formData) {
+        const queryString = new URLSearchParams(formData).toString();
+        return queryString;
+    }
 
     // Adapts canvas size to desired size;
     function adjust_canvas_size(id) {
@@ -1029,6 +1047,8 @@ window.FrontendForms = (function() {
         isEmptyObject: isEmptyObject,
         cloneObject: cloneObject,
         lookup: lookup,
+        formdata_serialize: formdata_serialize,
+        formdata_to_querystring: formdata_to_querystring,
         adjust_canvas_size: adjust_canvas_size,
         getCookie: getCookie,
         confirmRemoteAction: confirmRemoteAction,
