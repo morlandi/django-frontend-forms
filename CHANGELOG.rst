@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.19
+-------
+- [fix] frontend_forms.js was out of sync with frontend_forms.jsx
+
 v0.2.18
 -------
 - [fix] "it" language selection for datepicker
