@@ -3,6 +3,10 @@
 History
 =======
 
+v0.2.20
+-------
+- generic_edit_view() now treats request.FILES
+
 v0.2.19
 -------
 - [fix] frontend_forms.js was out of sync with frontend_forms.jsx

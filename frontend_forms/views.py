@@ -186,7 +186,7 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
     if request.method == 'POST':
 
         #form = model_form_class(instance=object, data=request.POST)
-        kwargs = {'instance': object, 'data': request.POST }
+        kwargs = {'instance': object, 'data': request.POST, 'files': request.FILES, }
         if forms_wants_request:
             kwargs.update({'request': request, })
         form = model_form_class(**kwargs)
