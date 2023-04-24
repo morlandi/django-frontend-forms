@@ -262,6 +262,109 @@ When a form submission is involved, the modal life cycle has to be modified as f
 already takes care of all these needs automatically, and keeps refreshing the modal
 after each submission until the form validation succeedes.
 
+Thus, you can safely forget about all these technicalities
+and just include a form in the rendered response as you would in any common form-processing view:
+
+.. code:: python
+
+    urlpatterns = [
+        ...
+        path('j/edit_profile/', ajax.edit_profile, name='j_edit_profile'),
+        ...
+    ]
+
+
+    from django import forms
+
+    class UserProfileForm(forms.ModelForm):
+        class Meta:
+            model = Profile
+            fields = [
+                'whatever',
+                ...
+            ]
+
+
+    from django.core.exceptions import PermissionDenied
+    from django.contrib.auth.decorators import login_required
+    from django.views.decorators.cache import never_cache
+    from django.shortcuts import render
+
+    @login_required
+    @never_cache
+    def edit_profile(request):
+
+        is_ajax_request = request.accepts("application/json")
+        if not is_ajax_request:
+            raise PermissionDenied
+
+        template_name = 'frontend_forms/generic_form_inner.html'
+        if request.method == 'POST':
+            form = UserProfileForm(data=request.POST, instance=request.user.profile)
+            if form.is_valid():
+                form.save()
+        else:
+            form = UserProfileForm(instance=request.user.profile)
+
+        return render(request, template_name, {
+            'form': form,
+            'object': request.user,  # unused, but armless
+        })
+
+and later on:
+
+.. code:: html
+
+    <a href="{% url 'frontend:j_edit_profile' %}"
+        class="btn btn-info"
+        data-title="My title"
+        data-subtitle="My Subtitle"
+        data-width="50%"
+        data-height="50%"
+        onclick="new Dialog().open(event); return false;">
+            Open
+    </a>
+
+or, to keep more control over the modal life cycle:
+
+.. code:: html
+
+    <a class="btn btn-info" href="#" onclick="dialog_edit_profile.open(); return false;">
+        <i class="fa fa-user"></i> {% trans 'Edit Profile ...' %}
+    </a>
+
+    <script language="javascript">
+
+        $(document).ready(function() {
+
+            dialog_edit_profile = new Dialog({
+                html: '<div>{% trans "Please wait" %} ...</div>',
+                url: '{% url "frontend:j_edit_profile" %}',
+                width: '400px',
+                min_height: '200px',
+                title: '<i class="fa fa-user"></i>&nbsp;&nbsp;{% trans "Edit Profile" %} ...',
+                callback: function(event_name, dialog, params) {
+                    switch (event_name) {
+                        case "loaded":
+                            dialog.element.find('.django-select2').djangoSelect2({
+                                // "dropdownParent" is required for Bootstrap; see:
+                                // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
+                                dropdownParent: dialog.element,
+                                width: 'style'
+                            });
+                            break;
+                        case "submitted":
+                            FrontendForms.hide_mouse_cursor();
+                            FrontendForms.reload_page(true);
+                            break;
+                    }
+                }
+            });
+
+        });
+    </script>
+
+
 Giving a feedback after successful form submission
 --------------------------------------------------
 
@@ -1054,11 +1157,10 @@ Follow these steps:
             switch (event_name) {
                 case "loaded":
                     dialog.element.find('.django-select2').djangoSelect2({
-
                         // "dropdownParent" is required for Bootstrap; see:
                         // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
-
-                        dropdownParent: dialog.element
+                        dropdownParent: dialog.element,
+                        width: 'style'
                     });
                     break;
                 ...
