@@ -42,14 +42,22 @@ class Dialog {
             Object.assign(self.options, options);
         }
 
-        self.element = jQuery(self.options.dialog_selector);
-        if (self.element.length <= 0) {
-            var message = 'ERROR: dialog "' + self.options.dialog_selector + '" not found';
+        //self.element = jQuery(self.options.dialog_selector);
+        //if (self.element.length <= 0) {
+        self.element = document.querySelector(self.options.dialog_selector);
+        if (self._check_dialog_element()) {
+            self._notify("created", {options: self.options});
+        }
+    }
+
+    _check_dialog_element() {
+        if (self.element === null) {
+            let message = 'ERROR: dialog "' + self.options.dialog_selector + '" not found';
             console.log(message);
             FrontendForms.display_server_error(message);
+            return false;
         }
-
-        self._notify("created", {options: self.options});
+        return true;
     }
 
     /**
@@ -98,15 +106,28 @@ class Dialog {
     close() {
         var self = this;
 
-        self.element.find('.close').off();
+        // Remove close handlers
+        document.querySelectorAll('.dialog-header .close, .dialog-footer .btn-close').forEach(item => {
+            self._off(item);
+        });
         //jQuery(window).off();
-        self.element.hide();
+        self.element.style.display = 'none';
 
         // Restore normal page scrolling in case the recently opened modal
         // had disable it to scroll it's own contents instead
-        jQuery('body').css('overflow', 'auto');
+        document.querySelector('body').style.overflow = 'auto';
 
         self._notify('closed');
+    }
+
+    _off(element) {
+        // Remove all event handlers from element
+        // https://stackoverflow.com/questions/4386300/javascript-dom-how-to-remove-all-event-listeners-of-a-dom-object
+        if (element !== null) {
+            // Clone the element and replace the element with its clone.
+            // Events are not cloned.
+            element.replaceWith(element.cloneNode(true));
+        }
     }
 
     _initialize(open_event) {
@@ -133,27 +154,29 @@ class Dialog {
 
         self.options.open_event = open_event;
 
-        var content = self.element.find('.dialog-content');
-        var header = content.find('.dialog-header');
-        var body = content.find('.dialog-body');
-        var footer = content.find('.dialog-footer');
+        var content = self.element.querySelector('.dialog-content');
+        var header = content.querySelector('.dialog-header');
+        var body = content.querySelector('.dialog-body');
+        var footer = content.querySelector('.dialog-footer');
 
-        if (self.options.width) { content.css('width', self.options.width); }
-        if (self.options.min_width) { content.css('min-width', self.options.min_width); }
-        if (self.options.max_width) { content.css('max-width', self.options.max_width); }
-        if (self.options.height) { body.css('height', self.options.height); }
-        if (self.options.min_height) { body.css('min-height', self.options.min_height); }
-        if (self.options.max_height) { body.css('max-height', self.options.max_height); }
+        if (self.options.width) { content.style.width = self.options.width; }
+        if (self.options.min_width) { content.style.minWidth = self.options.min_width; }
+        if (self.options.max_width) { content.style.maxWidth = self.options.max_width; }
+        if (self.options.height) { body.style.height = self.options.height; }
+        if (self.options.min_height) { body.style.minHeight = self.options.min_height; }
+        if (self.options.max_height) { body.style.maxHeight = self.options.max_height; }
 
-        header.find('.title').html('&nbsp;' + self.options.title);
+        header.querySelector('.title').innerHTML = '&nbsp;' + self.options.title;
         if (!self.options.subtitle) {
-            header.find('.subtitle').hide();
+            header.querySelector('.subtitle').style.display = 'none';
         }
         else {
-            header.find('.subtitle').html('&nbsp;' + self.options.subtitle);
+            header.querySelector('.subtitle').innerHTML = '&nbsp;' + self.options.subtitle;
         }
-        footer.find('.text').html('&nbsp;' + self.options.footer_text);
+        footer.querySelector('.text').innerHTML = '&nbsp;' + self.options.footer_text;
 
+        /*
+        !!!
         var btn_save = footer.find('.btn-save');
         if (!self.options.button_save_label) {
             btn_save.hide();
@@ -172,6 +195,7 @@ class Dialog {
         else {
             btn_close.val(self.options.button_close_label);
         }
+        */
 
         self._notify('initialized');
     }
@@ -182,7 +206,8 @@ class Dialog {
 
     show() {
         var self = this;
-        self.element.show();
+        //self.element.show();
+        self.element.style.display = 'block';
         self._notify('shown');
     }
 
@@ -228,31 +253,29 @@ class Dialog {
     open(event=null, show=true) {
 
         var self = this;
+        if (!self._check_dialog_element()) {
+            return;
+        }
         self._initialize(event);
 
         // When the user clicks on any '.btn-close' element, close the modal
-        self.element.find('.dialog-header .close').off().on('click', function() {
-            self.close();
-        });
-
-        // Handle Close botton in the footer, if any
-        var btn_close = self.element.find('.dialog-footer .btn-close');
-        if (btn_close.length) {
-            btn_close.off().on('click', function(event) {
+        // Also handle Close botton in the footer, if any
+        document.querySelectorAll('.dialog-header .close, .dialog-footer .btn-close').forEach(item => {
+            console.log(item);
+            item.addEventListener('click', function(event) {
                 event.preventDefault();
                 self.close();
             });
-        }
+        });
 
         /*
-        // When the user clicks anywhere outside of the modal, close it
-        jQuery(window).off().on('click', function(event) {
-            //if (event.target.id == modal.attr('id')) {
-            if (event.target == self.element.get(0)) {
-                self.close();
-            }
-        });
-        */
+        //// When the user clicks anywhere outside of the modal, close it
+        //jQuery(window).off().on('click', function(event) {
+        //    //if (event.target.id == modal.attr('id')) {
+        //    if (event.target == self.element.get(0)) {
+        //        self.close();
+        //    }
+        //});
 
         if (self.element.hasClass('draggable')) {
             self.element.find('.dialog-content').draggable({
@@ -260,8 +283,9 @@ class Dialog {
             });
         }
 
+        */
         // Load static content
-        self.element.find('.dialog-body').html(self.options.html);
+        self.element.querySelector('.dialog-body').innerHTML = self.options.html;
         self._notify('open');
 
         // Show the dialog
@@ -269,6 +293,7 @@ class Dialog {
             self.show();
         }
 
+        /*
         // Load remote content
         if (self.options.url) {
             self._load().done(function(data, textStatus, jqXHR) {
@@ -279,6 +304,7 @@ class Dialog {
                 }
             });
         }
+        */
     }
 
     _form_ajax_submit(with_errors=false) {
