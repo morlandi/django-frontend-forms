@@ -193,7 +193,7 @@ SELECT2_JS = ''
 SELECT2_CSS = ''
 
 QUERYCOUNT = {
-    'IGNORE_ALL_REQUESTS': False,
+    'IGNORE_ALL_REQUESTS': True,
     'IGNORE_REQUEST_PATTERNS': [],
     'IGNORE_SQL_PATTERNS': [],
     'THRESHOLDS': {
@@ -211,8 +211,8 @@ QUERYCOUNT = {
 
 LOGIN_URL = reverse_lazy('frontend_forms:login')
 LOGOUT_URL = reverse_lazy('frontend_forms:logout')
-LOGIN_REDIRECT_URL = reverse_lazy('index')
-LOGOUT_REDIRECT_URL = reverse_lazy('index')
+LOGIN_REDIRECT_URL = reverse_lazy('frontend:index')
+LOGOUT_REDIRECT_URL = reverse_lazy('frontend:index')
 
 USE_VANILLA_JS = True
 

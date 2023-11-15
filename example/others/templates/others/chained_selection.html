@@ -56,7 +56,7 @@
                         case "loaded":
                             // "Select2 does not function properly when I use it inside a Bootstrap modal":
                             // https://select2.org/troubleshooting/common-problems#select2-does-not-function-properly-when-i-use-it-inside-a-bootst
-                            dialog.element.find('.django-select2').djangoSelect2({
+                            $(dialog.element).find('.django-select2').djangoSelect2({
                                 dropdownParent: dialog.element
                             });
                             break;
