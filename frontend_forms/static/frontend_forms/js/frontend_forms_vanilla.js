@@ -138,7 +138,7 @@ class Dialog {
         if (open_event && open_event.target) {
             let target = open_event.target;
             let options = self.options;
-            if (!options.url) options.url = target.href || '';
+            if (!options.url) options.url = target.getAttribute('href') || '';
             if (!options.html) options.html = target.dataset.html || '';
             if (!options.width) options.width = target.dataset.width || '';
             if (!options.min_width) options.min_width = target.dataset.minWidth || '';
@@ -210,56 +210,7 @@ class Dialog {
     }
 
 
-    /*
-        function pingUrl(url) {
-            // Verifica la connessione all'url specificato e incrementa counter_online
-            // oppure counter_offline di conseguenza; fornisce un feedback nascondendo
-            // o visualizzando il pallino (rosso o verde) corrispondente
-            fetch(url, {
-                method: 'GET', // *GET, POST, PUT, DELETE, etc.
-                mode: 'no-cors',
-            }).then((response) => {
-                if (response.ok) {
-                    counter_online += 1;
-                    document.getElementById("red-dot").style.display = 'none';
-                    document.getElementById("green-dot").style.display = 'block';
-                }
-                else {
-                    throw new Error('Bad response');
-                }
-            }).catch(e => {
-                //console.error(e)
-                counter_offline += 1;
-                document.getElementById("red-dot").style.display = 'block';
-                document.getElementById("green-dot").style.display = 'none';
-            });
-            return;
-        }
-
-
-
-
-function postRequest(url, data) {
-    const options = {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }
-    return fetch(url, options);
-}
-
-
-
-
-    */
-
     _load() {
-
 
         let self = this;
         let header = self.element.querySelector('.dialog-header');
@@ -267,55 +218,57 @@ function postRequest(url, data) {
         self._notify('loading', {url: self.options.url});
         header.classList.add('loading');
 
-        if (true) {
+        /*
+        var promise = $.ajax({
+            type: 'GET',
+            url: self.options.url,
+            cache: false,
+            crossDomain: true,
+            headers: {
+                // make sure request.is_ajax() return True on the server
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).done(function(data, textStatus, jqXHR) {
+            self.element.find('.dialog-body').html(data);
+            self._notify('loaded', {url: self.options.url, data: data});
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            self._notify('loading_failed', {jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
+            console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
+            FrontendForms.display_server_error(errorThrown);
+        }).always(function() {
+            header.removeClass('loading');
+        });
+        */
 
-            //let url = self.options.url;
-            let promise = fetch(
-                self.options.url, {
-                    method: 'GET'//, // *GET, POST, PUT, DELETE, etc.
-                    //mode: 'no-cors',
-                }
-            );
-
-            promise.then(response => {
-                console.log('loaded; ok: %o', response.ok);
-                console.log(self.element.querySelector('.dialog-body'));
-                response.text().then(text => {
-                    // console.log(text)
-                    // console.log(self.element.querySelector('.dialog-body'));
-
-                    self.element.querySelector('.dialog-body').innerHTML = text;
-                    // self.element.find('.dialog-body').html(data);
-                    // self._notify('loaded', {url: self.options.url, data: data});
-                });
-            }).catch(error => {
-               console.log('LOAD FAILED: %o', error);
-            });
-
-        }
-        else {
-
-            var promise = $.ajax({
-                type: 'GET',
-                url: self.options.url,
-                cache: false,
-                crossDomain: true,
+        let promise = fetch(
+            self.options.url, {
+                method: 'GET',  // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors',   // 'no-cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
                 headers: {
                     // make sure request.is_ajax() return True on the server
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            }).done(function(data, textStatus, jqXHR) {
-                self.element.find('.dialog-body').html(data);
-                self._notify('loaded', {url: self.options.url, data: data});
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                self._notify('loading_failed', {jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
-                console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
-                FrontendForms.display_server_error(errorThrown);
-            }).always(function() {
-                header.removeClass('loading');
-            });
-
-        }
+            }
+        );
+        promise.then(response => {
+            if (response.ok) {
+                response.text().then(data => {
+                    self.element.querySelector('.dialog-body').innerHTML = data;
+                    self._notify('loaded', {url: self.options.url, data: data});
+                })
+            }
+            else {
+                self._notify('loading_failed', {error: response.statusText});
+                FrontendForms.display_server_error(response.statusText);
+            }
+        }).catch(error => {
+            self._notify('loading_failed', {error: error});
+            FrontendForms.display_server_error(error.toString());
+        }).finally(() => {
+            header.classList.remove('loading');
+        });
 
         return promise;
     }
@@ -375,10 +328,6 @@ function postRequest(url, data) {
             self.show();
         }
 
-        if (self.options.url) {
-            self._load();
-        }
-
         /*
         // Load remote content
         if (self.options.url) {
@@ -391,7 +340,72 @@ function postRequest(url, data) {
             });
         }
         */
+
+        // Load remote content
+        if (self.options.url) {
+            let promise = self._load();
+            promise.then(response => {
+                console.log('response: %o', response);
+            });
+        }
+        // promise.then(response => {
+        //     if (response.ok) {
+        //         response.text().then(data => {
+        //             self.element.querySelector('.dialog-body').innerHTML = data;
+        //             self._notify('loaded', {url: self.options.url, data: data});
+        //         })
+        //     }
+        //     else {
+        //         self._notify('loading_failed', {error: response.statusText});
+        //         FrontendForms.display_server_error(response.statusText);
+        //     }
+        // }).catch(error => {
     }
+
+    /*
+        function pingUrl(url) {
+            // Verifica la connessione all'url specificato e incrementa counter_online
+            // oppure counter_offline di conseguenza; fornisce un feedback nascondendo
+            // o visualizzando il pallino (rosso o verde) corrispondente
+            fetch(url, {
+                method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                mode: 'no-cors',
+            }).then((response) => {
+                if (response.ok) {
+                    counter_online += 1;
+                    document.getElementById("red-dot").style.display = 'none';
+                    document.getElementById("green-dot").style.display = 'block';
+                }
+                else {
+                    throw new Error('Bad response');
+                }
+            }).catch(e => {
+                //console.error(e)
+                counter_offline += 1;
+                document.getElementById("red-dot").style.display = 'block';
+                document.getElementById("green-dot").style.display = 'none';
+            });
+            return;
+        }
+
+
+
+
+function postRequest(url, data) {
+    const options = {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }
+    return fetch(url, options);
+}
+
+    */
 
     _form_ajax_submit(with_errors=false) {
         var self = this;
