@@ -257,6 +257,12 @@ class Dialog {
                 response.text().then(data => {
                     self.element.querySelector('.dialog-body').innerHTML = data;
                     self._notify('loaded', {url: self.options.url, data: data});
+
+                    let form = self.element.querySelector('.dialog-content .dialog-body form');
+                    if (form !== null) {
+                        // Manage form
+                        self._form_ajax_submit();
+                    }
                 })
             }
             else {
@@ -343,23 +349,16 @@ class Dialog {
 
         // Load remote content
         if (self.options.url) {
-            let promise = self._load();
-            promise.then(response => {
-                console.log('response: %o', response);
-            });
+            self._load();
+            // the following has been moved inside _load() as we are not able to
+            // read the reponse content (which is itself a provise) twice
+
+            //    var form = self.element.find('.dialog-content .dialog-body form');
+            //    if (form.length == 1) {
+            //        // Manage form
+            //        self._form_ajax_submit();
+            //    }
         }
-        // promise.then(response => {
-        //     if (response.ok) {
-        //         response.text().then(data => {
-        //             self.element.querySelector('.dialog-body').innerHTML = data;
-        //             self._notify('loaded', {url: self.options.url, data: data});
-        //         })
-        //     }
-        //     else {
-        //         self._notify('loading_failed', {error: response.statusText});
-        //         FrontendForms.display_server_error(response.statusText);
-        //     }
-        // }).catch(error => {
     }
 
     /*
@@ -408,6 +407,9 @@ function postRequest(url, data) {
     */
 
     _form_ajax_submit(with_errors=false) {
+
+        console.log('*********** _form_ajax_submit() ...');
+
         var self = this;
 
         var content = self.element.find('.dialog-content');
