@@ -2,6 +2,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // base Dialog
 
+
 class Dialog {
 
     /**
@@ -83,7 +84,7 @@ class Dialog {
     // }
 
     _notify(event_name, params={}) {
-        var self = this;
+        let self = this;
         if (self.options.enable_trace) {
             console.log('[Dialog ' + event_name + '] dialog: %o; params:%o', self, params);
         }
@@ -104,7 +105,7 @@ class Dialog {
      */
 
     close() {
-        var self = this;
+        let self = this;
 
         // Remove close handlers
         document.querySelectorAll('.dialog-header .close, .dialog-footer .btn-close').forEach(item => {
@@ -131,33 +132,33 @@ class Dialog {
     }
 
     _initialize(open_event) {
-        var self = this;
+        let self = this;
 
         // Retrieve missing options from open_event
         if (open_event && open_event.target) {
-            var target = jQuery(open_event.target);
-            var options = self.options;
-            if (!options.url) options.url = target.attr('href') || '';
-            if (!options.html) options.html = target.data('html') || '';
-            if (!options.width) options.width = target.data('width') || '';
-            if (!options.min_width) options.min_width = target.data('min-width') || '';
-            if (!options.max_width) options.max_width = target.data('max-width') || '';
-            if (!options.height) options.height = target.data('height') || '';
-            if (!options.min_height) options.min_height = target.data('min-height') || '';
-            if (!options.max_height) options.max_height = target.data('max-height') || '';
-            if (!options.button_save_label) options.button_save_label = target.data('button-save-label') || '';
-            if (!options.button_close_label) options.button_close_label = target.data('button-close-label') || '';
-            if (!options.title) options.title = target.data('title') || '';
-            if (!options.subtitle) options.subtitle = target.data('subtitle') || '';
-            if (!options.footer_text) options.footer_text = target.data('footer-text') || '';
+            let target = open_event.target;
+            let options = self.options;
+            if (!options.url) options.url = target.href || '';
+            if (!options.html) options.html = target.dataset.html || '';
+            if (!options.width) options.width = target.dataset.width || '';
+            if (!options.min_width) options.min_width = target.dataset.minWidth || '';
+            if (!options.max_width) options.max_width = target.dataset.maxWidth || '';
+            if (!options.height) options.height = target.dataset.height || '';
+            if (!options.min_height) options.min_height = target.dataset.minHeight || '';
+            if (!options.max_height) options.max_height = target.dataset.maxHeight || '';
+            if (!options.button_save_label) options.button_save_label = target.dataset.buttonSaveLabel || '';
+            if (!options.button_close_label) options.button_close_label = target.dataset.buttonCloseLabel || '';
+            if (!options.title) options.title = target.dataset.title || '';
+            if (!options.subtitle) options.subtitle = target.dataset.subtitle || '';
+            if (!options.footer_text) options.footer_text = target.dataset.footerText || '';
         }
 
         self.options.open_event = open_event;
 
-        var content = self.element.querySelector('.dialog-content');
-        var header = content.querySelector('.dialog-header');
-        var body = content.querySelector('.dialog-body');
-        var footer = content.querySelector('.dialog-footer');
+        let content = self.element.querySelector('.dialog-content');
+        let header = content.querySelector('.dialog-header');
+        let body = content.querySelector('.dialog-body');
+        let footer = content.querySelector('.dialog-footer');
 
         if (self.options.width) { content.style.width = self.options.width; }
         if (self.options.min_width) { content.style.minWidth = self.options.min_width; }
@@ -175,27 +176,24 @@ class Dialog {
         }
         footer.querySelector('.text').innerHTML = '&nbsp;' + self.options.footer_text;
 
-        /*
-        !!!
-        var btn_save = footer.find('.btn-save');
+        let btn_save = footer.querySelector('.btn-save');
         if (!self.options.button_save_label) {
-            btn_save.hide();
+            btn_save.style.display = 'none';
         }
         else {
-            btn_save.val(self.options.button_save_label);
+            btn_save.value = self.options.button_save_label;
             if (self.options.button_save_initially_hidden) {
                 // Visualization postponed after form rendering
-                btn_save.hide();
+                btn_save.style.display = 'none';
             }
         }
-        var btn_close = footer.find('.btn-close');
+        let btn_close = footer.querySelector('.btn-close');
         if (!self.options.button_close_label) {
-            btn_close.hide();
+            btn_close.style.display = 'none';
         }
         else {
-            btn_close.val(self.options.button_close_label);
+            btn_close.value = self.options.button_close_label;
         }
-        */
 
         self._notify('initialized');
     }
@@ -211,32 +209,113 @@ class Dialog {
         self._notify('shown');
     }
 
+
+    /*
+        function pingUrl(url) {
+            // Verifica la connessione all'url specificato e incrementa counter_online
+            // oppure counter_offline di conseguenza; fornisce un feedback nascondendo
+            // o visualizzando il pallino (rosso o verde) corrispondente
+            fetch(url, {
+                method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                mode: 'no-cors',
+            }).then((response) => {
+                if (response.ok) {
+                    counter_online += 1;
+                    document.getElementById("red-dot").style.display = 'none';
+                    document.getElementById("green-dot").style.display = 'block';
+                }
+                else {
+                    throw new Error('Bad response');
+                }
+            }).catch(e => {
+                //console.error(e)
+                counter_offline += 1;
+                document.getElementById("red-dot").style.display = 'block';
+                document.getElementById("green-dot").style.display = 'none';
+            });
+            return;
+        }
+
+
+
+
+function postRequest(url, data) {
+    const options = {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }
+    return fetch(url, options);
+}
+
+
+
+
+    */
+
     _load() {
 
-        var self = this;
-        var header = self.element.find('.dialog-header');
+
+        let self = this;
+        let header = self.element.querySelector('.dialog-header');
 
         self._notify('loading', {url: self.options.url});
-        header.addClass('loading');
-        var promise = $.ajax({
-            type: 'GET',
-            url: self.options.url,
-            cache: false,
-            crossDomain: true,
-            headers: {
-                // make sure request.is_ajax() return True on the server
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).done(function(data, textStatus, jqXHR) {
-            self.element.find('.dialog-body').html(data);
-            self._notify('loaded', {url: self.options.url, data: data});
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            self._notify('loading_failed', {jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
-            console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
-            FrontendForms.display_server_error(errorThrown);
-        }).always(function() {
-            header.removeClass('loading');
-        });
+        header.classList.add('loading');
+
+        if (true) {
+
+            //let url = self.options.url;
+            let promise = fetch(
+                self.options.url, {
+                    method: 'GET'//, // *GET, POST, PUT, DELETE, etc.
+                    //mode: 'no-cors',
+                }
+            );
+
+            promise.then(response => {
+                console.log('loaded; ok: %o', response.ok);
+                console.log(self.element.querySelector('.dialog-body'));
+                response.text().then(text => {
+                    // console.log(text)
+                    // console.log(self.element.querySelector('.dialog-body'));
+
+                    self.element.querySelector('.dialog-body').innerHTML = text;
+                    // self.element.find('.dialog-body').html(data);
+                    // self._notify('loaded', {url: self.options.url, data: data});
+                });
+            }).catch(error => {
+               console.log('LOAD FAILED: %o', error);
+            });
+
+        }
+        else {
+
+            var promise = $.ajax({
+                type: 'GET',
+                url: self.options.url,
+                cache: false,
+                crossDomain: true,
+                headers: {
+                    // make sure request.is_ajax() return True on the server
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).done(function(data, textStatus, jqXHR) {
+                self.element.find('.dialog-body').html(data);
+                self._notify('loaded', {url: self.options.url, data: data});
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                self._notify('loading_failed', {jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
+                console.log('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);
+                FrontendForms.display_server_error(errorThrown);
+            }).always(function() {
+                header.removeClass('loading');
+            });
+
+        }
 
         return promise;
     }
@@ -268,7 +347,6 @@ class Dialog {
             });
         });
 
-        /*
         //// When the user clicks anywhere outside of the modal, close it
         //jQuery(window).off().on('click', function(event) {
         //    //if (event.target.id == modal.attr('id')) {
@@ -277,13 +355,17 @@ class Dialog {
         //    }
         //});
 
-        if (self.element.hasClass('draggable')) {
-            self.element.find('.dialog-content').draggable({
-                handle: '.dialog-header'
-            });
+        if (self.element.classList.contains('draggable')) {
+
+            // TODO
+            // See: "Drag-n-Drop with Vanilla JavaScript"
+            // https://medium.com/codex/drag-n-drop-with-vanilla-javascript-75f9c396ecd
+
+            //self.element.querySelector('.dialog-content').draggable({
+            //    handle: '.dialog-header'
+            //});
         }
 
-        */
         // Load static content
         self.element.querySelector('.dialog-body').innerHTML = self.options.html;
         self._notify('open');
@@ -291,6 +373,10 @@ class Dialog {
         // Show the dialog
         if (show) {
             self.show();
+        }
+
+        if (self.options.url) {
+            self._load();
         }
 
         /*
