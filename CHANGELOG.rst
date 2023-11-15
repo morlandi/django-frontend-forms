@@ -3,6 +3,11 @@
 History
 =======
 
+v0.3.0
+------
+- optionally replace "frontend_form.js" with "frontend_form_vanilla.js"
+- upgrade to Django 4.2
+
 v0.2.20
 -------
 - generic_edit_view() now treats request.FILES
