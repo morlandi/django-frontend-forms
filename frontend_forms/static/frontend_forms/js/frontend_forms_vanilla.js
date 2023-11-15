@@ -315,6 +315,7 @@ class Dialog {
         //});
 
         if (self.element.classList.contains('draggable')) {
+            console.log("[TODO] add support for draggable modals");
 
             // TODO
             // See: "Drag-n-Drop with Vanilla JavaScript"
@@ -361,105 +362,136 @@ class Dialog {
         }
     }
 
-    /*
-        function pingUrl(url) {
-            // Verifica la connessione all'url specificato e incrementa counter_online
-            // oppure counter_offline di conseguenza; fornisce un feedback nascondendo
-            // o visualizzando il pallino (rosso o verde) corrispondente
-            fetch(url, {
-                method: 'GET', // *GET, POST, PUT, DELETE, etc.
-                mode: 'no-cors',
-            }).then((response) => {
-                if (response.ok) {
-                    counter_online += 1;
-                    document.getElementById("red-dot").style.display = 'none';
-                    document.getElementById("green-dot").style.display = 'block';
-                }
-                else {
-                    throw new Error('Bad response');
-                }
-            }).catch(e => {
-                //console.error(e)
-                counter_offline += 1;
-                document.getElementById("red-dot").style.display = 'block';
-                document.getElementById("green-dot").style.display = 'none';
-            });
-            return;
-        }
-
-
-
-
-function postRequest(url, data) {
-    const options = {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }
-    return fetch(url, options);
-}
-
-    */
-
     _form_ajax_submit(with_errors=false) {
 
-        console.log('*********** _form_ajax_submit() ...');
+        let self = this;
 
-        var self = this;
-
-        var content = self.element.find('.dialog-content');
-        var header = content.find('.dialog-header');
-        var body = content.find('.dialog-body');
-        var footer = content.find('.dialog-footer');
-        var form = content.find('.dialog-body form');
+        let content = self.element.querySelector('.dialog-content');
+        let header = content.querySelector('.dialog-header');
+        let body = content.querySelector('.dialog-body');
+        let footer = content.querySelector('.dialog-footer');
+        let form = content.querySelector('.dialog-body form');
 
         // use footer save button, if available
-        var btn_save = footer.find('.btn-save');
+        let btn_save = footer.querySelector('.btn-save');
         if (self.options.button_save_label !== null && btn_save) {
-            form.find('.form-submit-row').hide();
-            btn_save.off().on('click', function(event) {
-                form.submit();
+
+            form.querySelector('.form-submit-row').style.display = 'none';
+            //btn_save.off().on('click', function(event) {
+            //    form.submit();
+            //});
+            self._off(btn_save);
+            btn_save = footer.querySelector('.btn-save');
+
+            btn_save.addEventListener('click', function(event) {
+                //form.submit();
+                form.requestSubmit();
             });
-            btn_save.show();
+
+            btn_save.style.display = 'block';
         }
+
 
         // Give focus to first visible form field
         if (self.options.autofocus_first_visible_input) {
-            if (with_errors) {
-                // In case of error, move focus to first failing input
-                form.find('.field-with-errors input:visible').first().focus().select();
+
+            // TODO: rewrite as vanilla js
+            try {
+                if (with_errors) {
+                    // In case of error, move focus to first failing input
+                    form.find('.field-with-errors input:visible').first().focus().select();
+                }
+                else {
+                    form.find('input:visible').first().focus().select();
+                }
             }
-            else {
-                form.find('input:visible').first().focus().select();
+            catch (error) {
+                console.log('[TODO] give focus to first visible field')
             }
         }
 
         // bind to the form’s submit event
-        form.on('submit', function(event) {
+        form.addEventListener('submit', function(event) {
 
             // prevent the form from performing its default submit action
             event.preventDefault();
-            header.addClass('loading');
+            header.classList.add('loading');
 
             // serialize the form’s content and send via an AJAX call
             // using the form’s defined method and action
-            var url = form.attr('action') || self.options.url;
-            var method = form.attr('method') || 'post';
-            //var data = form.serialize();
-
-            // We now use FormData instead of form.serialize() to package up data from form,
-            // to allow files upload (i.e. process <input type="file"> as expected);
-            // Note that, using FormData, we also need:
+            let url = form.getAttribute('action') || self.options.url;
+            let method = form.getAttribute('method') || 'post';
+            // We use FormData // to allow files upload (i.e. process <input type="file"> as expected)
+            // Note that, using FormData, we also need (with jQuery):
             // - processData: false
             // - contentType: false
-            var data = new FormData(form.get(0));
+            let data = new FormData(form);
+            //console.log('form data: %o', new URLSearchParams(data).toString());
 
             self._notify('submitting', {method: method, url: url, data:data});
+
+            let promise = fetch(
+                self.options.url, {
+                    method: method,
+                    body: data,
+                    mode: 'cors',   // 'no-cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        // make sure request.is_ajax() return True on the server
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                }
+            );
+            promise.then(response => {
+                if (response.ok) {
+                    response.text().then(data => {
+
+                        // update the modal body with the new form
+                        body.innerHTML = data;
+
+                        // Does the response contain a form ?
+                        let form = self.element.querySelector('.dialog-content .dialog-body form');
+                        if (form !== null) {
+                            // If the server sends back a successful response,
+                            // we need to further check the HTML received
+
+                            // If xhr contains any field errors,
+                            // the form did not validate successfully,
+                            // so we keep it open for further editing
+                            //if (jQuery(xhr).find('.has-error').length > 0) {
+
+                            if (form.querySelectorAll('.has-error').length > 0 || form.querySelectorAll('.errorlist').length > 0) {
+                                self._notify('loaded', {url: url});
+                                self._form_ajax_submit(true);
+                            } else {
+                                // otherwise, we've done and can close the modal
+                                self._notify('submitted', {method: method, url: url, data: data});
+                                self.close();
+                            }
+                        }
+                        // If not, assume we received a feedback for the user after successfull submission, so:
+                        // - keep the dialog open
+                        // - hide the save button
+                        else {
+                            // We also notify the user about successful submission
+                            self._notify('submitted', {method: method, url: url, data: data});
+                            btn_save.style.display = 'none';
+                        }
+                    });
+                } else {
+                    self._notify('submission_failure', {method: method, url: url, data: data, error: response.statusText});
+                    FrontendForms.display_server_error(response.statusText);
+                }
+
+            }).catch(error => {
+                self._notify('submission_failure', {method: method, url: url, data: data, error:error});
+                FrontendForms.display_server_error(error.toString());
+            }).finally(() => {
+                header.classList.remove('loading');
+            });
+
+            /*
             $.ajax({
                 type: method,
                 url: url,
@@ -513,6 +545,8 @@ function postRequest(url, data) {
             }).always(function() {
                 header.removeClass('loading');
             });
+
+            */
         });
     }
 
