@@ -203,7 +203,7 @@ class Dialog {
      */
 
     show() {
-        var self = this;
+        let self = this;
         //self.element.show();
         self.element.style.display = 'block';
         self._notify('shown');
@@ -290,7 +290,7 @@ class Dialog {
 
     open(event=null, show=true) {
 
-        var self = this;
+        let self = this;
         if (!self._check_dialog_element()) {
             return;
         }
