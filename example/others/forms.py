@@ -8,7 +8,9 @@ from backend.models import Track
 
 class FileForm(forms.Form):
     title = forms.CharField(required=True)
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    #file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    # See: https://forum.image.sc/t/cannot-start-omero-web-valueerror-clearablefileinput-doesnt-support-uploading-multiple-files/80743/3#post_4
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}))
 
 
 class ChainedSelectionForm(forms.Form):

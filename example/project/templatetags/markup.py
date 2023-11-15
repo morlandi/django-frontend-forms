@@ -22,7 +22,13 @@ markup syntaxes to HTML; currently there is support for:
 
 from django import template
 from django.conf import settings
-from django.utils.encoding import smart_str, force_text
+#from django.utils.encoding import smart_str, force_text
+try:
+    from django.utils.encoding import force_text
+except:
+    from django.utils.encoding import force_str as force_text
+from django.utils.encoding import smart_str
+
 from django.utils.safestring import mark_safe
 
 register = template.Library()

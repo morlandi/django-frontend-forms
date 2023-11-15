@@ -44,7 +44,13 @@ def login(request, template_name='frontend_forms/login.html',
         request.GET.get(redirect_field_name, '')
     )
 
-    if request.is_ajax():
+    try:
+        is_ajax_request = request.accepts("application/json")
+    except AttributeError as e:
+        # Django < 4.0
+        is_ajax_request = request.is_ajax()
+
+    if is_ajax_request:
         template_name = 'frontend_forms/login_inner.html'
 
     if request.method == "POST":
@@ -58,7 +64,7 @@ def login(request, template_name='frontend_forms/login.html',
             # Okay, security check complete. Log the user in.
             auth_login(request, form.get_user())
 
-            if request.is_ajax():
+            if is_ajax_request:
                 return render(request, "frontend_forms/login_successful_message.html", {})
                 #return HttpResponse("<h1>Great !</h1> You're logged in")
             else:
@@ -170,7 +176,14 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
     #     template_name = 'modal_helpers/generic_form_inner.html'
     # else:
     #     template_name = 'modal_helpers/generic_form.html'
-    if request.is_ajax():
+
+    try:
+        is_ajax_request = request.accepts("application/json")
+    except AttributeError as e:
+        # Django < 4.0
+        is_ajax_request = request.is_ajax()
+
+    if is_ajax_request:
         filename, extension = os.path.splitext(template_name)
         template_name = filename + '_inner' + extension
 
@@ -193,7 +206,7 @@ def generic_edit_view(request, model_form_class, pk=None, template_name='fronten
 
         if form.is_valid():
             object = form.save()
-            if not request.is_ajax():
+            if not is_ajax_request:
                 # reload the page
                 if pk is None:
                     message = 'The %s "%s" was added successfully.' % (model_verbose_name, object)

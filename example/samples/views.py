@@ -19,6 +19,15 @@ from .forms import TrackForm
 from .forms import TrackFormEx
 
 
+def is_ajax(request):
+    try:
+        is_ajax_request = request.accepts("application/json")
+    except AttributeError as e:
+        # Django < 4.0
+        is_ajax_request = is_ajax(request)
+    return is_ajax_request
+
+
 def simulate_network_latency():
     if settings.DEBUG:
         time.sleep(1.0)
@@ -34,7 +43,7 @@ def simple_content_forbidden(request):
 
 def simple_content2(request):
     # Either render only the modal content, or a full standalone page
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/simple_content2_inner.html'
     else:
         template_name = 'dialogs/simple_content2.html'
@@ -46,7 +55,7 @@ def simple_form_validation(request):
 
     simulate_network_latency()
 
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/simple_form_inner.html'
     else:
         template_name = 'dialogs/simple_form.html'
@@ -55,7 +64,7 @@ def simple_form_validation(request):
         form = SimpleForm(data=request.POST)
         if form.is_valid():
             form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.info(request, "Form has been validated" )
     else:
         form = SimpleForm()
@@ -70,7 +79,7 @@ def advanced_form_validation(request):
 
     simulate_network_latency()
 
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/advanced_form_inner.html'
     else:
         template_name = 'dialogs/advanced_form.html'
@@ -79,7 +88,7 @@ def advanced_form_validation(request):
         form = AdvancedForm(data=request.POST)
         if form.is_valid():
             form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.info(request, "Form has been validated" )
     else:
         form = AdvancedForm()
@@ -93,7 +102,7 @@ def form_validation_with_feedback(request):
 
     simulate_network_latency()
 
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/simple_form_inner.html'
     else:
         template_name = 'dialogs/simple_form.html'
@@ -102,7 +111,7 @@ def form_validation_with_feedback(request):
         form = SimpleForm(data=request.POST)
         if form.is_valid():
             form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.info(request, "Form has been validated")
             else:
                 return HttpResponse("<h1>Great !</h1> Your form has been validated")
@@ -119,7 +128,7 @@ def simple_form_validation_with_addon(request):
 
     simulate_network_latency()
 
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/simple_form_with_addon_inner.html'
     else:
         template_name = 'dialogs/simple_form_with_addon.html'
@@ -128,7 +137,7 @@ def simple_form_validation_with_addon(request):
         form = SimpleForm(data=request.POST)
         if form.is_valid():
             form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.info(request, "Form has been validated" )
     else:
         form = SimpleForm()
@@ -146,7 +155,7 @@ def add_artist(request):
         raise PermissionDenied
 
     # Either render only the modal content, or a full standalone page
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'frontend_forms/generic_form_inner.html'
     else:
         template_name = 'dialogs/generic_form.html'
@@ -159,7 +168,7 @@ def add_artist(request):
         form = ArtistCreateForm(data=request.POST)
         if form.is_valid():
             object = form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 # reload the page
                 message = 'The object "%s" was added successfully.' % object
                 messages.success(request, message)
@@ -182,7 +191,7 @@ def update_artist(request, pk):
         raise PermissionDenied
 
     # Either render only the modal content, or a full standalone page
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'frontend_forms/generic_form_inner.html'
     else:
         template_name = 'dialogs/generic_form.html'
@@ -195,7 +204,7 @@ def update_artist(request, pk):
         form = ArtistUpdateForm(instance=object, data=request.POST)
         if form.is_valid():
             object = form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 # reload the page
                 message = 'The object "%s" was changed successfully.' % object
                 messages.success(request, message)
@@ -234,7 +243,7 @@ def edit_artist(request, pk=None):
 
 
     # Either render only the modal content, or a full standalone page
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'frontend_forms/generic_form_inner.html'
     else:
         template_name = 'dialogs/generic_form.html'
@@ -246,7 +255,7 @@ def edit_artist(request, pk=None):
         form = ArtistEditForm(instance=object, data=request.POST)
         if form.is_valid():
             object = form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 # reload the page
                 if pk is None:
                     message = 'The object "%s" was added successfully.' % object
@@ -282,7 +291,7 @@ def new_track(request):
 
     simulate_network_latency()
 
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/track_form_inner.html'
     else:
         template_name = 'dialogs/track_form.html'
@@ -291,7 +300,7 @@ def new_track(request):
         form = TrackForm(data=request.POST)
         if form.is_valid():
             #form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.info(request, "Form has been validated")
             else:
                 return HttpResponse(
@@ -312,7 +321,7 @@ def new_track_ex(request):
 
     simulate_network_latency()
 
-    if request.is_ajax():
+    if is_ajax(request):
         template_name = 'dialogs/track_form_ex_inner.html'
     else:
         template_name = 'dialogs/track_form_ex.html'
@@ -321,7 +330,7 @@ def new_track_ex(request):
         form = TrackFormEx(data=request.POST)
         if form.is_valid():
             #form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.info(request, "Form has been validated")
             else:
                 return HttpResponse(

@@ -63,7 +63,12 @@ class FileFormView(FormView):
         form = self.get_form()
         files = request.FILES.getlist('file')
 
-        is_ajax = request.is_ajax()
+        try:
+            is_ajax = request.accepts("application/json")
+        except AttributeError as e:
+            # Django < 4.0
+            is_ajax = request.is_ajax()
+
         print('is_ajax: ' + str(is_ajax))
         print(request.POST)
 
@@ -103,7 +108,13 @@ def dump_result(form, prompt=""):
 
 def chained_selection(request):
 
-    if request.is_ajax():
+    try:
+        is_ajax = request.accepts("application/json")
+    except AttributeError as e:
+        # Django < 4.0
+        is_ajax = request.is_ajax()
+
+    if is_ajax:
         template_name = 'others/chained_selection_inner.html'
     else:
         template_name = 'others/chained_selection.html'
@@ -113,7 +124,7 @@ def chained_selection(request):
         if form.is_valid():
             #form.save()
             message = dump_result(form, "Form has been validated")
-            if not request.is_ajax():
+            if not is_ajax:
                 messages.info(request, message)
                 return HttpResponseRedirect(reverse('others:chained_selection'))
             else:

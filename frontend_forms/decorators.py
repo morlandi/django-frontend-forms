@@ -13,7 +13,14 @@ def check_logged_in():
             if request.user.is_authenticated:
                 return view_func(request, *args, **kwargs)
             template_name = 'frontend_forms/check_logged_in_failed.html'
-            if request.is_ajax():
+
+            try:
+                is_ajax_request = request.accepts("application/json")
+            except AttributeError as e:
+                # Django < 4.0
+                is_ajax_request = request.is_ajax()
+
+            if is_ajax_request:
                 template_name = 'frontend_forms/check_logged_in_failed_inner.html'
             return render(request, template_name, {})
         return _wrapped_view
