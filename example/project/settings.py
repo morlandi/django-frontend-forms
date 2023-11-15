@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'project.context_processors.main_settings',
             ],
         },
     },
@@ -212,6 +213,8 @@ LOGIN_URL = reverse_lazy('frontend_forms:login')
 LOGOUT_URL = reverse_lazy('frontend_forms:logout')
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_REDIRECT_URL = reverse_lazy('index')
+
+USE_VANILLA_JS = True
 
 # Load local settings when supplied
 try:

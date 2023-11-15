@@ -71,7 +71,11 @@
     <script src="{% static 'gasparesganga-jquery-loading-overlay/dist/loadingoverlay.min.js' %}"></script>
     <script src="{% static 'sweetalert2/dist/sweetalert2.min.js' %}"></script>
     <script src="{% static 'promise-polyfill/dist/polyfill.min.js' %}"></script>
+    {% if USE_VANILLA_JS %}
+    <script src="{% static 'frontend_forms/js/frontend_forms_vanilla.js' %}"></script>
+    {% else %}
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    {% endif %}
     <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     <script src="{% static 'dropzone/dist/min/dropzone.min.js' %}"></script>
 

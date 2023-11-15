@@ -56,7 +56,11 @@ the javascript messaeg catalog, and optionally the sample HTML template:
 .. code:: html
 
     <link rel='stylesheet' href="{% static 'frontend_forms/css/frontend_forms.css' %}">
+    {% if USE_VANILLA_JS %}
+    <script src="{% static 'frontend_forms/js/frontend_forms_vanilla.js' %}"></script>
+    {% else %}
     <script src="{% static 'frontend_forms/js/frontend_forms.js' %}"></script>
+    {% endif %}
     <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     {% include 'frontend_forms/dialogs.html' %}
 

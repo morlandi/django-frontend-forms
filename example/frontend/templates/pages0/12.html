@@ -14,7 +14,11 @@ and should be included as well.
 
     {% verbatim %}
     <link rel="stylesheet" href="{% static 'frontend_forms/css/frontend_forms.css' %}">
+    {% if USE_VANILLA_JS %}
+    <script src="{% static 'frontend_forms/js/frontend_forms_vanilla.js' %}"></script>
+    {% else %}
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
+    {% endif %}
     <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
 
     {% block modals %}
