@@ -35,6 +35,26 @@ sections = [
             {'index': 12, 'title': 'Files organization', },
         ]
     },
+    {
+        'title': 'Form submission from a modal',
+        'pages': [
+        ]
+    },
+    {
+        'title': 'Creating or updating a Django Model in the front-end',
+        'pages': [
+        ]
+    },
+    {
+        'title': 'Creating or updating a Django Model (revised)',
+        'pages': [
+        ]
+    },
+    {
+        'title': 'Advanced forms',
+        'pages': [
+        ]
+    },
 ]
 
 
