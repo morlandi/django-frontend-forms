@@ -49,6 +49,7 @@ urlpatterns = [
     path('simple-form-validation', views.simple_form_validation, name="simple-form-validation"),
     path('advanced-form-validation', views.advanced_form_validation, name="advanced-form-validation"),
     path('form-validation-with-feedback', views.form_validation_with_feedback, name="form-validation-with-feedback"),
+    path('form-validation-with-json-result', views.form_validation_with_json_result, name="form-validation-with-json-result"),
     path('simple-form-validation-with-addon', views.simple_form_validation_with_addon, name="simple-form-validation-with-addon"),
 
     path('artist/add-basic/', views.add_artist, name="artist-add-basic"),

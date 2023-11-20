@@ -124,6 +124,32 @@ def form_validation_with_feedback(request):
     })
 
 
+def form_validation_with_json_result(request):
+
+    simulate_network_latency()
+
+    if is_ajax(request):
+        template_name = 'dialogs/simple_form_inner.html'
+    else:
+        template_name = 'dialogs/simple_form.html'
+
+    if request.method == 'POST':
+        form = SimpleForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            if not is_ajax(request):
+                messages.info(request, "Form has been validated")
+            else:
+                return JsonResponse(form.cleaned_data)
+    else:
+        form = SimpleForm()
+
+    return render(request, template_name, {
+        'action': reverse('samples:form-validation-with-json-result'),
+        'form': form,
+    })
+
+
 def simple_form_validation_with_addon(request):
 
     simulate_network_latency()

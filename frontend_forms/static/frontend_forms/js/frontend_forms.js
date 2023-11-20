@@ -384,36 +384,48 @@ var Dialog = function () {
                     }
                 }).done(function (xhr, textStatus, jqXHR) {
 
-                    // update the modal body with the new form
-                    body.html(xhr);
-
-                    // Does the response contain a form ?
-                    var form = self.element.find('.dialog-content .dialog-body form');
-                    if (form.length > 0) {
-                        // If the server sends back a successful response,
-                        // we need to further check the HTML received
-
-                        // If xhr contains any field errors,
-                        // the form did not validate successfully,
-                        // so we keep it open for further editing
-                        //if (jQuery(xhr).find('.has-error').length > 0) {
-                        if (jQuery(xhr).find('.has-error').length > 0 || jQuery(xhr).find('.errorlist').length > 0) {
-                            self._notify('loaded', { url: url });
-                            self._form_ajax_submit(true);
-                        } else {
-                            // otherwise, we've done and can close the modal
-                            self._notify('submitted', { method: method, url: url, data: data });
+                    // Upon receiving a JSON response, we assume that the form has been validated,
+                    // so we can close the modal
+                    if (jqXHR.getResponseHeader('Content-Type') === 'application/json') {
+                        try {
+                            var _data = xhr;
+                            self._notify('submitted', { method: method, url: url, data: _data });
                             self.close();
+                        } catch (error) {
+                            FrontendForms.display_server_error(error);
                         }
+                    } else {
+                        // update the modal body with the new form
+                        body.html(xhr);
+
+                        // Does the response contain a form ?
+                        var form = self.element.find('.dialog-content .dialog-body form');
+                        if (form.length > 0) {
+                            // If the server sends back a successful response,
+                            // we need to further check the HTML received
+
+                            // If xhr contains any field errors,
+                            // the form did not validate successfully,
+                            // so we keep it open for further editing
+                            //if (jQuery(xhr).find('.has-error').length > 0) {
+                            if (jQuery(xhr).find('.has-error').length > 0 || jQuery(xhr).find('.errorlist').length > 0) {
+                                self._notify('loaded', { url: url });
+                                self._form_ajax_submit(true);
+                            } else {
+                                // otherwise, we've done and can close the modal
+                                self._notify('submitted', { method: method, url: url, data: data });
+                                self.close();
+                            }
+                        }
+                        // If not, assume we received a feedback for the user after successfull submission, so:
+                        // - keep the dialog open
+                        // - hide the save button
+                        else {
+                                // We also notify the user about successful submission
+                                self._notify('submitted', { method: method, url: url, data: data });
+                                btn_save.hide();
+                            }
                     }
-                    // If not, assume we received a feedback for the user after successfull submission, so:
-                    // - keep the dialog open
-                    // - hide the save button
-                    else {
-                            // We also notify the user about successful submission
-                            self._notify('submitted', { method: method, url: url, data: data });
-                            btn_save.hide();
-                        }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     self._notify('submission_failure', { method: method, url: url, data: data });
                     console.error('ERROR: errorThrown=%o, textStatus=%o, jqXHR=%o', errorThrown, textStatus, jqXHR);

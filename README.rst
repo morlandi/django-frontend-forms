@@ -400,6 +400,21 @@ thus giving to the user a chance to read your feedback.
             'form': form,
         })
 
+Returning JSON result after form validation
+-------------------------------------------
+
+.. code:: bash
+
+    ...
+        if request.method == 'POST':
+            form = MyForm(data=request.POST)
+            if form.is_valid():
+                form.save()
+                if not is_ajax(request):
+                    messages.info(request, "Form has been validated")
+                else:
+                    return JsonResponse(form.cleaned_data)
+
 Logging in with a modal form
 ----------------------------
 

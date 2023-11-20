@@ -3,6 +3,10 @@
 History
 =======
 
+v0.3.1
+------
+- accept JSON response after form validation
+
 v0.3.0
 ------
 - optionally replace "frontend_form.js" with "frontend_form_vanilla.js"

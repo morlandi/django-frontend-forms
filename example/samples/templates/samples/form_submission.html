@@ -27,10 +27,14 @@
         </tr>
         <tr>
             <td><a data-value="4" href="#" class="link-button btn btn-primary">dialog4</a></td>
+            <td><p>A dialog which returns a JSON-serialized result after form validation</p></td>
+        </tr>
+        <tr>
+            <td><a data-value="5" href="#" class="link-button btn btn-primary">dialog5</a></td>
             <td><p>A simple dialog with an input-group-addon</p></td>
         </tr>
         <tr>
-            <td><a data-value="5" href="#" class="link-button btn btn-primary">Login</a></td>
+            <td><a data-value="6" href="#" class="link-button btn btn-primary">Login</a></td>
             <td><p>Login with a modal form</p></td>
         </tr>
     </table>
@@ -45,7 +49,7 @@
     function onLinkButtonClicked(event) {
         event.preventDefault();
         var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
+        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5, dialog6];
         dialogs[n - 1].open(event);
     }
 
@@ -97,7 +101,27 @@
             enable_trace: true
         });
 
+        function dialog4_callback(event_name, dialog, params) {
+            switch (event_name) {
+                case "submitted":
+                    alert('Form has been validated; result: ' + JSON.stringify(params.data));
+                    break;
+            }
+        }
+
         dialog4 = new Dialog({
+            url: "{% url 'samples:form-validation-with-json-result' %}",
+            dialog_selector: '#dialog_generic',
+            html: '<h1>Loading ...</h1>',
+            width: '400px',
+            min_height: '200px',
+            title: '<i class="fa fa-calculator"></i> Select an object ...',
+            button_save_initially_hidden: true,
+            enable_trace: true,
+            callback: dialog4_callback
+        });
+
+        dialog5 = new Dialog({
             url: "{% url 'samples:simple-form-validation-with-addon' %}",
             dialog_selector: '#dialog_generic',
             html: '<h1>Loading ...</h1>',
@@ -108,7 +132,7 @@
             enable_trace: true
         });
 
-        dialog5 = new Dialog({
+        dialog6 = new Dialog({
             url: "{% url 'frontend_forms:login' %}",
             width: '400px',
             min_height: '200px',
