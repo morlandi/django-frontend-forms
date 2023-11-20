@@ -459,9 +459,6 @@ class Dialog {
                     else {
                         response.text().then(data => {
 
-                            // https://javascript.plainenglish.io/how-to-check-if-the-response-of-a-fetch-is-a-json-object-in-javascript-7f42515b1a05
-                            console.log('response2: %o', response);
-
                             // update the modal body with the new form
                             body.innerHTML = data;
 
