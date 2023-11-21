@@ -127,15 +127,18 @@ In the following example:
 
     function onLinkButtonClicked(event) {
         event.preventDefault();
-        var n = $(event.target).data('value');
-        var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
+        //var n = $(event.target).data('value');
+        let n = parseInt(event.target.dataset.value);
+        let dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5];
         dialogs[n - 1].open(event);
     }
 
 
-    $(document).ready(function() {
+    window.addEventListener('load', function() {
 
-        $('.link-button').on('click', onLinkButtonClicked);
+        document.querySelectorAll('.link-button').forEach(item => {
+            item.addEventListener('click', onLinkButtonClicked);
+        });
 
         dialog1 = new Dialog({
             dialog_selector: '#dialog_generic',

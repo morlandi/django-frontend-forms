@@ -651,25 +651,39 @@ window.FrontendForms = (function() {
      */
 
     function overlay_show(element) {
-        jQuery(element).LoadingOverlay(
-            'show', {
-                //background: 'rgba(0, 167, 140, 0.2)',
-                background: 'rgba(0, 0, 0, 0.3)',
-                image: '',
-                fontawesome: 'fa fa-cog fa-spin'
-            }
-        );
+        /*
+            Requires:
+
+                {% include 'frontend_forms/overlay.html' %}
+
+            References:
+                - "Custom Loading Animation on Fetch Call in Vanilla Javascript / CSS / HTML 5", at:
+                  https://dev.to/hariseldon27/custom-loading-animation-on-fetch-call-in-vanilla-javascript-css-html-5-1a9n
+                - "SVG Spinners collection", at:
+                  https://github.com/n3r4zzurr0/svg-spinners
+        */
+        let overlay = document.querySelector('#frontend_forms_overlay');
+        if (overlay !== null) {
+            overlay.style.display = 'block';
+        }
+        else {
+            console.error('Overlay "#frontend_forms_overlay" not found. Did you forget to include "frontend_forms/overlay.html" ?');
+        }
     }
 
     function overlay_hide(element) {
-        jQuery(element).LoadingOverlay('hide');
+        let overlay = document.querySelector('#frontend_forms_overlay');
+        if (overlay !== null) {
+            overlay.style.display = 'none';
+        }
+        else {
+            console.error('Overlay "#frontend_forms_overlay" not found. Did you forget to include "frontend_forms/overlay.html" ?');
+        }
     }
 
     function hide_mouse_cursor() {
         // https://stackoverflow.com/questions/9681080/changing-cursor-to-waiting-in-javascript-jquery#25207986
-        //jQuery('body').css('cursor', 'none');
-        //jQuery('body').addClass('waiting');
-        jQuery("body").css("cursor", "none");
+        document.querySelector('body').style.cursor = 'none';
     }
 
 

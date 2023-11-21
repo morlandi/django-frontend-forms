@@ -1,0 +1,40 @@
+<style>
+    /* Absolute Center Spinner */
+    #frontend_forms_overlay {
+        position: fixed;
+        z-index: 999;
+        height: 2em;
+        width: 2em;
+        overflow: show;
+        margin: auto;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: none;
+        /* opacity: 0.8; */
+    }
+    #frontend_forms_overlay svg {
+        transform: scale(9.75);
+    }
+    /* Transparent Overlay */
+    #frontend_forms_overlay:before {
+        content: '';
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.3);
+    }
+</style>
+<div id="frontend_forms_overlay">
+    <div id="frontend_forms_overlay_svgholder">
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <style>.spinner_7WDj{transform-origin:center;animation:spinner_PBVY .75s linear infinite}@keyframes spinner_PBVY{100%{transform:rotate(360deg)}}</style>
+            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/>
+            <circle class="spinner_7WDj" cx="12" cy="2.5" r="1.5"/>
+        </svg>
+    </div>
+</div>

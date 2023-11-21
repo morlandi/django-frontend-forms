@@ -45,18 +45,18 @@
 {% block extrajs %}
 <script language="javascript">
 
-
     function onLinkButtonClicked(event) {
         event.preventDefault();
-        var n = $(event.target).data('value');
+        let n = parseInt(event.target.dataset.value);
         var dialogs = [dialog1, dialog2, dialog3, dialog4, dialog5, dialog6];
         dialogs[n - 1].open(event);
     }
 
+    window.addEventListener('load', function() {
 
-    $(document).ready(function() {
-
-        $('.link-button').on('click', onLinkButtonClicked);
+        document.querySelectorAll('.link-button').forEach(item => {
+            item.addEventListener('click', onLinkButtonClicked);
+        });
 
         dialog1 = new Dialog({
             url: "{% url 'samples:simple-form-validation' %}",

@@ -76,9 +76,14 @@
         </div>
 
     {% block modals %}
+        {% include 'frontend_forms/overlay.html' %}
         {% include 'frontend_forms/dialogs.html' %}
     {% endblock modals %}
 
+    {% if USE_VANILLA_JS %}
+    <script src="{% static 'frontend_forms/js/frontend_forms_vanilla.js' %}"></script>
+    <script src="{% static 'sweetalert2/dist/sweetalert2.min.js' %}"></script>
+    {% else %}
     <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script src="{% static 'popper.js/dist/umd/popper.min.js' %}"></script>
     <script src="{% static 'jquery-ui-dist/jquery-ui.min.js' %}"></script>
@@ -87,15 +92,9 @@
     <script src="{% static 'gasparesganga-jquery-loading-overlay/dist/loadingoverlay.min.js' %}"></script>
     <script src="{% static 'sweetalert2/dist/sweetalert2.min.js' %}"></script>
     <script src="{% static 'promise-polyfill/dist/polyfill.min.js' %}"></script>
-    {% if USE_VANILLA_JS %}
-    <script src="{% static 'frontend_forms/js/frontend_forms_vanilla.js' %}"></script>
-    {% else %}
     <script src="{% static 'frontend_forms/js/frontend_forms.jsx' %}"></script>
-    {% endif %}
-    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
     <script src="{% static 'dropzone/dist/min/dropzone.min.js' %}"></script>
 
-    {# Select2 support #}
     <script src="{% static 'select2/dist/js/select2.min.js' %}"></script>
     <script src="{% static 'select2/dist/js/i18n/it.js' %}"></script>
     <script>
@@ -107,9 +106,12 @@
         $.fn.select2.defaults.set("language", "it");
     </script>
     <script src="{% static 'django_select2/django_select2.js' %}"></script>
+    {% endif %}
+    <script src="{% url 'frontend_forms:javascript-catalog' %}"></script>
 
     <script>
 
+        {% if not USE_VANILLA_JS %}
         $(document).ready(function() {
 
             $('#login_with_dialog').on('click', function(event) {
@@ -146,16 +148,18 @@
         });
 
         Dropzone.autoDiscover = false;
+        Dropzone.prototype.filesize = function (size) {
+           filesizecalculation(size)
+        };
+
+        {% endif %}
+
 
         function getCookie(name) {
             var value = '; ' + document.cookie,
                 parts = value.split('; ' + name + '=');
             if (parts.length == 2) return parts.pop().split(';').shift();
         }
-
-        Dropzone.prototype.filesize = function (size) {
-           filesizecalculation(size)
-        };
 
         function filesizecalculation(size) {
             if (size < 1024 * 1024) {

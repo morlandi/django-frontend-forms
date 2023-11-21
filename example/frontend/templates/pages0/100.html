@@ -3,8 +3,41 @@
 
 {% block page-content %}
 
-{% filter restructuredtext %}
 
+<table>
+    <tbody>
+    <tr>
+        <td><button id="button-overlay_show" class="btn btn-primary">overlay_show('body')</button></td>
+        <td><p>Show overlay on current page; Requires: "include 'frontend_forms/overlay.html'"</p></td>
+    </tr>
+    <tr>
+        <td><button class="btn btn-primary" onclick="FrontendForms.redirect('https://brainstorm.it', true);">redirect(url, show_layer=true)</button></td>
+        <td><p>Similar behavior as an HTTP redirect; optionally calls overlay_show('body')</p></td>
+    </tr>
+    <tr>
+        <td><button class="btn btn-primary" onclick="FrontendForms.gotourl('https://brainstorm.it', true);">gotourl(url, show_layer=true)</button></td>
+        <td><p>Similar behavior as clicking on a link; optionally calls overlay_show('body')</p></td>
+    </tr>
+    <tr>
+        <td><button class="btn btn-primary" onclick="FrontendForms.reload_page(true);">reload_page(show_layer=true)</button></td>
+        <td><p>Reload the current page; optionally calls overlay_show('body')</p></td>
+    </tr>
+    <tr>
+        <td><button class="btn btn-primary" onclick="FrontendForms.hide_mouse_cursor();">hide_mouse_cursor()</button></td>
+        <td><p>Hide the mouse cursor</p></td>
+    </tr>
+    <tr>
+        <td><button class="btn btn-primary" onclick="FrontendForms.display_message('ciao', title='', message_type='success');">display_message()</button></td>
+        <td><p>Display a message using SweetAlert2; failing that, uses a simple alert instead</p></td>
+    </tr>
+    <tr>
+        <td><button class="btn btn-primary" onclick="FrontendForms.display_server_error('error message');">display_server_error()</button></td>
+        <td><p>Display an error message using SweetAlert2; failing that, uses a simple alert instead</p></td>
+    </tr>
+    </tbody>
+</table>
+
+{% filter restructuredtext %}
 ======================================================= ========================================================================================
 Helper                                                  Purpose
 ------------------------------------------------------- ----------------------------------------------------------------------------------------
@@ -32,26 +65,25 @@ set_datepicker_defaults(language_code)                  Set datepicker defaults,
 apply_multiselect(elements)                             Bind MultiSelect widget
 ======================================================= ========================================================================================
 
-
 {% endfilter %}
 
-    <button id="button-overlay_show" class="btn btn-primary">overlay_show('body')</button>
-
 {% endblock page-content %}
-
-
-{% block extrastyle %}
-    <style>
-        {{ block.super }}
-    </style>
-{% endblock extrastyle %}
 
 
 {% block extrajs %}
     <script type="text/javascript">
         {{ block.super }}
         'use strict';
-        $(document).ready(function() {
+
+        window.addEventListener('load', function() {
+
+            document.querySelector('#button-overlay_show').addEventListener('click', function(event) {
+                FrontendForms.overlay_show('body');
+                setTimeout(function() {
+                    FrontendForms.overlay_hide('body');
+                }, 3000);
+            });
+
         });
     </script>
 {% endblock %}

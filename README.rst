@@ -930,8 +930,8 @@ display_message(html_content)                           Display a message using 
 redirect(url, show_overlay=False)                       Similar behavior as an HTTP redirect; optionally calls overlay_show('body')
 gotourl(url, show_overlay=False)                        Similar behavior as clicking on a link; optionally calls overlay_show('body')
 reload_page(show_overlay=False)                         Reload the current page; optionally calls overlay_show('body')
-overlay_show(element)                                   Show overlay on given element; Requires: gasparesganga-jquery-loading-overlay
-overlay_hide(element)                                   Hide overlay on given element; Requires: gasparesganga-jquery-loading-overlay
+overlay_show(element)                                   Show overlay on given element; Requires: gasparesganga-jquery-loading-overlay or {% include 'frontend_forms/overlay.html' %}
+overlay_hide(element)                                   Hide overlay on given element; Requires: gasparesganga-jquery-loading-overlay or {% include 'frontend_forms/overlay.html' %}
 hide_mouse_cursor                                       Hide the mouse cursor
 dumpObject(obj, max_depth)                              Serialize the given dictionary up to `max_depth` levels
 logObject(element, obj)                                 Render `obj` content as HTML table an assign to given element

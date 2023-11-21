@@ -3,6 +3,10 @@
 History
 =======
 
+v0.3.2
+------
+- rewrite utilities for vanilla JS
+
 v0.3.1
 ------
 - accept JSON response after form validation
