@@ -3,6 +3,10 @@
 History
 =======
 
+v0.3.3
+------
+- css cleanup (to keep Whitenoise happy)
+
 v0.3.2
 ------
 - rewrite utilities for vanilla JS
