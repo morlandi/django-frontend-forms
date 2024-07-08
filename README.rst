@@ -1,4 +1,14 @@
 
+.. warning::
+
+        This project has been archived and refactored into `django-htmx-forms <https://github.com/morlandi/django-htmx-forms>`_
+
+          with the following purposes:
+
+          - remove all dependencies (jQuery and Bootstrap)
+          - take a closer look at HTMX capabilities
+
+
 django-frontend-forms
 =====================
 
